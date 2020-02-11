@@ -38,7 +38,7 @@ app.use("/api/tasks", tasks);
 app.use("/api/users", users);
 
 // Static files
-app.use(express.static(path.join(__dirname, "public")));
+app.use(express.static(path.join(__dirname, "public/")));
 
 // Connect to MongoDB
 mongoose
@@ -46,7 +46,7 @@ mongoose
   .then(() => console.log("MongoDB successfully connected"))
   .catch(err => console.log(err));
 // Settings
-app.set("port", process.env.PORT || 3000);
+app.set("port", process.env.PORT || 8080);
 app.listen(app.get("port"), () =>
   console.log(`Server up and running on port ${app.get("port")} !`)
 );

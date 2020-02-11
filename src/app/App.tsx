@@ -1,7 +1,14 @@
 import React, { Component } from "react";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+
+import Navbar from "./components/layout/Navbar";
+import Landing from "./components/layout/Landing";
+import Register from "./components/auth/Register";
+import Login from "./components/auth/Login";
+
 declare const M: any;
-type MyProps = { };
-type MyState = { 
+type MyProps = {};
+type MyState = {
   _id: any;
   title: any;
   description: any;
@@ -124,6 +131,17 @@ export default class App extends Component<MyProps, MyState> {
             </a>
           </div>
         </nav>
+        <div>
+          <Router>
+            <div className="App">
+              <Navbar />
+              <Route exact path="/" component={Landing} />
+              <Route exact path="/register" component={Register} />
+              <Route exact path="/login" component={Login} />
+            </div>
+          </Router>
+        </div>
+
         <div className="container">
           <div className="row">
             <div className="col s5">

@@ -3,7 +3,7 @@ var Dotenv = require("dotenv-webpack");
 module.exports = {
   entry: "./src/app/index.tsx",
   output: {
-    path: __dirname + "/src/public/dist",
+    path: path.join(__dirname, "/src/public/dist"),
     filename: "bundle.js",
     publicPath: "/"
   },
@@ -45,8 +45,11 @@ module.exports = {
     })
   ],
   devServer: {
-    port: 3000,
-    contentBase: path.resolve(__dirname, "src/public"),
+    proxy: {
+      "/api": "http://localhost:8080"
+    },
+    port: 3001,
+    contentBase: path.resolve(__dirname, "src/public/"),
     publicPath: "/dist/",
     watchContentBase: true,
     inline: true,
