@@ -8,7 +8,11 @@
         "baseUrl": ".",
         "resolveJsonModule": true,
         "esModuleInterop": true,
-        "paths": {}
+        "paths": {
+            "src/*": ["./src/*"],
+            "utils/*": ["./src/utils/*"],
+            "components/*": ["./src/app/components/*"]
+        }
     },
     "include": ["./src/app/**/*"]
 }

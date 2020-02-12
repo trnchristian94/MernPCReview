@@ -21,6 +21,14 @@ passport: used to authenticate requests, which it does through an extensible set
 passport-jwt: passport strategy for authenticating with a JSON Web Token (JWT); lets you authenticate endpoints using a JWT
 validator: used to validate inputs (e.g. check for valid email format, confirming passwords match)
 
+Modules for Redux validation
+axios: promise based HTTP client for making requests to our backend
+classnames: used for conditional classes in our JSX
+jwt-decode: used to decode our jwt so we can get user data from it
+react-redux: allows us to use Redux with React
+react-router-dom: used for routing purposes
+redux: used to manage state between components (can be used with React or any other view library)
+redux-thunk: middleware for Redux that allows us to directly access the dispatch method to make asynchronous calls from our actions
 
 Notes:
 jsx = react + html
@@ -34,6 +42,6 @@ NodeJS = Entorno que permite usar JS fuera del navegador. Permite crear aplicaci
 
 Notas:
 Añadir -D al instalar dependencia indica que solo es para DESAROLLO
-
+createStore() creates a Redux store that holds the complete state tree of your app. There should only be a single store in your app.
 
 React es una biblioteca javascript que utiliza varias bibliotecas y optima
