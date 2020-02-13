@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { logoutUser } from "src/actions/authActions";
+import { logoutUser } from "userLogic/actions/authActions";
 
 type MyProps = {
   auth: any;
@@ -9,7 +8,7 @@ type MyProps = {
 };
 type MyState = {};
 class Dashboard extends Component<MyProps, MyState> {
-  onLogoutClick = (e: any) => {
+  onLogoutClick = (e: React.MouseEvent<HTMLButtonElement, MouseEvent>) => {
     e.preventDefault();
     this.props.logoutUser();
   };
@@ -22,8 +21,9 @@ class Dashboard extends Component<MyProps, MyState> {
             <h4>
               <b>Hey there,</b> {user.name.split(" ")[0]}
               <p className="flow-text grey-text text-darken-1">
-                You are logged into a full-stack{" "}
-                <span style={{ fontFamily: "monospace" }}>MERN</span> app 👏
+                <span>🎉🎉 You are logged into a full-stack </span>
+                <span style={{ fontFamily: "monospace" }}>MERN</span>
+                <span> app 👏</span>
               </p>
             </h4>
             <button
@@ -36,7 +36,7 @@ class Dashboard extends Component<MyProps, MyState> {
               onClick={this.onLogoutClick}
               className="btn btn-large waves-effect waves-light hoverable blue accent-3"
             >
-              Logout
+              <span>Logout</span>
             </button>
           </div>
         </div>

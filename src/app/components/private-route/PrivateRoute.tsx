@@ -1,14 +1,12 @@
-import React, { Component } from "react";
+import React from "react";
 import { Route, Redirect } from "react-router-dom";
 import { connect } from "react-redux";
-//import PropTypes from "prop-types";
 
 interface Props {
   component: any;
   auth: any;
   [x: string]: any;
 }
-// { component } : Props
 function PrivateRoute({ Component, auth, ...rest }: Props) {
   return (
     <Route

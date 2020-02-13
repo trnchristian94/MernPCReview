@@ -5,8 +5,8 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 const passport = require("passport");
 
-const users = require("./routes/user.routes");
-const tasks = require("./routes/task.routes");
+const users = require("./db/routes/user.routes.tsx");
+const tasks = require("./db/routes/task.routes.tsx");
 
 const app = express();
 
@@ -21,7 +21,7 @@ app.use(
 app.use(bodyParser.json());
 
 // DB Config address
-const db = require("./config/keys").mongoURI;
+const db = require("./db/config/keys").mongoURI;
 
 // Middlewares
 app.use(morgan("dev"));
@@ -31,7 +31,7 @@ app.use(express.json()); // Permite al servidor entender json.
 app.use(passport.initialize());
 
 // Passport config
-require("./config/passport")(passport);
+require("./db/config/passport")(passport);
 
 // Routes
 app.use("/api/tasks", tasks);

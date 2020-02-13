@@ -12,7 +12,9 @@ module.exports = {
     alias: {
       src: path.resolve(__dirname, "src/"),
       utils: path.resolve(__dirname, "src/utils/"),
-      components: path.resolve(__dirname, "src/app/components/")
+      components: path.resolve(__dirname, "src/app/components/"),
+      userLogic: path.resolve(__dirname, "src/userLogic/"),
+      db: path.resolve(__dirname, "src/db/")
     }
   },
   module: {

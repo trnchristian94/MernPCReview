@@ -1,9 +1,8 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { loginUser } from "src/actions/authActions";
+import { loginUser } from "userLogic/actions/authActions";
 import classnames from "classnames";
 
 type MyProps = {

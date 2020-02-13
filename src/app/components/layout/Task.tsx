@@ -4,9 +4,9 @@ import { Link } from "react-router-dom";
 declare const M: any;
 type MyProps = {};
 type MyState = {
-  _id: any;
-  title: any;
-  description: any;
+  _id: string;
+  title: string;
+  description: string;
   tasks: Array<any>;
   [x: number]: any;
 };

@@ -12,7 +12,7 @@ import Login from "components/auth/Login";
 
 import jwt_decode from "jwt-decode";
 import setAuthToken from "utils/setAuthToken";
-import { setCurrentUser, logoutUser } from "src/actions/authActions";
+import { setCurrentUser, logoutUser } from "userLogic/actions/authActions";
 import PrivateRoute from "components/private-route/PrivateRoute";
 import Dashboard from "components/dashboard/Dashboard";
 

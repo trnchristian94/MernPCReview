@@ -1,6 +1,6 @@
 import { createStore, applyMiddleware, compose } from "redux";
 import thunk from "redux-thunk";
-import rootReducer from "src/reducers";
+import rootReducer from "userLogic/reducers";
 declare global {
     interface Window { __REDUX_DEVTOOLS_EXTENSION__: any; }
 }
