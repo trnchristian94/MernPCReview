@@ -23,8 +23,8 @@ type MyState = {
   [x: number]: any;
 };
 class Login extends Component<MyProps, MyState> {
-  constructor() {
-    super(null);
+  constructor(props: any) {
+    super(props);
     this.state = {
       email: "",
       password: "",

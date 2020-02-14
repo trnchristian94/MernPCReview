@@ -9,25 +9,28 @@ import Landing from "components/layout/Landing";
 import Task from "components/layout/Task";
 import Register from "components/auth/Register";
 import Login from "components/auth/Login";
+import PrivateRoute from "components/private-route/PrivateRoute";
+import Dashboard from "components/dashboard/Dashboard";
+import Header from "components/layout/Header";
 
 import jwt_decode from "jwt-decode";
 import setAuthToken from "utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "userLogic/actions/authActions";
-import PrivateRoute from "components/private-route/PrivateRoute";
-import Dashboard from "components/dashboard/Dashboard";
 
 // Check for token to keep user logged in
+
 if (localStorage.jwtToken) {
+  console.log("hola");
   // Set auth token header auth
   const token = localStorage.jwtToken;
   setAuthToken(token);
   // Decode token and get user info and exp
-  const decoded: any = jwt_decode(token);
+  const user: any = jwt_decode(token);
   // Set user and isAuthenticated
-  store.dispatch(setCurrentUser(decoded));
+  store.dispatch(setCurrentUser(user));
   // Check for expired token
   const currentTime = Date.now() / 1000; // to get in milliseconds
-  if (decoded.exp < currentTime) {
+  if (user.exp < currentTime) {
     // Logout user
     store.dispatch<any>(logoutUser());
     // Redirect to login
@@ -41,13 +44,8 @@ export default class App extends Component {
       <Provider store={store}>
         <div>
           {/* Navigation */}
-          <nav className="light-blue darken-4">
-            <div className="container">
-              <a className="brand-logo" href="/">
-                The PC Review
-              </a>
-            </div>
-          </nav>
+          <Header />
+
           <div>
             <Router>
               <div className="App">
