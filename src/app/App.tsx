@@ -20,7 +20,6 @@ import { setCurrentUser, logoutUser } from "userLogic/actions/authActions";
 // Check for token to keep user logged in
 
 if (localStorage.jwtToken) {
-  console.log("hola");
   // Set auth token header auth
   const token = localStorage.jwtToken;
   setAuthToken(token);

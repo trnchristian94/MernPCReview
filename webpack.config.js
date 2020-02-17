@@ -52,7 +52,10 @@ module.exports = {
   ],
   devServer: {
     proxy: {
-      "/api": "http://localhost:8080"
+      "/api/**": {
+        target: "http://thepcreview.herokuapp.com",
+        secure: false
+      }
     },
     port: 3001,
     contentBase: path.resolve(__dirname, "src/public/"),
