@@ -7,7 +7,7 @@ class Landing extends Component {
         <div className="row">
           <div className="col s12 center-align">
             <br />
-            <div className="col s4">
+            <div className="col s3">
               <Link
                 to="/register"
                 style={{
@@ -20,7 +20,7 @@ class Landing extends Component {
                 Register
               </Link>
             </div>
-            <div className="col s4">
+            <div className="col s3">
               <Link
                 to="/login"
                 style={{
@@ -33,7 +33,7 @@ class Landing extends Component {
                 Log In
               </Link>
             </div>
-            <div className="col s4">
+            <div className="col s3">
               <Link
                 to="/tasks"
                 style={{
@@ -44,6 +44,19 @@ class Landing extends Component {
                 className="btn btn-large btn-flat waves-effect white black-text"
               >
                 Tasks
+              </Link>
+            </div>
+            <div className="col s3">
+              <Link
+                to="/userList"
+                style={{
+                  width: "140px",
+                  borderRadius: "3px",
+                  letterSpacing: "1.5px"
+                }}
+                className="btn btn-large btn-flat waves-effect white black-text"
+              >
+                Users
               </Link>
             </div>
           </div>

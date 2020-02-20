@@ -1,5 +1,4 @@
 var path = require("path");
-var Dotenv = require("dotenv-webpack");
 module.exports = {
   entry: "./src/app/index.tsx",
   output: {
@@ -45,15 +44,10 @@ module.exports = {
   node: {
     fs: "empty"
   },
-  plugins: [
-    new Dotenv({
-      path: path.resolve(__dirname, ".", ".env")
-    })
-  ],
   devServer: {
     proxy: {
-      "/api/**": {
-        target: "http://thepcreview.herokuapp.com",
+      "/api/*": {
+        target: "http://localhost:8080",
         secure: false
       }
     },
