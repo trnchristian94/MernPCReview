@@ -1,2 +1,2 @@
-/api/*  https://thepcreview.herokuapp.com/api/  200
+/api/*  https://thepcreview.herokuapp.com/api/:splat  200
 /*    /index.html   200
