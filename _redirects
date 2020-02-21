@@ -1,7 +1,7 @@
 /*  /index.html  200
 
 [[redirects]]
-  from = "/api"
+  from = "/api/*"
   to = "https://thepcreview.herokuapp.com/api/"
   status = 200
   force = true
