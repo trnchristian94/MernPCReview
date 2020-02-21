@@ -5,4 +5,7 @@
   to = "https://thepcreview.herokuapp.com/api/"
   status = 200
   force = true
-  headers = {X-From = "Netlify"}
+  headers = { 
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+       }
