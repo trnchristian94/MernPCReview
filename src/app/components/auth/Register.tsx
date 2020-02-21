@@ -3,6 +3,7 @@ import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { registerUser } from "userLogic/actions/authActions";
 import classnames from "classnames";
+import { Form, Button, InputGroup, Col, Row } from "react-bootstrap";
 
 type MyProps = {
   registerUser: any;
@@ -35,7 +36,7 @@ class Register extends Component<MyProps, MyState> {
       this.props.history.push("/dashboard");
     }
   }
-  UNSAFE_componentWillReceiveProps (nextProps: any) {
+  UNSAFE_componentWillReceiveProps(nextProps: any) {
     if (nextProps.errors) {
       this.setState({
         errors: nextProps.errors
@@ -55,7 +56,7 @@ class Register extends Component<MyProps, MyState> {
     };
     console.log(newUser);
     this.props.registerUser(newUser, this.props.history);
-  }
+  };
 
   render() {
     const errors = this.state.errors;
@@ -64,8 +65,7 @@ class Register extends Component<MyProps, MyState> {
         <div className="row">
           <div className="col s8 offset-s2">
             <Link to="/" className="btn-flat waves-effect">
-              <i className="material-icons left">keyboard_backspace</i> Back to
-              home
+              Back to home
             </Link>
             <div className="col s12" style={{ paddingLeft: "11.250px" }}>
               <h4>
@@ -75,78 +75,88 @@ class Register extends Component<MyProps, MyState> {
                 Already have an account? <Link to="/login">Log in</Link>
               </p>
             </div>
-            <form noValidate onSubmit={this.register}>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.handleChange}
-                  value={this.state.name}
-                  data-error={errors.name}
-                  id="name"
-                  type="text"
-                  className={classnames("", {
-                    invalid: errors.name
-                  })}
-                />
-                <label htmlFor="name">Name</label>
-                <span className="red-text">{errors.name}</span>
-              </div>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.handleChange}
-                  value={this.state.email}
-                  data-error={errors.email}
-                  id="email"
-                  type="email"
-                  className={classnames("", {
-                    invalid: errors.email
-                  })}
-                />
-                <label htmlFor="email">Email</label>
-                <span className="red-text">{errors.email}</span>
-              </div>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.handleChange}
-                  value={this.state.password}
-                  data-error={errors.password}
-                  id="password"
-                  type="password"
-                  className={classnames("", {
-                    invalid: errors.password
-                  })}
-                />
-                <label htmlFor="password">Password</label>
-                <span className="red-text">{errors.password}</span>
-              </div>
-              <div className="input-field col s12">
-                <input
-                  onChange={this.handleChange}
-                  value={this.state.password2}
-                  data-error={errors.password2}
-                  id="password2"
-                  type="password"
-                  className={classnames("", {
-                    invalid: errors.password2
-                  })}
-                />
-                <label htmlFor="password2">Confirm Password</label>
-                <span className="red-text">{errors.password2}</span>
-              </div>
-              <div className="col s12" style={{ paddingLeft: "11.250px" }}>
-                <button
-                  style={{
-                    width: "150px",
-                    borderRadius: "3px",
-                    letterSpacing: "1.5px",
-                    marginTop: "1rem"
-                  }}
-                  type="submit"
-                  className="btn btn-large waves-effect waves-light hoverable blue accent-3"
-                >
-                  Sign up
-                </button>
-              </div>
-            </form>
+            <Form noValidate onSubmit={this.register}>
+              <Form.Row>
+                <Form.Group as={Col}>
+                  <Form.Label>Email</Form.Label>
+                  <Form.Control
+                    type="text"
+                    id="email"
+                    placeholder="Email"
+                    aria-describedby="inputGroupPrepend"
+                    value={this.state.email}
+                    onChange={this.handleChange}
+                    className={classnames("", {
+                      invalid: errors.email
+                    })}
+                    required
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.email}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col}>
+                  <Form.Label>Username</Form.Label>
+                  <InputGroup>
+                    <InputGroup.Prepend>
+                      <InputGroup.Text id="inputGroupPrepend">
+                        @
+                      </InputGroup.Text>
+                    </InputGroup.Prepend>
+                    <Form.Control
+                      type="text"
+                      id="name"
+                      placeholder="Username"
+                      aria-describedby="inputGroupPrepend"
+                      value={this.state.name}
+                      onChange={this.handleChange}
+                      className={classnames("", {
+                        invalid: errors.name
+                      })}
+                      required
+                    />
+                    <Form.Control.Feedback type="invalid">
+                      {errors.name}
+                    </Form.Control.Feedback>
+                  </InputGroup>
+                </Form.Group>
+              </Form.Row>
+              <Form.Row>
+                <Form.Group as={Col}>
+                  <Form.Label>Password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    id="password"
+                    placeholder="Password"
+                    value={this.state.password}
+                    onChange={this.handleChange}
+                    className={classnames("", {
+                      invalid: errors.password
+                    })}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.password}
+                  </Form.Control.Feedback>
+                </Form.Group>
+                <Form.Group as={Col}>
+                  <Form.Label>Confirm password</Form.Label>
+                  <Form.Control
+                    type="password"
+                    id="password2"
+                    placeholder="Confirm password"
+                    onChange={this.handleChange}
+                    value={this.state.password2}
+                    className={classnames("", {
+                      invalid: errors.password2
+                    })}
+                  />
+                  <Form.Control.Feedback type="invalid">
+                    {errors.password2}
+                  </Form.Control.Feedback>
+                </Form.Group>
+              </Form.Row>
+              <Button type="submit">Sign Up</Button>
+            </Form>
           </div>
         </div>
       </div>

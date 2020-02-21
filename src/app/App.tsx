@@ -4,9 +4,8 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "src/store";
 
-import Header from "components/layout/Header";
-import Navbar from "components/layout/Navbar";
-import Landing from "components/layout/Landing";
+import Navbar from "src/app/components/layout/Navbar";
+import Landing from "src/app/components/layout/Landing";
 import Task from "components/layout/Task";
 import UserList from "components/layout/UserList";
 
@@ -45,7 +44,6 @@ export default class App extends Component {
       <Provider store={store}>
         <div>
           {/* Navigation */}
-          <Header />
 
           <div>
             <Router>
