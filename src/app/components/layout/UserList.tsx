@@ -1,8 +1,13 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 
-declare const M: any;
-type MyProps = {};
+import { connect } from "react-redux";
+
+type MyProps = {
+  auth: any;
+  errors: any;
+  history: any;
+};
 type MyState = {
   _id: string;
   userName: string;
@@ -12,8 +17,8 @@ type MyState = {
 };
 
 class UserList extends Component<MyProps, MyState> {
-  constructor() {
-    super(null);
+  constructor(props: any) {
+    super(props);
     this.state = {
       userName: "",
       email: "",
@@ -21,9 +26,13 @@ class UserList extends Component<MyProps, MyState> {
       _id: ""
     };
   }
-  
+
   componentDidMount() {
-    this.fetchUsers();
+    if (!this.props.auth.isAuthenticated) {
+      this.props.history.push("/login");
+    } else {
+      this.fetchUsers();
+    }
   }
 
   fetchUsers() {
@@ -75,4 +84,8 @@ class UserList extends Component<MyProps, MyState> {
     );
   }
 }
-export default UserList;
+const mapStateToProps = (state: any) => ({
+  auth: state.auth,
+  errors: state.errors
+});
+export default connect(mapStateToProps)(UserList);

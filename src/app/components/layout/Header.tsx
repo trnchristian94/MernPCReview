@@ -32,7 +32,7 @@ class Header extends Component<MyProps, MyState> {
   onChange = (e: any) => {
     this.setState({ [e.target.id]: e.target.value });
   };
-  componentWillReceiveProps(nextProps: any) {
+  UNSAFE_componentWillReceiveProps(nextProps: any) {
     if (nextProps.auth.isAuthenticated) {
       window.location.href = "./dashboard";
     }

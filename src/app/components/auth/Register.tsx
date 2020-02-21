@@ -35,7 +35,7 @@ class Register extends Component<MyProps, MyState> {
       this.props.history.push("/dashboard");
     }
   }
-  componentWillReceiveProps(nextProps: any) {
+  UNSAFE_componentWillReceiveProps (nextProps: any) {
     if (nextProps.errors) {
       this.setState({
         errors: nextProps.errors
