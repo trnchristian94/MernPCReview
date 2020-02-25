@@ -40,9 +40,6 @@ class Header extends Component<MyProps, MyState> {
     if (nextProps.auth.isAuthenticated) {
       window.location.href = "./dashboard";
     }
-    if (nextProps.errors) {
-      window.location.href = "./login";
-    }
   }
 
   onSubmit = (e: any) => {
@@ -51,79 +48,85 @@ class Header extends Component<MyProps, MyState> {
       email: this.state.email,
       password: this.state.password
     };
-    console.log(userData);
     this.props.loginUser(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
   };
 
   render() {
+    console.log(window.location);
     const { user } = this.props.auth;
     return (
-      <Navbar bg="primary" variant="dark">
-        <Link to={"/"} className="nav-link">
-          <Navbar.Brand>The PC Review</Navbar.Brand>
-        </Link>
-        <Nav className="mr-auto">
-          <Link to={"/"} className="nav-link">
-            Home
-          </Link>
-          <Link to={"/tasks"} className="nav-link">
-            Tasks
-          </Link>
-          {!this.props.auth.isAuthenticated ? (
-            <>
-              <Link to={"/register"} className="nav-link">
-                Register
-              </Link>
-              <Link to={"/login"} className="nav-link">
-                Login
-              </Link>
-            </>
-          ) : (
-            <Link to={"/userList"} className="nav-link">
-              Users
+      <>
+        <Navbar id="pc-principalNavbar">
+          <Nav>
+            <Link to={"/"} className="nav-link">
+              <Navbar.Brand id="pc-principalBrand">The PC Review</Navbar.Brand>
             </Link>
-          )}
-        </Nav>
-        {this.props.auth.isAuthenticated ? (
-          <div>
-            <span className="mr-2">Welcome {user.name.split(" ")[0]}!</span>
-            <Button variant="dark" size="sm" onClick={this.onLogoutClick}>
-              Logout
-            </Button>
-          </div>
-        ) : (
-          <Form inline onSubmit={this.onSubmit}>
-            <Form.Row>
-              <Form.Group className="mr-2">
-                <Form.Label className="mr-2">Email</Form.Label>
-                <Form.Control
-                  size="sm"
-                  type="email"
-                  placeholder="Enter email"
-                  onChange={this.onChange}
-                  value={this.state.email}
-                  id="email"
-                />
-              </Form.Group>
-
-              <Form.Group className="mr-2">
-                <Form.Label className="mr-2">Password</Form.Label>
-                <Form.Control
-                  size="sm"
-                  type="password"
-                  placeholder="Password"
-                  onChange={this.onChange}
-                  value={this.state.password}
-                  id="password"
-                />
-              </Form.Group>
-              <Button variant="dark" type="submit" size="sm">
-                Login
+          </Nav>
+        </Navbar>
+        <Navbar variant="dark">
+          <Nav className="mr-auto">
+            <Link to={"/"} className="nav-link">
+              Home
+            </Link>
+            <Link to={"/tasks"} className="nav-link">
+              Tasks
+            </Link>
+            {!this.props.auth.isAuthenticated ? (
+              <>
+                <Link to={"/register"} className="nav-link">
+                  Register
+                </Link>
+                <Link to={"/login"} className="nav-link">
+                  Login
+                </Link>
+              </>
+            ) : (
+              <Link to={"/userList"} className="nav-link">
+                Users
+              </Link>
+            )}
+          </Nav>
+          {this.props.auth.isAuthenticated ? (
+            <div>
+              <span className="mr-2">Welcome {user.name.split(" ")[0]}!</span>
+              <Button variant="dark" size="sm" onClick={this.onLogoutClick}>
+                Logout
               </Button>
-            </Form.Row>
-          </Form>
-        )}
-      </Navbar>
+            </div>
+          ) : (
+            <Form inline onSubmit={this.onSubmit}>
+              <Form.Row>
+                <Form.Group className="mr-2">
+                  <Form.Label className="mr-2">Email</Form.Label>
+                  <Form.Control
+                    size="sm"
+                    type="email"
+                    placeholder="Enter email"
+                    onChange={this.onChange}
+                    value={this.state.email}
+                    id="email"
+                  />
+                </Form.Group>
+
+                <Form.Group className="mr-2">
+                  <Form.Label className="mr-2">Password</Form.Label>
+                  <Form.Control
+                    size="sm"
+                    type="password"
+                    placeholder="Password"
+                    onChange={this.onChange}
+                    value={this.state.password}
+                    id="password"
+                  />
+                </Form.Group>
+                <Button variant="dark" type="submit" size="sm">
+                  Login
+                </Button>
+              </Form.Row>
+            </Form>
+          )}
+        </Navbar>
+      </>
     );
   }
 }

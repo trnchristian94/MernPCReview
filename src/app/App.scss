@@ -1,0 +1,29 @@
+.App {
+    #pc-principalNavbar .navbar-nav {
+        width: 100%;
+
+        .nav-link {
+            margin: 0 auto;
+        }
+    }
+
+    .navbar.bg-primary {
+        background-color: transparent !important;
+    }
+
+    .navbar {
+
+        .navbar-brand {
+            color: #4a3e3e !important;
+        }
+
+        .nav-link {
+            color: rgba(59, 81, 236, 0.5) !important;
+        }
+
+        .nav-link:focus {
+            color: rgba(141, 165, 243, 0.5) !important;
+        }
+    }
+
+}

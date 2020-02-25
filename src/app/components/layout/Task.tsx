@@ -1,36 +1,19 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Form, Button, Col, Row, Container, Card } from "react-bootstrap";
+import { useToasts } from "react-toast-notifications";
 
-declare const M: any;
-type MyProps = {};
-type MyState = {
-  _id: string;
-  title: string;
-  description: string;
-  tasks: Array<any>;
-  [x: number]: any;
-};
+export default function Task() {
+  const { addToast } = useToasts();
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [tasks, setTasks] = useState([]);
+  const [_id, setId] = useState("");
 
-class Task extends Component<MyProps, MyState> {
-  constructor() {
-    super(null);
-    this.state = {
-      title: "",
-      description: "",
-      tasks: [],
-      _id: ""
-    };
-    this.handleChange = this.handleChange.bind(this);
-    this.addTask = this.addTask.bind(this);
-  }
-
-  addTask(e: any) {
-    console.log("adding task");
-    console.log(this.state);
-    if (this.state._id) {
-      fetch(`/api/tasks/${this.state._id}`, {
+  const addTask: any = (e: any) => {
+    if (_id) {
+      fetch(`/api/tasks/${_id}`, {
         method: "PUT",
-        body: JSON.stringify(this.state),
+        body: JSON.stringify({ title, description }),
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json"
@@ -38,15 +21,19 @@ class Task extends Component<MyProps, MyState> {
       })
         .then(res => res.json())
         .then(data => {
-          console.log(data);
-          M.toast({ html: "Task updated" });
-          this.setState({ title: "", description: "", _id: "" });
-          this.fetchTasks();
+          addToast("Task updated", {
+            appearance: "success",
+            autoDismiss: true
+          });
+          setTitle("");
+          setDescription("");
+          setId("");
+          fetchTasks();
         });
     } else {
       fetch("/api/tasks", {
         method: "POST",
-        body: JSON.stringify(this.state),
+        body: JSON.stringify({ title, description }),
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json"
@@ -54,33 +41,29 @@ class Task extends Component<MyProps, MyState> {
       })
         .then(res => res.json())
         .then(data => {
-          console.log(data);
-          M.toast({ html: "Task Saved" });
-          this.setState({ title: "", description: "" });
-          this.fetchTasks();
+          addToast("Task saved", {
+            appearance: "success",
+            autoDismiss: true
+          });
+          setTitle("");
+          setDescription("");
+          fetchTasks();
         })
         .catch(err => console.log(err));
     }
     e.preventDefault(); // Evita que el navegador actualice.
-  }
+  };
 
-  componentDidMount() {
-    console.log("El componente se montó");
-    this.fetchTasks();
-  }
-
-  fetchTasks() {
+  const fetchTasks = () => {
     fetch("/api/tasks") // Por defecto es GET
       .then(res => res.json())
       .then(data => {
-        this.setState({ tasks: data });
-        console.log(this.state.tasks);
+        setTasks(data);
       });
-  }
+  };
 
-  deleteTask(id: string) {
+  const deleteTask = (id: string) => {
     if (confirm("Are you sure you want to delete this?")) {
-      console.log("Eliminando " + id);
       fetch(`/api/tasks/${id}`, {
         method: "DELETE",
         headers: {
@@ -90,108 +73,100 @@ class Task extends Component<MyProps, MyState> {
       })
         .then(res => res.json())
         .then(data => {
-          console.log(data);
-          M.toast({ html: "Task Deleted" });
-          this.fetchTasks();
+          addToast("Task deleted", {
+            appearance: "success",
+            autoDismiss: true
+          });
+          fetchTasks();
         });
     }
-  }
+  };
 
-  editTask(id: string) {
-    console.log("Editando " + id);
+  const editTask = (id: string) => {
     fetch(`/api/tasks/${id}`)
       .then(res => res.json())
       .then(data => {
-        this.setState({
-          title: data.title,
-          description: data.description,
-          _id: data._id
-        });
+        setTitle(data.title);
+        setDescription(data.description);
+        setId(data._id);
       });
-  }
+  };
 
-  handleChange(e: any) {
-    const { name, value } = e.target;
-    this.setState({
-      [name]: value
-    });
-  }
-  render() {
-    return (
-      <div className="container">
-        <Link to="/" className="btn-flat waves-effect">
-          <i className="material-icons left">keyboard_backspace</i> Back to home
-        </Link>
-        <div className="row">
-          <div className="col s5">
-            <div className="card">
-              <div className="card-content">
-                <form onSubmit={this.addTask}>
-                  <div className="row">
-                    <div className="input-field col s12">
-                      <input
-                        name="title"
-                        onChange={this.handleChange}
-                        type="text"
-                        placeholder="Task title"
-                        value={this.state.title}
-                      />
-                    </div>
-                  </div>
-                  <div className="row">
-                    <div className="input-field col s12">
-                      <textarea
-                        name="description"
-                        onChange={this.handleChange}
-                        className="materialize-textarea"
-                        placeholder="Task description"
-                        value={this.state.description}
-                      />
-                    </div>
-                  </div>
-                  <button className="btn light-blue darken-4">Send</button>
-                </form>
-              </div>
-            </div>
-          </div>
-          <div className="col s7">
-            <table>
-              <thead>
-                <tr>
-                  <th>Title</th>
-                  <th>Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.tasks.map(task => {
-                  return (
-                    <tr key={task._id}>
-                      <td>{task.title}</td>
-                      <td>{task.description}</td>
-                      <td>
-                        <button
-                          className="btn light-blue darken-4"
-                          onClick={() => this.editTask(task._id)}
-                        >
-                          <i className="material-icons">edit</i>
-                        </button>
-                        <button
-                          className="btn light-blue darken-4"
-                          style={{ margin: "4px" }}
-                          onClick={() => this.deleteTask(task._id)}
-                        >
-                          <i className="material-icons">delete</i>
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  useEffect(() => {
+    fetchTasks();
+  }, []);
+
+  return (
+    <Container fluid style={{ maxWidth: "75%", paddingTop: "4rem" }}>
+      <Row>
+        <Col lg={true}>
+          <Card style={{ padding: "15px", width: "400px" }}>
+            <Form noValidate onSubmit={addTask}>
+              <Form.Row>
+                <Form.Group as={Col}>
+                  <Form.Label>Task</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="title"
+                    placeholder="Task title"
+                    value={title}
+                    onChange={(e: any) => setTitle(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+              </Form.Row>
+              <Form.Row>
+                <Form.Group as={Col}>
+                  <Form.Label>Description</Form.Label>
+                  <Form.Control
+                    type="text"
+                    name="description"
+                    placeholder="Task description"
+                    value={description}
+                    onChange={(e: any) => setDescription(e.target.value)}
+                    required
+                  />
+                </Form.Group>
+              </Form.Row>
+              <Button type="submit">Send</Button>
+            </Form>
+          </Card>
+        </Col>
+        <Col lg={true}>
+          <Row>
+            {tasks.map(task => {
+              return (
+                <Card
+                  key={task._id}
+                  style={{
+                    width: "200px",
+                    marginTop: "10px",
+                    marginLeft: "10px"
+                  }}
+                >
+                  <Card.Body>
+                    <Card.Title>{task.title}</Card.Title>
+                    <Card.Text>{task.description}</Card.Text>
+                    <Button
+                      variant="primary"
+                      className="mr-2"
+                      onClick={() => editTask(task._id)}
+                    >
+                      Edit
+                    </Button>
+                    <Button
+                      variant="primary"
+                      onClick={() => deleteTask(task._id)}
+                    >
+                      Delete
+                    </Button>
+                  </Card.Body>
+                </Card>
+              );
+            })}
+          </Row>
+        </Col>
+      </Row>
+    </Container>
+  );
 }
-export default Task;

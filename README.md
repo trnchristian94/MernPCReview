@@ -23,7 +23,6 @@ validator: used to validate inputs (e.g. check for valid email format, confirmin
 
 Modules for Redux validation
 axios: promise based HTTP client for making requests to our backend
-classnames: used for conditional classes in our JSX
 jwt-decode: used to decode our jwt so we can get user data from it
 react-redux: allows us to use Redux with React
 react-router-dom: used for routing purposes

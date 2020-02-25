@@ -18,6 +18,9 @@ import jwt_decode from "jwt-decode";
 import setAuthToken from "utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "userLogic/actions/authActions";
 
+import "./App.scss";
+
+import { ToastProvider } from "react-toast-notifications";
 // Check for token to keep user logged in
 
 if (localStorage.jwtToken) {
@@ -41,27 +44,33 @@ if (localStorage.jwtToken) {
 export default class App extends Component {
   render() {
     return (
-      <Provider store={store}>
-        <div>
-          {/* Navigation */}
-
+      <ToastProvider>
+        <Provider store={store}>
           <div>
-            <Router>
-              <div className="App">
-                <Navbar />
-                <Route exact path="/" component={Landing} />
-                <Route exact path="/register" component={Register} />
-                <Route exact path="/login" component={Login} />
-                <Route exact path="/tasks" component={Task} />
-                <Route exact path="/userList" component={UserList} />
-                <Switch>
-                  <PrivateRoute exact path="/dashboard" Component={Dashboard} />
-                </Switch>
-              </div>
-            </Router>
+            {/* Navigation */}
+
+            <div>
+              <Router>
+                <div className="App">
+                  <Navbar />
+                  <Route exact path="/" component={Landing} />
+                  <Route exact path="/register" component={Register} />
+                  <Route exact path="/login" component={Login} />
+                  <Route exact path="/tasks" component={Task} />
+                  <Route exact path="/userList" component={UserList} />
+                  <Switch>
+                    <PrivateRoute
+                      exact
+                      path="/dashboard"
+                      Component={Dashboard}
+                    />
+                  </Switch>
+                </div>
+              </Router>
+            </div>
           </div>
-        </div>
-      </Provider>
+        </Provider>
+      </ToastProvider>
     );
   }
 }

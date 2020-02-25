@@ -1,88 +1,71 @@
-import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { useToasts } from "react-toast-notifications";
 
 import { connect } from "react-redux";
 
-type MyProps = {
+interface Props {
   auth: any;
   errors: any;
   history: any;
-};
-type MyState = {
-  _id: string;
-  userName: string;
-  email: string;
-  users: Array<any>;
-  [x: number]: any;
-};
+}
 
-class UserList extends Component<MyProps, MyState> {
-  constructor(props: any) {
-    super(props);
-    this.state = {
-      userName: "",
-      email: "",
-      users: [],
-      _id: ""
-    };
-  }
+function UserList({ auth, errors, history }: Props) {
+  const { addToast } = useToasts();
+  const [userName, setUsername] = useState("");
+  const [email, setEmail] = useState("");
+  const [users, setUsers] = useState([]);
+  const [_id, setId] = useState("");
+  const [img, setImg] = useState();
 
-  componentDidMount() {
-    if (!this.props.auth.isAuthenticated) {
-      this.props.history.push("/login");
+  useEffect(() => {
+    if (!auth.isAuthenticated) {
+      history.push("/login");
     } else {
-      this.fetchUsers();
+      fetchUsers();
     }
-  }
+  }, []);
 
-  fetchUsers() {
+  const fetchUsers = () => {
     fetch("/api/userList") // Por defecto es GET
       .then(res => res.json())
       .then(data => {
-        this.setState({ users: data });
-        console.log(this.state.users);
+        setUsers(data);
       });
-  }
+  };
 
-  render() {
-    return (
-      <div className="container">
-        <Link to="/" className="btn-flat waves-effect">
-          <i className="material-icons left">keyboard_backspace</i> Back to home
-        </Link>
-        <div className="row">
-          <div className="col s12">
-            <table>
-              <thead>
-                <tr>
-                  <th>User</th>
-                  <th>Email</th>
-                </tr>
-              </thead>
-              <tbody>
-                {this.state.users.map(user => {
-                  return (
-                    <tr key={user._id}>
-                      <td>{user.name}</td>
-                      <td>{user.email}</td>
-                      <td>
-                        <button
-                          className="btn light-blue darken-4"
-                          //onClick={() => this.addUser(task._id)}
-                        >
-                          <i className="material-icons">add</i>
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-    );
-  }
+  const addUser = (e: any) => {
+    addToast("User added", {
+      appearance: "success",
+      autoDismiss: true
+    });
+  };
+
+  return (
+    <Container fluid style={{ paddingTop: "4rem" }}>
+      <Col lg={true}>
+        <Row>
+          {users.map((user: any) => {
+            return (
+              <Card
+                key={user._id}
+                style={{ margin: "15px 0px 0px 15px", width: "200px" }}
+              >
+                {img && <Card.Img variant="top" src="holder.js/100px180" />}
+                <Card.Body>
+                  <Card.Title>@{user.name}</Card.Title>
+                  <Card.Text>{user.email}</Card.Text>
+                  <Button variant="primary" onClick={() => addUser(user._id)}>
+                    Add user as Friend
+                  </Button>
+                </Card.Body>
+              </Card>
+            );
+          })}
+        </Row>
+      </Col>
+    </Container>
+  );
 }
 const mapStateToProps = (state: any) => ({
   auth: state.auth,

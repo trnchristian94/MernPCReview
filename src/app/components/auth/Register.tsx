@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { registerUser } from "userLogic/actions/authActions";
-import classnames from "classnames";
-import { Form, Button, InputGroup, Col, Row } from "react-bootstrap";
+import { Form, Button, InputGroup, Col } from "react-bootstrap";
 
 type MyProps = {
   registerUser: any;
@@ -62,7 +61,7 @@ class Register extends Component<MyProps, MyState> {
     const errors = this.state.errors;
     return (
       <div className="container">
-        <div className="row">
+        <div style={{ marginTop: "4rem" }}>
           <div className="col s8 offset-s2">
             <Link to="/" className="btn-flat waves-effect">
               Back to home
@@ -86,9 +85,8 @@ class Register extends Component<MyProps, MyState> {
                     aria-describedby="inputGroupPrepend"
                     value={this.state.email}
                     onChange={this.handleChange}
-                    className={classnames("", {
-                      invalid: errors.email
-                    })}
+                    isValid={errors.email === undefined}
+                    isInvalid={errors.email !== undefined}
                     required
                   />
                   <Form.Control.Feedback type="invalid">
@@ -110,9 +108,8 @@ class Register extends Component<MyProps, MyState> {
                       aria-describedby="inputGroupPrepend"
                       value={this.state.name}
                       onChange={this.handleChange}
-                      className={classnames("", {
-                        invalid: errors.name
-                      })}
+                      isValid={errors.name === undefined}
+                      isInvalid={errors.name !== undefined}
                       required
                     />
                     <Form.Control.Feedback type="invalid">
@@ -130,9 +127,9 @@ class Register extends Component<MyProps, MyState> {
                     placeholder="Password"
                     value={this.state.password}
                     onChange={this.handleChange}
-                    className={classnames("", {
-                      invalid: errors.password
-                    })}
+                    isValid={errors.password === undefined}
+                    isInvalid={errors.password !== undefined}
+                    required
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.password}
@@ -146,9 +143,9 @@ class Register extends Component<MyProps, MyState> {
                     placeholder="Confirm password"
                     onChange={this.handleChange}
                     value={this.state.password2}
-                    className={classnames("", {
-                      invalid: errors.password2
-                    })}
+                    isValid={errors.password2 === undefined}
+                    isInvalid={errors.password2 !== undefined}
+                    required
                   />
                   <Form.Control.Feedback type="invalid">
                     {errors.password2}
