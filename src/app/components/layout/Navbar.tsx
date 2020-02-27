@@ -31,6 +31,10 @@ function Header({ auth, loginUser, logoutUser, errors }: Props) {
   useEffect(() => {
     if (auth.isAuthenticated) {
       setConnected(true);
+      addToast("You logged in succesfully", {
+        appearance: "success",
+        autoDismiss: true
+      });
     }
   }, [auth.isAuthenticated]);
 
@@ -40,6 +44,10 @@ function Header({ auth, loginUser, logoutUser, errors }: Props) {
     e.preventDefault();
     logoutUser();
     setConnected(false);
+    addToast("User logged out", {
+      appearance: "success",
+      autoDismiss: true
+    });
   };
 
   const onSubmit = (e: any) => {
