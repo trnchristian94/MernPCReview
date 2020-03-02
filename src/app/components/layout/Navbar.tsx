@@ -23,11 +23,6 @@ function Header({ auth, loginUser, logoutUser, errors }: Props) {
   const [password, setPassword] = useState("");
   const [connected, setConnected] = useState(false);
 
-  /*UNSAFE_componentWillReceiveProps(nextProps: any) {
-    if (nextProps.auth.isAuthenticated) {
-      window.location.href = "./dashboard";
-    }
-  }*/
   useEffect(() => {
     if (auth.isAuthenticated) {
       setConnected(true);
@@ -60,6 +55,7 @@ function Header({ auth, loginUser, logoutUser, errors }: Props) {
   };
 
   const { user } = auth;
+
   return (
     <>
       {!connected && <Redirect push to="/login" />}
@@ -89,9 +85,14 @@ function Header({ auth, loginUser, logoutUser, errors }: Props) {
               </Link>
             </>
           ) : (
-            <Link to={"/userList"} className="nav-link">
-              Users
-            </Link>
+            <>
+              <Link to={"/userList"} className="nav-link">
+                Users
+              </Link>
+              <Link to={"/profile"} className="nav-link">
+                My profile
+              </Link>
+            </>
           )}
         </Nav>
         {auth.isAuthenticated ? (

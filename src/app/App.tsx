@@ -8,6 +8,7 @@ import Navbar from "src/app/components/layout/Navbar";
 import Landing from "src/app/components/layout/Landing";
 import Task from "components/layout/Task";
 import UserList from "components/layout/UserList";
+import MyProfile from "components/layout/MyProfile";
 
 import Register from "components/auth/Register";
 import Login from "components/auth/Login";
@@ -58,6 +59,7 @@ export default class App extends Component {
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/tasks" component={Task} />
                   <Route exact path="/userList" component={UserList} />
+                  <Route exact path="/profile" component={MyProfile} />
                   <Switch>
                     <PrivateRoute
                       exact

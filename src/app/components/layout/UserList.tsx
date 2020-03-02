@@ -27,7 +27,11 @@ function UserList({ auth, errors, history }: Props) {
   }, []);
 
   const fetchUsers = () => {
-    fetch("/api/userList") // Por defecto es GET
+    fetch("/api/userList", {
+      headers: {
+        Authorization: localStorage.jwtToken
+      }
+    })
       .then(res => res.json())
       .then(data => {
         setUsers(data);
