@@ -58,7 +58,7 @@ function Header({ auth, loginUser, logoutUser, errors }: Props) {
 
   return (
     <>
-      {!connected && <Redirect push to="/login" />}
+      {/*!connected && <Redirect push to="/login" />*/}
       {connected && <Redirect push to="/dashboard" />}
       <Navbar id="pc-principalNavbar">
         <Nav>
