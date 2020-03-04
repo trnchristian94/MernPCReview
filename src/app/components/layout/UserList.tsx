@@ -12,11 +12,7 @@ interface Props {
 
 function UserList({ auth, errors, history }: Props) {
   const { addToast } = useToasts();
-  const [userName, setUsername] = useState("");
-  const [email, setEmail] = useState("");
   const [users, setUsers] = useState([]);
-  const [_id, setId] = useState("");
-  const [img, setImg] = useState();
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
@@ -55,10 +51,24 @@ function UserList({ auth, errors, history }: Props) {
                 key={user._id}
                 style={{ margin: "15px 0px 0px 15px", width: "200px" }}
               >
-                {img && <Card.Img variant="top" src="holder.js/100px180" />}
-                <Card.Body>
+                <Card.Body style={{ textAlign: "center" }}>
+                  {user.userImage && (
+                    <div style={{ width: "150px", height: "150px", display: "block", margin: "auto"}}>
+                      <Card.Img
+                        variant="top"
+                        style={{
+                          maxWidth: "150px",
+                          maxHeight: "150px",
+                          borderRadius: "50%"
+                        }}
+                        src={user.userImage.image}
+                      />
+                    </div>
+                  )}
                   <Card.Title>@{user.name}</Card.Title>
-                  <Card.Text>{user.email}</Card.Text>
+                  <Card.Text style={{ color: "#53adda" }}>
+                    {user.userInfo && user.userInfo.bio}
+                  </Card.Text>
                   <Button variant="primary" onClick={() => addUser(user._id)}>
                     Add user as Friend
                   </Button>

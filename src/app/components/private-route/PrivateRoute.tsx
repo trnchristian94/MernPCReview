@@ -12,7 +12,6 @@ function PrivateRoute({ Component, auth, ...rest }: Props) {
     <Route
       {...rest}
       render={props => {
-        console.log(props);
         return auth.isAuthenticated === true ? (
           <Component {...props} />
         ) : (
