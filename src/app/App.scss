@@ -26,4 +26,44 @@
         }
     }
 
+    // UserCard
+    .userCard {
+        margin: 15px 0px 0px 15px;
+        width: 200px;
+
+        .userCard-body {
+            text-align: center;
+            padding: 1rem;
+
+
+            &__header {
+                height: 310px;
+
+                .userImage {
+                    width: 150px;
+                    height: 150px;
+                    display: block;
+                    margin: auto;
+                    border: 2px solid #ccc !important;
+                    border-radius: 50%;
+                    box-sizing: content-box;
+
+                    .userImg {
+                        width: 150px;
+                        height: 150px;
+                        border-radius: 50%;
+                    }
+                }
+
+                .userName {}
+
+                .userBio {
+                    color: #53adda;
+                }
+            }
+
+            &__footer {}
+        }
+
+    }
 }

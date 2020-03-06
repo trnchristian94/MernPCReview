@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col, Card, Button } from "react-bootstrap";
+import { Container, Row, Col } from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
+import UserCard from "components/layout/UserCard";
 
 import { connect } from "react-redux";
 
@@ -11,7 +12,6 @@ interface Props {
 }
 
 function UserList({ auth, errors, history }: Props) {
-  const { addToast } = useToasts();
   const [users, setUsers] = useState([]);
 
   useEffect(() => {
@@ -34,47 +34,12 @@ function UserList({ auth, errors, history }: Props) {
       });
   };
 
-  const addUser = (e: any) => {
-    addToast("User added", {
-      appearance: "success",
-      autoDismiss: true
-    });
-  };
-
   return (
     <Container fluid style={{ paddingTop: "4rem" }}>
       <Col lg={true}>
         <Row>
           {users.map((user: any) => {
-            return (
-              <Card
-                key={user._id}
-                style={{ margin: "15px 0px 0px 15px", width: "200px" }}
-              >
-                <Card.Body style={{ textAlign: "center" }}>
-                  {user.userImage && (
-                    <div style={{ width: "150px", height: "150px", display: "block", margin: "auto"}}>
-                      <Card.Img
-                        variant="top"
-                        style={{
-                          maxWidth: "150px",
-                          maxHeight: "150px",
-                          borderRadius: "50%"
-                        }}
-                        src={user.userImage.image}
-                      />
-                    </div>
-                  )}
-                  <Card.Title>@{user.name}</Card.Title>
-                  <Card.Text style={{ color: "#53adda" }}>
-                    {user.userInfo && user.userInfo.bio}
-                  </Card.Text>
-                  <Button variant="primary" onClick={() => addUser(user._id)}>
-                    Add user as Friend
-                  </Button>
-                </Card.Body>
-              </Card>
-            );
+            return <UserCard key={user._id} user={user} showAddButton={true} />;
           })}
         </Row>
       </Col>

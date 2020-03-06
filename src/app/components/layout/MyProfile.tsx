@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Container, Form, Col, Card, Button } from "react-bootstrap";
+import { Container, Form, Col, Button } from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
+import UserCard from "components/layout/UserCard";
 
 import { formatDate } from "utils/date";
 
@@ -41,7 +42,6 @@ function MyProfile({ auth, errors, history }: Props) {
         setDate(data.date);
         setEmail(data.email);
         setBio(data.userInfo ? data.userInfo.bio : "");
-        console.log(data.userImage);
         setUserImage({
           image: data.userImage ? data.userImage.image : "",
           imageId: data.userImage ? data.userImage.imageId : ""
@@ -113,7 +113,7 @@ function MyProfile({ auth, errors, history }: Props) {
     <Container style={{ paddingTop: "4rem" }}>
       <Col lg={true}>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          <Card style={{ margin: "15px 0px 0px 15px", width: "200px" }}>
+          {/*<Card style={{ margin: "15px 0px 0px 15px", width: "200px" }}>
             <Card.Body style={{ textAlign: "center" }}>
               {userImage && (
                 <div
@@ -138,7 +138,8 @@ function MyProfile({ auth, errors, history }: Props) {
               <Card.Title>@{userName}</Card.Title>
               <Card.Text style={{ color: "#53adda" }}>{bio}</Card.Text>
             </Card.Body>
-          </Card>
+                  </Card>*/}
+                  <UserCard user={{name: userName, userImage:{image: userImage.image}, userInfo:{bio: bio} }} showAddButton={false}/>
         </div>
         <br />
         <Button onClick={() => setImageForm(!imageForm)}>
