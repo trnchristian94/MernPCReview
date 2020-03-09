@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Form, Col, Button } from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
 import UserCard from "components/layout/UserCard";
+import PicCropUpload from "utils/picCropUpload";
 
 import { formatDate } from "utils/date";
 
@@ -24,6 +25,7 @@ function MyProfile({ auth, errors, history }: Props) {
     imageId: ""
   });
   const [image, setImage] = useState();
+  const [croppedImage, setCroppedImage] = useState(null);
   const [imageForm, setImageForm] = useState(false);
   const [id, setId] = useState("");
 
@@ -70,36 +72,8 @@ function MyProfile({ auth, errors, history }: Props) {
       });
   };
 
-  const uploadImage = (e: any) => {
-    e.preventDefault();
-    let formData = new FormData();
-    formData.append("image", image);
-    formData.append("userId", id);
-    addImage(formData);
-  };
-  const addImage = (imageData: any) => {
-    fetch("/api/userProfile/uploadImage/", {
-      headers: {
-        Authorization: localStorage.jwtToken
-      },
-      method: "POST",
-      body: imageData
-    })
-      .then(res => res.json())
-      .then(data => {
-        addToast(data.status, {
-          appearance: "success",
-          autoDismiss: true
-        });
-        fetchUser();
-      })
-      .catch(err =>
-        addToast(err.message, {
-          appearance: "error",
-          autoDismiss: true
-        })
-      );
-  };
+  
+  
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
@@ -113,33 +87,14 @@ function MyProfile({ auth, errors, history }: Props) {
     <Container style={{ paddingTop: "4rem" }}>
       <Col lg={true}>
         <div style={{ display: "flex", justifyContent: "center" }}>
-          {/*<Card style={{ margin: "15px 0px 0px 15px", width: "200px" }}>
-            <Card.Body style={{ textAlign: "center" }}>
-              {userImage && (
-                <div
-                  style={{
-                    width: "150px",
-                    height: "150px",
-                    display: "block",
-                    margin: "auto"
-                  }}
-                >
-                  <Card.Img
-                    variant="top"
-                    style={{
-                      maxWidth: "150px",
-                      maxHeight: "150px",
-                      borderRadius: "50%"
-                    }}
-                    src={userImage.image}
-                  />
-                </div>
-              )}
-              <Card.Title>@{userName}</Card.Title>
-              <Card.Text style={{ color: "#53adda" }}>{bio}</Card.Text>
-            </Card.Body>
-                  </Card>*/}
-                  <UserCard user={{name: userName, userImage:{image: userImage.image}, userInfo:{bio: bio} }} showAddButton={false}/>
+          <UserCard
+            user={{
+              name: userName,
+              userImage: { image: userImage.image },
+              userInfo: { bio: bio }
+            }}
+            showAddButton={false}
+          />
         </div>
         <br />
         <Button onClick={() => setImageForm(!imageForm)}>
@@ -147,22 +102,7 @@ function MyProfile({ auth, errors, history }: Props) {
         </Button>
         <br />
         {imageForm && (
-          <Form encType="multipart/form-data" onSubmit={uploadImage}>
-            <Form.Row>
-              <Form.Group as={Col}>
-                <Form.Label>Choose an image </Form.Label>
-                <br />
-                <input
-                  type="file"
-                  className="form-input"
-                  onChange={(e: any) => setImage(e.target.files[0])}
-                />
-              </Form.Group>
-            </Form.Row>
-            <Button type="submit" className="submit-btn">
-              Submit!
-            </Button>
-          </Form>
+          <PicCropUpload setCroppedImage={setCroppedImage} addToast={addToast} fetchUser={fetchUser} id={id}/>
         )}
         <Form noValidate onSubmit={editUser}>
           <Form.Row>
