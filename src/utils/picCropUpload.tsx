@@ -16,7 +16,10 @@ export default function picCropUpload({
   id
 }: IProps) {
   const [crop, setCrop] = useState({
-    width: 50,
+    width: 75,
+    height: 75,
+    x: 0,
+    y: 0,
     aspect: 1 / 1,
     unit: "px"
   } as Crop);
@@ -35,6 +38,7 @@ export default function picCropUpload({
   const resetForm = () => {
     setCrop({
       width: 50,
+      height: 50,
       aspect: 1 / 1,
       unit: "px"
     } as Crop);
@@ -66,9 +70,15 @@ export default function picCropUpload({
     const canvas = document.createElement("canvas");
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
-    canvas.width = Math.ceil(crop.width * scaleX);
-    canvas.height = Math.ceil(crop.height * scaleY);
     const ctx = canvas.getContext("2d");
+    canvas.width =
+      Math.ceil(crop.width * scaleX) > 300
+        ? 300
+        : Math.ceil(crop.width * scaleX);
+    canvas.height =
+      Math.ceil(crop.height * scaleY) > 300
+        ? 300
+        : Math.ceil(crop.height * scaleY);
     ctx.drawImage(
       image,
       crop.x * scaleX,
@@ -77,11 +87,11 @@ export default function picCropUpload({
       crop.height * scaleY,
       0,
       0,
-      crop.width * scaleX,
-      crop.height * scaleY
+      crop.width * scaleX > 300 ? 300 : crop.width * scaleX, //crop.width * scaleX,
+      crop.height * scaleY > 300 ? 300 : crop.height * scaleY //crop.height * scaleY
     );
     // As Base64 string
-    // const base64Image = canvas.toDataURL('image/jpeg');
+    //const base64Image = canvas.toDataURL('image/jpeg');
     // As a blob
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -143,6 +153,18 @@ export default function picCropUpload({
       );
   };
 
+  const imageLoaded = (target: any) => {
+    setImageRef(target);
+    let size =
+      target.naturalWidth > target.naturalHeight
+        ? target.naturalWidth
+        : target.naturalHeight;
+    size = size > 150 ? 150 : size;
+    crop.width = size;
+    crop.height = size;
+    getCroppedImg(target, crop);
+  };
+
   return (
     <Form encType="multipart/form-data" onSubmit={uploadImage}>
       <Form.Row>
@@ -165,7 +187,7 @@ export default function picCropUpload({
               className="picCrop"
               src={src}
               crop={crop}
-              onImageLoaded={(target: any) => setImageRef(target)}
+              onImageLoaded={imageLoaded}
               onComplete={onCropComplete}
               onChange={(crop: Crop) => setCrop(crop)}
               circularCrop={true}

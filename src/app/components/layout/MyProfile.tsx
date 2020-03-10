@@ -72,9 +72,6 @@ function MyProfile({ auth, errors, history }: Props) {
       });
   };
 
-  
-  
-
   useEffect(() => {
     if (!auth.isAuthenticated) {
       history.push("/login");
