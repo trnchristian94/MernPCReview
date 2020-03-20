@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Form, Col, Button } from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
+import { Link } from "react-router-dom";
 import UserCard from "components/layout/UserCard";
 import PicCropUpload from "utils/picCropUpload";
 
@@ -28,6 +29,8 @@ function MyProfile({ auth, errors, history }: Props) {
   const [croppedImage, setCroppedImage] = useState(null);
   const [imageForm, setImageForm] = useState(false);
   const [id, setId] = useState("");
+  const [stalkers, setStalkers] = useState(0);
+  const [stalking, setStalking] = useState(0);
 
   const { user } = auth;
 
@@ -72,11 +75,33 @@ function MyProfile({ auth, errors, history }: Props) {
       });
   };
 
+  const fetchStalks = () => {
+    fetch(`/api/stalks/stalkers/${user.id}/amount`, {
+      headers: {
+        Authorization: localStorage.jwtToken
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        setStalkers(data.stalkers);
+      });
+    fetch(`/api/stalks/stalking/${user.id}/amount`, {
+      headers: {
+        Authorization: localStorage.jwtToken
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        setStalking(data.stalking);
+      });
+  };
+
   useEffect(() => {
     if (!auth.isAuthenticated) {
       history.push("/login");
     } else {
       fetchUser();
+      fetchStalks();
     }
   }, []);
 
@@ -93,13 +118,32 @@ function MyProfile({ auth, errors, history }: Props) {
             showAddButton={false}
           />
         </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "10px"
+          }}
+        >
+          <Link to={"/stalkers"} className="nav-link">
+            Stalkers: {stalkers}
+          </Link>
+          <Link to={"/stalking"} className="nav-link">
+            Stalking: {stalking}
+          </Link>
+        </div>
         <br />
         <Button onClick={() => setImageForm(!imageForm)}>
           Upload new profile Image
         </Button>
         <br />
         {imageForm && (
-          <PicCropUpload setCroppedImage={setCroppedImage} addToast={addToast} fetchUser={fetchUser} id={id}/>
+          <PicCropUpload
+            setCroppedImage={setCroppedImage}
+            addToast={addToast}
+            fetchUser={fetchUser}
+            id={id}
+          />
         )}
         <Form noValidate onSubmit={editUser}>
           <Form.Row>

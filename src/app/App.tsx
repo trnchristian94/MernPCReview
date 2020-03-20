@@ -9,6 +9,9 @@ import Landing from "src/app/components/layout/Landing";
 import Task from "components/layout/Task";
 import UserList from "components/layout/UserList";
 import MyProfile from "components/layout/MyProfile";
+import Stalking from "components/layout/Stalking";
+import Stalkers from "components/layout/Stalkers";
+import StalkerRequests from "components/layout/StalkerRequests";
 
 import Register from "components/auth/Register";
 import Login from "components/auth/Login";
@@ -60,6 +63,13 @@ export default class App extends Component {
                   <Route exact path="/tasks" component={Task} />
                   <Route exact path="/userList" component={UserList} />
                   <Route exact path="/profile" component={MyProfile} />
+                  <Route exact path="/stalking" component={Stalking} />
+                  <Route exact path="/stalkers" component={Stalkers} />
+                  <Route
+                    exact
+                    path="/stalkerRequests"
+                    component={StalkerRequests}
+                  />
                   <Switch>
                     <PrivateRoute
                       exact

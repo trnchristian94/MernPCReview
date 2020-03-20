@@ -6,7 +6,7 @@ import { loginUser } from "userLogic/actions/authActions";
 
 import { useToasts } from "react-toast-notifications";
 
-import { Link, Redirect } from "react-router-dom";
+import { Link, Redirect, withRouter } from "react-router-dom";
 
 import { Navbar, Nav, Form, Button } from "react-bootstrap";
 
@@ -17,11 +17,14 @@ interface Props {
   errors: any;
 }
 
-function Header({ auth, loginUser, logoutUser, errors }: Props) {
+function NavbarHeader({ auth, loginUser, logoutUser, errors }: Props) {
   const { addToast } = useToasts();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [connected, setConnected] = useState(false);
+  const [stalkRequests, setStalkRequests] = useState(0);
+
+  const { user } = auth;
 
   useEffect(() => {
     if (auth.isAuthenticated) {
@@ -30,6 +33,7 @@ function Header({ auth, loginUser, logoutUser, errors }: Props) {
         appearance: "success",
         autoDismiss: true
       });
+      fetchStalkRequests();
     }
   }, [auth.isAuthenticated]);
 
@@ -45,6 +49,18 @@ function Header({ auth, loginUser, logoutUser, errors }: Props) {
     });
   };
 
+  const fetchStalkRequests = () => {
+    fetch(`/api/stalks/received/${user.id}/amount`, {
+      headers: {
+        Authorization: localStorage.jwtToken
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        setStalkRequests(data.stalkRequests);
+      });
+  };
+
   const onSubmit = (e: any) => {
     e.preventDefault();
     const userData = {
@@ -53,8 +69,6 @@ function Header({ auth, loginUser, logoutUser, errors }: Props) {
     };
     loginUser(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
   };
-
-  const { user } = auth;
 
   return (
     <>
@@ -86,12 +100,29 @@ function Header({ auth, loginUser, logoutUser, errors }: Props) {
             </>
           ) : (
             <>
-              <Link to={"/userList"} className="nav-link">
+              <Link
+                to={"/userList"}
+                className="nav-link"
+                onClick={fetchStalkRequests}
+              >
                 Users
               </Link>
-              <Link to={"/profile"} className="nav-link">
+              <Link
+                to={"/profile"}
+                className="nav-link"
+                onClick={fetchStalkRequests}
+              >
                 My profile
               </Link>
+              {stalkRequests > 0 && (
+                <Link
+                  to={"/stalkerRequests"}
+                  className="nav-link stalkerRequests"
+                  onClick={fetchStalkRequests}
+                >
+                  Stalker Requests : {stalkRequests}
+                </Link>
+              )}
             </>
           )}
         </Nav>
@@ -142,6 +173,8 @@ function Header({ auth, loginUser, logoutUser, errors }: Props) {
 
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
 });
-export default connect(mapStateToProps, { logoutUser, loginUser })(Header);
+export default withRouter(
+  connect(mapStateToProps, { logoutUser, loginUser })(NavbarHeader)
+);

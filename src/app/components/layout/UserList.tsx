@@ -13,14 +13,29 @@ interface Props {
 
 function UserList({ auth, errors, history }: Props) {
   const [users, setUsers] = useState([]);
+  const [stalkRequests, setStalkRequests] = useState([]);
+  const { user } = auth;
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
       history.push("/login");
     } else {
-      fetchUsers();
+      fetchStalkRequests();
     }
   }, []);
+
+  const fetchStalkRequests = () => {
+    fetch("/api/stalks/sent/" + user.id, {
+      headers: {
+        Authorization: localStorage.jwtToken
+      }
+    })
+      .then(res => res.json())
+      .then(data => {
+        setStalkRequests(data);
+        fetchUsers();
+      });
+  };
 
   const fetchUsers = () => {
     fetch("/api/userList", {
@@ -38,8 +53,21 @@ function UserList({ auth, errors, history }: Props) {
     <Container fluid style={{ paddingTop: "4rem" }}>
       <Col lg={true}>
         <Row>
-          {users.map((user: any) => {
-            return <UserCard key={user._id} user={user} showAddButton={true} />;
+          {users.map((publicUser: any) => {
+            const stalkReq: {
+              _id: String;
+              recipient: String;
+              status: number;
+            } = stalkRequests.find(f => f.recipient === publicUser._id);
+            return (
+              <UserCard
+                key={publicUser._id}
+                user={publicUser}
+                showAddButton={publicUser._id === user.id ? false : true}
+                status={stalkReq ? stalkReq.status : 0}
+                fetchUsers={fetchStalkRequests}
+              />
+            );
           })}
         </Row>
       </Col>
