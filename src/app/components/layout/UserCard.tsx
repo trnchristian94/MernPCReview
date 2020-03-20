@@ -3,6 +3,8 @@ import { Card, Button } from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
 import { connect, useDispatch } from "react-redux";
 
+import { getStalkRequests } from "userLogic/actions/stalkRequestActions";
+
 interface IProps {
   auth: any;
   user: {
@@ -15,6 +17,7 @@ interface IProps {
   status?: number;
   fetchUsers?: any;
   stalker?: boolean;
+  getStalkRequests: any;
 }
 
 function UserCard({
@@ -23,7 +26,8 @@ function UserCard({
   status,
   auth,
   fetchUsers,
-  stalker
+  stalker,
+  getStalkRequests
 }: IProps) {
   const { addToast } = useToasts();
   const { dispatch } = useDispatch();
@@ -89,7 +93,7 @@ function UserCard({
         });
         fetchUsers();
       })
-      .catch(err => console.log(err));
+      .catch(err => console.log(err)).finally(getStalkRequests(auth.user));
   };
 
   const renderStatus = () => {
@@ -195,6 +199,7 @@ function UserCard({
 }
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  stalkers: state.stalkers
 });
-export default connect(mapStateToProps)(UserCard);
+export default connect(mapStateToProps, { getStalkRequests })(UserCard);

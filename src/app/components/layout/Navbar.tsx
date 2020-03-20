@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 
 import { connect } from "react-redux";
-import { logoutUser } from "userLogic/actions/authActions";
-import { loginUser } from "userLogic/actions/authActions";
+import { loginUser, logoutUser } from "userLogic/actions/authActions";
+import { getStalkRequests } from "userLogic/actions/stalkRequestActions";
 
 import { useToasts } from "react-toast-notifications";
 
@@ -12,18 +12,27 @@ import { Navbar, Nav, Form, Button } from "react-bootstrap";
 
 interface Props {
   auth: any;
+  stalks: any;
   loginUser: any;
   logoutUser: any;
+  getStalkRequests: any;
   errors: any;
 }
 
-function NavbarHeader({ auth, loginUser, logoutUser, errors }: Props) {
+function NavbarHeader({
+  auth,
+  loginUser,
+  logoutUser,
+  getStalkRequests,
+  errors,
+  stalks
+}: Props) {
   const { addToast } = useToasts();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [connected, setConnected] = useState(false);
-  const [stalkRequests, setStalkRequests] = useState(0);
-
+  //const [stalkRequests, setStalkRequests] = useState(0);
+  const stalkReq = stalks.stalkRequests;
   const { user } = auth;
 
   useEffect(() => {
@@ -33,7 +42,7 @@ function NavbarHeader({ auth, loginUser, logoutUser, errors }: Props) {
         appearance: "success",
         autoDismiss: true
       });
-      fetchStalkRequests();
+      getStalkRequests(user);
     }
   }, [auth.isAuthenticated]);
 
@@ -47,18 +56,6 @@ function NavbarHeader({ auth, loginUser, logoutUser, errors }: Props) {
       appearance: "success",
       autoDismiss: true
     });
-  };
-
-  const fetchStalkRequests = () => {
-    fetch(`/api/stalks/received/${user.id}/amount`, {
-      headers: {
-        Authorization: localStorage.jwtToken
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        setStalkRequests(data.stalkRequests);
-      });
   };
 
   const onSubmit = (e: any) => {
@@ -100,27 +97,22 @@ function NavbarHeader({ auth, loginUser, logoutUser, errors }: Props) {
             </>
           ) : (
             <>
-              <Link
-                to={"/userList"}
-                className="nav-link"
-                onClick={fetchStalkRequests}
-              >
+              <Link to={"/userList"} className="nav-link">
                 Users
               </Link>
               <Link
                 to={"/profile"}
                 className="nav-link"
-                onClick={fetchStalkRequests}
+                onClick={() => getStalkRequests(user)}
               >
                 My profile
               </Link>
-              {stalkRequests > 0 && (
+              {stalkReq > 0 && (
                 <Link
                   to={"/stalkerRequests"}
                   className="nav-link stalkerRequests"
-                  onClick={fetchStalkRequests}
                 >
-                  Stalker Requests : {stalkRequests}
+                  Stalker Requests : {stalkReq}
                 </Link>
               )}
             </>
@@ -174,7 +166,10 @@ function NavbarHeader({ auth, loginUser, logoutUser, errors }: Props) {
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
   errors: state.errors,
+  stalks: state.stalks
 });
 export default withRouter(
-  connect(mapStateToProps, { logoutUser, loginUser })(NavbarHeader)
+  connect(mapStateToProps, { logoutUser, loginUser, getStalkRequests })(
+    NavbarHeader
+  )
 );
