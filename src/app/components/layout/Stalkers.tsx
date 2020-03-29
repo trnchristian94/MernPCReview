@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import UserCard from "components/layout/UserCard";
 import { connect } from "react-redux";
+import { requestGet } from "utils/request";
 
 interface Props {
   auth: any;
@@ -9,8 +10,6 @@ interface Props {
   history: any;
 }
 
-// Buscar a quien sigue el usuario.
-// Filtrar usuarios por estos a los que sigue (desde la parte back)
 function Stalking({ auth, errors, history }: Props) {
   const [stalkers, setStalkers] = useState([]);
   const { user } = auth;
@@ -23,24 +22,22 @@ function Stalking({ auth, errors, history }: Props) {
   }, []);
 
   const fetchStalking = () => {
-    fetch("/api/stalks/stalkers/" + user.id, {
-      headers: {
-        Authorization: localStorage.jwtToken
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        setStalkers(data);
-      });
+    requestGet("/api/stalks/stalkers/" + user.id, setStalkers);
   };
 
   return (
     <Container fluid style={{ paddingTop: "4rem" }}>
       <Col lg={true}>
-          <div>Stalkers :</div>
+        <div>Stalkers :</div>
         <Row>
           {stalkers.map((publicUser: any) => {
-            return <UserCard key={publicUser._id} user={publicUser} showAddButton={false} />;
+            return (
+              <UserCard
+                key={publicUser._id}
+                user={publicUser}
+                showAddButton={false}
+              />
+            );
           })}
         </Row>
       </Col>

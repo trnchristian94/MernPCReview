@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
 import { Form, Col, Button } from "react-bootstrap";
+import { requestPostFile } from "./request";
 
 interface IProps {
   setCroppedImage: any;
@@ -125,32 +126,19 @@ export default function picCropUpload({
   };
 
   const uploadImage = (e: any) => {
+    const callback = () => {
+      addToast("Image uploaded", {
+        appearance: "success",
+        autoDismiss: true
+      });
+      fetchUser();
+      resetForm();
+    };
     e.preventDefault();
     let formData = new FormData();
     formData.append("image", cropImage);
     formData.append("userId", id);
-    fetch("/api/userProfile/uploadImage/", {
-      headers: {
-        Authorization: localStorage.jwtToken
-      },
-      method: "POST",
-      body: formData
-    })
-      .then(res => res.json())
-      .then(data => {
-        addToast(data.status, {
-          appearance: "success",
-          autoDismiss: true
-        });
-        fetchUser();
-        resetForm();
-      })
-      .catch(err =>
-        addToast(err.message, {
-          appearance: "error",
-          autoDismiss: true
-        })
-      );
+    requestPostFile("/api/userProfile/uploadImage/", formData, callback);
   };
 
   const imageLoaded = (target: any) => {

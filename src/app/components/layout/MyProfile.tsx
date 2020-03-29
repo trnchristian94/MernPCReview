@@ -4,7 +4,7 @@ import { useToasts } from "react-toast-notifications";
 import { Link } from "react-router-dom";
 import UserCard from "components/layout/UserCard";
 import PicCropUpload from "utils/picCropUpload";
-
+import { requestGet, requestPut } from "utils/request";
 import { formatDate } from "utils/date";
 
 import { connect } from "react-redux";
@@ -29,8 +29,8 @@ function MyProfile({ auth, errors, history }: Props) {
   const [croppedImage, setCroppedImage] = useState(null);
   const [imageForm, setImageForm] = useState(false);
   const [id, setId] = useState("");
-  const [stalkers, setStalkers] = useState(0);
-  const [stalking, setStalking] = useState(0);
+  const [stalkers, setStalkers] = useState({ stalkers: 0 });
+  const [stalking, setStalking] = useState({ stalking: 0 });
 
   const { user } = auth;
 
@@ -57,43 +57,19 @@ function MyProfile({ auth, errors, history }: Props) {
 
   const editUser = (e: any) => {
     e.preventDefault();
-    fetch(`/api/userProfile/updateUser/${id}`, {
-      method: "PUT",
-      body: JSON.stringify({ name: userName, email, userInfo: { bio: bio } }),
-      headers: {
-        Authorization: localStorage.jwtToken,
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        addToast("User updated", {
-          appearance: "success",
-          autoDismiss: true
-        });
-      });
+    requestPut(
+      `/api/userProfile/updateUser/${id}`,
+      { name: userName, email, userInfo: { bio: bio } },
+      addToast("User updated", {
+        appearance: "success",
+        autoDismiss: true
+      })
+    );
   };
 
   const fetchStalks = () => {
-    fetch(`/api/stalks/stalkers/${user.id}/amount`, {
-      headers: {
-        Authorization: localStorage.jwtToken
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        setStalkers(data.stalkers);
-      });
-    fetch(`/api/stalks/stalking/${user.id}/amount`, {
-      headers: {
-        Authorization: localStorage.jwtToken
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        setStalking(data.stalking);
-      });
+    requestGet(`/api/stalks/stalkers/${user.id}/amount`, setStalkers);
+    requestGet(`/api/stalks/stalking/${user.id}/amount`, setStalking);
   };
 
   useEffect(() => {
@@ -126,10 +102,10 @@ function MyProfile({ auth, errors, history }: Props) {
           }}
         >
           <Link to={"/stalkers"} className="nav-link">
-            Stalkers: {stalkers}
+            Stalkers: {stalkers.stalkers}
           </Link>
           <Link to={"/stalking"} className="nav-link">
-            Stalking: {stalking}
+            Stalking: {stalking.stalking}
           </Link>
         </div>
         <br />

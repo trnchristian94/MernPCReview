@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import UserCard from "components/layout/UserCard";
+import { requestGet } from "utils/request";
 
 import { connect } from "react-redux";
 
@@ -24,15 +25,7 @@ function StalkerRequests({ auth, errors, history }: Props) {
   }, []);
 
   const fetchStalkerRequests = () => {
-    fetch("/api/stalks/received/" + user.id, {
-      headers: {
-        Authorization: localStorage.jwtToken
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        setStalkerRequests(data);
-      });
+    requestGet("/api/stalks/received/" + user.id, setStalkerRequests);
   };
 
   return (

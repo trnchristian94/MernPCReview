@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Container, Row, Col } from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
 import UserCard from "components/layout/UserCard";
+import { requestGet } from "utils/request";
 
 import { connect } from "react-redux";
 
@@ -25,28 +26,12 @@ function UserList({ auth, errors, history }: Props) {
   }, []);
 
   const fetchStalkRequests = () => {
-    fetch("/api/stalks/sent/" + user.id, {
-      headers: {
-        Authorization: localStorage.jwtToken
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        setStalkRequests(data);
-        fetchUsers();
-      });
+    requestGet(`/api/stalks/sent/${user.id}`, setStalkRequests);
+    fetchUsers();
   };
 
   const fetchUsers = () => {
-    fetch("/api/userList", {
-      headers: {
-        Authorization: localStorage.jwtToken
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        setUsers(data);
-      });
+    requestGet("/api/userList", setUsers);
   };
 
   return (

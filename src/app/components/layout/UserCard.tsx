@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Card, Button } from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
 import { connect, useDispatch } from "react-redux";
-
+import { requestPost, requestDelete, requestPut } from "utils/request";
 import { getStalkRequests } from "userLogic/actions/stalkRequestActions";
 
 interface IProps {
@@ -34,66 +34,49 @@ function UserCard({
   const [statusText, setStatusText] = useState("");
 
   const addUser = (userId: string) => {
-    fetch(`/api/stalks/${auth.user.id}`, {
-      method: "POST",
-      body: JSON.stringify({ recipient: userId }),
-      headers: {
-        Authorization: localStorage.jwtToken,
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        addToast(data.status, {
-          appearance: "success",
-          autoDismiss: true
-        });
-        fetchUsers();
-      })
-      .catch(err => console.log(err));
+    const callback = () => {
+      addToast("User added", {
+        appearance: "success",
+        autoDismiss: true
+      });
+      fetchUsers();
+    };
+    requestPost(`/api/stalks/${auth.user.id}`, { recipient: userId }, callback);
   };
 
   const cancelRequest = (userId: string) => {
-    fetch(`/api/stalks/cancel/${auth.user.id}`, {
-      method: "DELETE",
-      body: JSON.stringify({ recipient: userId }),
-      headers: {
-        Authorization: localStorage.jwtToken,
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        addToast(data.status, {
-          appearance: "success",
-          autoDismiss: true
-        });
-        fetchUsers();
-      })
-      .catch(err => console.log(err));
+    const callback = () => {
+      addToast("Stalk removed", {
+        appearance: "success",
+        autoDismiss: true
+      });
+      fetchUsers();
+    };
+    requestDelete(`/api/stalks/cancel/${auth.user.id}`, callback, {
+      recipient: userId
+    });
   };
 
   const actionRequest = (userId: string, action: string) => {
-    fetch(`/api/stalks/${action}/${auth.user.id}`, {
-      method: "PUT",
-      body: JSON.stringify({ requester: userId }),
-      headers: {
-        Authorization: localStorage.jwtToken,
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-      .then(res => res.json())
-      .then(data => {
-        addToast(data.status, {
-          appearance: "success",
-          autoDismiss: true
-        });
-        fetchUsers();
-      })
-      .catch(err => console.log(err)).finally(getStalkRequests(auth.user));
+    let message = "";
+    if (action === "accept") {
+      message = "Stalk request accepted";
+    } else if (action === "deny") {
+      message = "Stalk request dennied";
+    }
+    const callback = () => {
+      addToast(message, {
+        appearance: "success",
+        autoDismiss: true
+      });
+      fetchUsers();
+      getStalkRequests(auth.user);
+    };
+    requestPut(
+      `/api/stalks/${action}/${auth.user.id}`,
+      { requester: userId },
+      callback
+    );
   };
 
   const renderStatus = () => {
@@ -154,7 +137,6 @@ function UserCard({
             {statusText ? statusText : "Stalking"}
           </Button>
         );
-      // Stop stalking, blue background, red background hover, white text
       case 3:
         return (
           <Button

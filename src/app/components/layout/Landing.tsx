@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Container, Card, Row, Col, Button, Form } from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
+import { requestGet, requestPostFile, requestDelete } from "utils/request";
 
 import { connect } from "react-redux";
 
@@ -25,50 +26,31 @@ function Landing({ auth, errors }: Props) {
   };
 
   const getAllImages = () => {
-    fetch("/api/images") // Por defecto es GET
-      .then(res => res.json())
-      .then(data => {
-        setImages(data);
-      });
+    requestGet("/api/images", setImages);
   };
   const addImage = (imageData: any) => {
-    fetch("/api/images/", {
-      method: "POST",
-      body: imageData
-    })
-      .then(res => res.json())
-      .then(data => {
-        addToast(data.status, {
-          appearance: "success",
-          autoDismiss: true
-        });
-        getAllImages();
-      })
-      .catch(err =>
-        addToast(err.message, {
-          appearance: "error",
-          autoDismiss: true
-        })
-      );
+    const callback = () => {
+      addToast("Image uploaded", {
+        appearance: "success",
+        autoDismiss: true
+      });
+      getAllImages();
+    };
+    requestPostFile("/api/images/", imageData, callback);
   };
+
   const deleteImage = (pic: any) => {
+    const callback = () => {
+      addToast("Image deleted", {
+        appearance: "success",
+        autoDismiss: true
+      });
+      getAllImages();
+    };
     if (confirm("Are you sure you want to delete this?")) {
-      fetch(`/api/images/${pic._id}`, {
-        method: "DELETE",
-        body: JSON.stringify({ imageId: pic.imageId }),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
-          addToast(data.status, {
-            appearance: "success",
-            autoDismiss: true
-          });
-          getAllImages();
-        });
+      requestDelete(`/api/images/${pic._id}`, callback, {
+        imageId: pic.imageId
+      });
     }
   };
 

@@ -1,6 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { Form, Button, Col, Row, Container, Card } from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
+import {
+  requestGet,
+  requestPut,
+  requestPost,
+  requestDelete
+} from "utils/request";
 
 export default function Task() {
   const { addToast } = useToasts();
@@ -9,79 +15,50 @@ export default function Task() {
   const [tasks, setTasks] = useState([]);
   const [_id, setId] = useState("");
 
+  const showToast = (message: string) => {
+    addToast(message, {
+      appearance: "success",
+      autoDismiss: true
+    });
+  };
+
   const addTask: any = (e: any) => {
     if (_id) {
-      fetch(`/api/tasks/${_id}`, {
-        method: "PUT",
-        body: JSON.stringify({ title, description }),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
-          addToast("Task updated", {
-            appearance: "success",
-            autoDismiss: true
-          });
-          setTitle("");
-          setDescription("");
-          setId("");
-          fetchTasks();
-        });
+      const callback = () => {
+        showToast("Task updated");
+        setTitle("");
+        setDescription("");
+        setId("");
+        fetchTasks();
+      };
+      requestPut(`/api/tasks/${_id}`, { title, description }, callback);
     } else {
-      fetch("/api/tasks", {
-        method: "POST",
-        body: JSON.stringify({ title, description }),
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
-          addToast("Task saved", {
-            appearance: "success",
-            autoDismiss: true
-          });
-          setTitle("");
-          setDescription("");
-          fetchTasks();
-        })
-        .catch(err => console.log(err));
+      const callback = () => {
+        showToast("Task updated");
+        setTitle("");
+        setDescription("");
+        fetchTasks();
+      };
+      requestPost("/api/tasks", { title, description, callback }, callback);
     }
     e.preventDefault(); // Evita que el navegador actualice.
   };
 
   const fetchTasks = () => {
-    fetch("/api/tasks") // Por defecto es GET
-      .then(res => res.json())
-      .then(data => {
-        setTasks(data);
-      });
+    requestGet("/api/tasks", setTasks);
   };
 
   const deleteTask = (id: string) => {
     if (confirm("Are you sure you want to delete this?")) {
-      fetch(`/api/tasks/${id}`, {
-        method: "DELETE",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(res => res.json())
-        .then(data => {
-          addToast("Task deleted", {
-            appearance: "success",
-            autoDismiss: true
-          });
-          fetchTasks();
-        });
+      const callback = () => {
+        showToast("Task deleted");
+        fetchTasks();
+      };
+      requestDelete(`/api/tasks/${id}`, callback);
     }
   };
 
+  // Buscar cómo crear función para esto.
   const editTask = (id: string) => {
     fetch(`/api/tasks/${id}`)
       .then(res => res.json())
