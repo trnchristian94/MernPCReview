@@ -6,15 +6,17 @@ import { requestPostFile } from "./request";
 
 interface IProps {
   setCroppedImage: any;
+  landscape: boolean;
   addToast: any;
   fetchUser: any;
   id: string;
 }
 export default function picCropUpload({
   setCroppedImage,
+  landscape,
   addToast,
   fetchUser,
-  id
+  id,
 }: IProps) {
   const [crop, setCrop] = useState({
     width: 75,
@@ -22,7 +24,7 @@ export default function picCropUpload({
     x: 0,
     y: 0,
     aspect: 1 / 1,
-    unit: "px"
+    unit: "px",
   } as Crop);
   const [croppedImageUrl, setCroppedImageUrl] = useState(null);
   const [src, setSrc] = useState();
@@ -34,15 +36,24 @@ export default function picCropUpload({
 
   useEffect(() => {
     inputElement.click();
+    if (landscape) {
+      setCrop({
+        width: 400,
+        height: 150,
+        aspect: 8 / 3,
+      } as Crop);
+    }
   }, []);
 
   const resetForm = () => {
-    setCrop({
-      width: 50,
-      height: 50,
-      aspect: 1 / 1,
-      unit: "px"
-    } as Crop);
+    if (!landscape) {
+      setCrop({
+        width: 75,
+        height: 75,
+        aspect: 1 / 1,
+      } as Crop);
+    }
+
     setCroppedImageUrl(null);
     setSrc(null);
     setCropImage(null);
@@ -72,32 +83,55 @@ export default function picCropUpload({
     const scaleX = image.naturalWidth / image.width;
     const scaleY = image.naturalHeight / image.height;
     const ctx = canvas.getContext("2d");
-    canvas.width =
-      Math.ceil(crop.width * scaleX) > 300
-        ? 300
-        : Math.ceil(crop.width * scaleX);
-    canvas.height =
-      Math.ceil(crop.height * scaleY) > 300
-        ? 300
-        : Math.ceil(crop.height * scaleY);
-    ctx.drawImage(
-      image,
-      crop.x * scaleX,
-      crop.y * scaleY,
-      crop.width * scaleX,
-      crop.height * scaleY,
-      0,
-      0,
-      crop.width * scaleX > 300 ? 300 : crop.width * scaleX, //crop.width * scaleX,
-      crop.height * scaleY > 300 ? 300 : crop.height * scaleY //crop.height * scaleY
-    );
+    if (landscape) {
+      canvas.width =
+        Math.ceil(crop.width * scaleX) > 800
+          ? 800
+          : Math.ceil(crop.width * scaleX);
+      canvas.height =
+        Math.ceil(crop.height * scaleY) > 300
+          ? 300
+          : Math.ceil(crop.height * scaleY);
+      ctx.drawImage(
+        image,
+        crop.x * scaleX,
+        crop.y * scaleY,
+        crop.width * scaleX,
+        crop.height * scaleY,
+        0,
+        0,
+        crop.width * scaleX > 800 ? 800 : crop.width * scaleX, //crop.width * scaleX,
+        crop.height * scaleY > 300 ? 300 : crop.height * scaleY //crop.height * scaleY
+      );
+    } else {
+      canvas.width =
+        Math.ceil(crop.width * scaleX) > 300
+          ? 300
+          : Math.ceil(crop.width * scaleX);
+      canvas.height =
+        Math.ceil(crop.height * scaleY) > 300
+          ? 300
+          : Math.ceil(crop.height * scaleY);
+      ctx.drawImage(
+        image,
+        crop.x * scaleX,
+        crop.y * scaleY,
+        crop.width * scaleX,
+        crop.height * scaleY,
+        0,
+        0,
+        crop.width * scaleX > 300 ? 300 : crop.width * scaleX, //crop.width * scaleX,
+        crop.height * scaleY > 300 ? 300 : crop.height * scaleY //crop.height * scaleY
+      );
+    }
+
     // As Base64 string
     //const base64Image = canvas.toDataURL('image/jpeg');
     // As a blob
     return new Promise((resolve, reject) => {
       const reader = new FileReader();
       canvas.toBlob(
-        blob => {
+        (blob) => {
           resolve(blob);
           reader.readAsDataURL(blob);
           reader.onloadend = () => {
@@ -129,7 +163,7 @@ export default function picCropUpload({
     const callback = () => {
       addToast("Image uploaded", {
         appearance: "success",
-        autoDismiss: true
+        autoDismiss: true,
       });
       fetchUser();
       resetForm();
@@ -138,18 +172,28 @@ export default function picCropUpload({
     let formData = new FormData();
     formData.append("image", cropImage);
     formData.append("userId", id);
-    requestPostFile("/api/userProfile/uploadImage/", formData, callback);
+    if (landscape) {
+      requestPostFile("/api/userProfile/uploadLandscape/", formData, callback);
+    } else {
+      requestPostFile("/api/userProfile/uploadImage/", formData, callback);
+    }
   };
 
   const imageLoaded = (target: any) => {
     setImageRef(target);
-    let size =
-      target.naturalWidth > target.naturalHeight
-        ? target.naturalWidth
-        : target.naturalHeight;
-    size = size > 150 ? 150 : size;
-    crop.width = size;
-    crop.height = size;
+    if (!landscape) {
+      let size =
+        target.naturalWidth > target.naturalHeight
+          ? target.naturalWidth
+          : target.naturalHeight;
+      size = size > 150 ? 150 : size;
+      crop.width = size;
+      crop.height = size;
+    } else {
+      crop.width = 400;
+      crop.height = 150;
+    }
+
     getCroppedImg(target, crop);
   };
 
@@ -161,7 +205,7 @@ export default function picCropUpload({
           <br />
           <input
             type="file"
-            ref={input => (inputElement = input)}
+            ref={(input) => (inputElement = input)}
             className="form-input"
             onChange={handleFile}
             key={theInputKey}
@@ -178,10 +222,10 @@ export default function picCropUpload({
               onImageLoaded={imageLoaded}
               onComplete={onCropComplete}
               onChange={(crop: Crop) => setCrop(crop)}
-              circularCrop={true}
+              circularCrop={!landscape}
             />
             {croppedImageUrl && previewImage && (
-              <img className="croppedImage" alt="Crop" src={croppedImageUrl} />
+              <img className={landscape?"croppedLandscape":"croppedImage"} alt="Crop" src={croppedImageUrl} />
             )}
             <div>
               {croppedImageUrl && (

@@ -6,7 +6,7 @@ import { getStalkRequests } from "userLogic/actions/stalkRequestActions";
 
 import { useToasts } from "react-toast-notifications";
 
-import { Link, Redirect, withRouter } from "react-router-dom";
+import { Link, useHistory, withRouter } from "react-router-dom";
 
 import { Navbar, Nav, Form, Button } from "react-bootstrap";
 
@@ -34,6 +34,7 @@ function NavbarHeader({
   //const [stalkRequests, setStalkRequests] = useState(0);
   const stalkReq = stalks.stalkRequests;
   const { user } = auth;
+  const history = useHistory();
 
   useEffect(() => {
     if (auth.isAuthenticated) {
@@ -52,6 +53,7 @@ function NavbarHeader({
     e.preventDefault();
     logoutUser();
     setConnected(false);
+    history.push("/");
     addToast("User logged out", {
       appearance: "success",
       autoDismiss: true
@@ -121,7 +123,6 @@ function NavbarHeader({
         {auth.isAuthenticated ? (
           <div>
             <span className="mr-2">Welcome {user.name.split(" ")[0]}!</span>
-
             <Button variant="dark" size="sm" onClick={onLogoutClick}>
               Logout
             </Button>

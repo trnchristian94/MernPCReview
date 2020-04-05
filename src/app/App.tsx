@@ -25,6 +25,7 @@ import { setCurrentUser, logoutUser } from "userLogic/actions/authActions";
 import "./App.scss";
 
 import { ToastProvider } from "react-toast-notifications";
+import Profile from "./components/layout/Profile";
 // Check for token to keep user logged in
 
 if (localStorage.jwtToken) {
@@ -65,6 +66,7 @@ export default class App extends Component {
                   <Route exact path="/profile" component={MyProfile} />
                   <Route exact path="/stalking" component={Stalking} />
                   <Route exact path="/stalkers" component={Stalkers} />
+                  <Route exact path={`/user/:username`} component={Profile} />
                   <Route
                     exact
                     path="/stalkerRequests"

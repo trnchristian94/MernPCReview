@@ -1,3 +1,5 @@
+import { useToasts, AppearanceTypes } from "react-toast-notifications";
+
 const requestGet = (url: string, _setValue: any): any => {
   fetch(url, {
     headers: {
@@ -10,7 +12,7 @@ const requestGet = (url: string, _setValue: any): any => {
     });
 };
 
-const requestPut = (url: string, body: any, _callback: any): any => {
+const requestPut = (url: string, body: any, _callback?: any): any => {
   fetch(url, {
     method: "PUT",
     body: JSON.stringify(body),
@@ -19,11 +21,15 @@ const requestPut = (url: string, body: any, _callback: any): any => {
       Accept: "application/json",
       "Content-Type": "application/json"
     }
-  })
-    .then(res => res.json())
-    .then(data => {
-      _callback();
+  }).then(res => {
+    res.json().then(data => {
+      if (res.status) {
+        showAlert(res.status, data.status, _callback);
+      } else {
+        _callback();
+      }
     });
+  });
 };
 
 const requestPost = (url: string, body: any, _callback: any): any => {
@@ -73,6 +79,21 @@ const requestDelete = (url: string, _callback: any, body?: any): any => {
       _callback();
     })
     .catch(err => console.log(err));
+};
+
+const showAlert = (
+  responseStatus: any,
+  message: string,
+  addToast: any
+): any => {
+  let status: AppearanceTypes = "success";
+  if (responseStatus != 200) {
+    status = "warning";
+  }
+  addToast(message, {
+    appearance: status,
+    autoDismiss: true
+  });
 };
 
 export { requestGet, requestPut, requestPost, requestDelete, requestPostFile };

@@ -4,13 +4,14 @@ import { useToasts } from "react-toast-notifications";
 import { connect, useDispatch } from "react-redux";
 import { requestPost, requestDelete, requestPut } from "utils/request";
 import { getStalkRequests } from "userLogic/actions/stalkRequestActions";
+import { Link } from "react-router-dom";
 
 interface IProps {
   auth: any;
   user: {
     _id?: string;
     name: string;
-    userImage?: { image: string };
+    userImage?: { image: string; landscape: string };
     userInfo?: { bio: string };
   };
   showAddButton: boolean;
@@ -27,7 +28,7 @@ function UserCard({
   auth,
   fetchUsers,
   stalker,
-  getStalkRequests
+  getStalkRequests,
 }: IProps) {
   const { addToast } = useToasts();
   const { dispatch } = useDispatch();
@@ -37,7 +38,7 @@ function UserCard({
     const callback = () => {
       addToast("User added", {
         appearance: "success",
-        autoDismiss: true
+        autoDismiss: true,
       });
       fetchUsers();
     };
@@ -48,12 +49,12 @@ function UserCard({
     const callback = () => {
       addToast("Stalk removed", {
         appearance: "success",
-        autoDismiss: true
+        autoDismiss: true,
       });
       fetchUsers();
     };
     requestDelete(`/api/stalks/cancel/${auth.user.id}`, callback, {
-      recipient: userId
+      recipient: userId,
     });
   };
 
@@ -67,7 +68,7 @@ function UserCard({
     const callback = () => {
       addToast(message, {
         appearance: "success",
-        autoDismiss: true
+        autoDismiss: true,
       });
       fetchUsers();
       getStalkRequests(auth.user);
@@ -164,7 +165,20 @@ function UserCard({
               />
             )}
           </div>
-          <Card.Title className="userName">@{user.name}</Card.Title>
+          <div className="landscape">
+            {user.userImage && (
+              <Card.Img
+                className="landscapeImg"
+                variant="top"
+                src={user.userImage.landscape}
+              />
+            )}
+          </div>
+          <Card.Title className="userName">
+            <Link to={`user/${user.name}`} className="nav-link">
+              <span>@{user.name}</span>
+            </Link>
+          </Card.Title>
           <Card.Text className="userBio">
             {user.userInfo &&
               (user.userInfo.bio.length > 69
@@ -182,6 +196,6 @@ function UserCard({
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
   errors: state.errors,
-  stalkers: state.stalkers
+  stalkers: state.stalkers,
 });
 export default connect(mapStateToProps, { getStalkRequests })(UserCard);

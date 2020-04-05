@@ -1,159 +1,247 @@
 .App {
-    #pc-principalNavbar .navbar-nav {
+  // General
+
+  // Navbar
+  #pc-principalNavbar .navbar-nav {
+    width: 100%;
+
+    .nav-link {
+      margin: 0 auto;
+    }
+  }
+
+  .navbar.bg-primary {
+    background-color: transparent !important;
+  }
+
+  .navbar {
+    .navbar-brand {
+      color: #4a3e3e !important;
+    }
+
+    .nav-link {
+      color: rgba(59, 81, 236, 0.5) !important;
+    }
+
+    .nav-link.stalkerRequests {
+      font-weight: 700;
+      color: #56d452 !important;
+    }
+
+    .nav-link:focus {
+      color: rgba(141, 165, 243, 0.5) !important;
+    }
+  }
+
+  // UserCard
+  .userCard {
+    margin: 15px 0px 0px 15px;
+    width: 350px;
+
+    .userCard-body {
+      text-align: center;
+      padding: 1rem;
+
+      &__header {
+        height: 200px;
+
+        .landscape {
+          position: absolute;
+          z-index: 0;
+          top: 0;
+          left: 0;
+          height: 45%;
+          width: 100%;
+          /*overflow: hidden;
+          background-size: cover;
+          background-position: center;*/
+        }
+
+        .userImage {
+          width: 102px;
+          height: 102px;
+          display: block;
+          margin: auto;
+          border: 2px solid white !important;
+          border-radius: 50%;
+          box-sizing: content-box;
+          position: relative;
+          z-index: 1;
+
+          .userImg {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            margin-top: 1px;
+          }
+        }
+
+        .userName {
+          padding-top: 10px;
+          margin-bottom: -7px;
+        }
+
+        .userBio {
+          color: #53adda;
+        }
+      }
+
+      &__footer {
+        .stalkReqButton,
+        .stalkingButton,
+        .stalkCanceledButton {
+          width: 120px;
+          font-size: 0.95em;
+          font-weight: 700;
+          border-radius: 20px;
+        }
+
+        .stalkingButton:hover {
+          background-color: #d61f31;
+          border-color: #d61f31;
+        }
+
+        .stalkCanceledButton:hover {
+          color: #007bff;
+          background-color: rgba(29, 161, 242, 0.1);
+          border-color: #007bff;
+        }
+
+        .stalkReqButton:hover {
+          color: #007bff;
+          background-color: rgba(29, 161, 242, 0.1);
+          border-color: #007bff;
+        }
+      }
+    }
+  }
+
+  // Pic Crop
+  .floatingPicCrop:before {
+    /* Center vertically, part 1 */
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+
+  .floatingPicCrop {
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.6);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+    text-align: center;
+    /* Center horizontally */
+
+    .picCropDialog {
+      background-color: #fff;
+      display: inline-block;
+      vertical-align: middle;
+      /* Center vertically, part 2 */
+      padding: 1em;
+      border-radius: 5px;
+
+      .croppedImage {
+        border-radius: 50%;
+        position: fixed;
+        width: 150px;
+        height: 150px;
+        top: 15px;
+        left: 15px;
+      }
+
+      .croppedLandscape {
+        position: fixed;
+        width: 400px;
+        height: 150px;
+        top: 15px;
+        left: 15px;
+      }
+
+      .submit-btn,
+      .cancel-btn {
+        margin-right: 15px;
+      }
+    }
+
+    .ReactCrop__image {
+      max-height: calc(100vh - 150px);
+    }
+  }
+
+  .btn:focus {
+    outline: none !important;
+    outline-offset: none !important;
+  }
+
+  // Profile
+  #profile {
+    .imageHeader {
+      position: relative;
+      margin-bottom: 10px;
+
+      .landscape {
         width: 100%;
+        padding-top: 37%;
 
-        .nav-link {
-            margin: 0 auto;
+        .landscapeImg {
+          height: 100%;
+          width: 100%;
+          position: absolute;
+          top: 0vw;
         }
-    }
+      }
 
-    .navbar.bg-primary {
-        background-color: transparent !important;
-    }
+      @media (min-width: 768px) {
+        .userImage {
+          top: 11vw;
+          width: 11.1vw;
+          height: 11.1vw;
 
-    .navbar {
-
-        .navbar-brand {
-            color: #4a3e3e !important;
+          .userImg {
+            width: 11vw;
+            height: 11vw;
+            margin-top: 0.05vw;
+            margin-left: 0.05vw;
+          }
         }
-
-        .nav-link {
-            color: rgba(59, 81, 236, 0.5) !important;
+      }
+      @media (max-width: 767px) {
+        .userImage {
+          top: 23vw;
+          width: 21vw;
+          height: 21vw;
+          .userImg {
+            width: 21vw;
+            height: 21vw;
+          }
         }
-
-        .nav-link.stalkerRequests {
-            font-weight: 700;
-            color: #56d452 !important;
-        }
-
-        .nav-link:focus {
-            color: rgba(141, 165, 243, 0.5) !important;
-        }
-    }
-
-    // UserCard
-    .userCard {
-        margin: 15px 0px 0px 15px;
-        width: 200px;
-
-        .userCard-body {
-            text-align: center;
-            padding: 1rem;
-
-
-            &__header {
-                height: 310px;
-
-                .userImage {
-                    width: 150px;
-                    height: 150px;
-                    display: block;
-                    margin: auto;
-                    border: 2px solid #ccc !important;
-                    border-radius: 50%;
-                    box-sizing: content-box;
-
-                    .userImg {
-                        width: 150px;
-                        height: 150px;
-                        border-radius: 50%;
-                    }
-                }
-
-                .userName {}
-
-                .userBio {
-                    color: #53adda;
-                }
-            }
-
-            &__footer {
-
-                .stalkReqButton,
-                .stalkingButton,
-                .stalkCanceledButton {
-                    width: 120px;
-                    font-size: 0.95em;
-                    font-weight: 700;
-                    border-radius: 20px;
-                }
-
-                .stalkingButton:hover {
-                    background-color: #d61f31;
-                    border-color: #d61f31;
-                }
-
-                .stalkCanceledButton:hover {
-                    color: #007bff;
-                    background-color: rgba(29, 161, 242, 0.1);
-                    border-color: #007bff;
-                }
-
-                .stalkReqButton:hover {
-                    color: #007bff;
-                    background-color: rgba(29, 161, 242, 0.1);
-                    border-color: #007bff;
-                }
-            }
-        }
-
-    }
-
-    // Pic Crop
-    .floatingPicCrop:before {
-        /* Center vertically, part 1 */
-        content: '';
-        display: inline-block;
-        height: 100%;
-        vertical-align: middle;
-    }
-
-
-
-    .floatingPicCrop {
-        z-index: 2;
-        background: rgba(0, 0, 0, .6);
-        top: 0;
+      }
+      .userImage {
+        margin: auto;
+        display: block;
+        border: 4px solid white !important;
+        border-radius: 50%;
+        box-sizing: content-box;
+        position: absolute;
         left: 0;
         right: 0;
-        bottom: 0;
-        position: fixed;
-        text-align: center;
-        /* Center horizontally */
+        margin-left: auto;
+        margin-right: auto;
 
-        .picCropDialog {
-            background-color: #fff;
-            display: inline-block;
-            vertical-align: middle;
-            /* Center vertically, part 2 */
-            padding: 1em;
-            border-radius: 5px;
-
-            .croppedImage {
-                border-radius: 50%;
-                position: fixed;
-                width: 150px;
-                height: 150px;
-                top: 15px;
-                left: 15px;
-            }
-
-            .submit-btn,
-            .cancel-btn {
-                margin-right: 15px;
-            }
+        .userImg {
+          border-radius: 50%;
         }
-
-        .ReactCrop__image {
-            max-height: calc(100vh - 150px);
-        }
-
-
+      }
     }
-
-    .btn:focus {
-        outline: none !important;
-        outline-offset: none !important;
+    .userName {
     }
-
+    .userBio {
+      text-align: center;
+      padding-top: 6vh;
+    }
+  }
 }

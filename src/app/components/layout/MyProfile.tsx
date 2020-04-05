@@ -25,8 +25,14 @@ function MyProfile({ auth, errors, history }: Props) {
     image: "",
     imageId: ""
   });
+  
+  const [userLandscape, setUserLandscape] = useState({
+    landscape: "",
+    landscapeId: ""
+  });
   const [image, setImage] = useState();
   const [croppedImage, setCroppedImage] = useState(null);
+  const [landscapeForm, setlandscapeForm] = useState(false);
   const [imageForm, setImageForm] = useState(false);
   const [id, setId] = useState("");
   const [stalkers, setStalkers] = useState({ stalkers: 0 });
@@ -51,20 +57,21 @@ function MyProfile({ auth, errors, history }: Props) {
           image: data.userImage ? data.userImage.image : "",
           imageId: data.userImage ? data.userImage.imageId : ""
         });
+        setUserLandscape({
+          landscape: data.userImage.landscape ? data.userImage.landscape : "",
+          landscapeId: data.userImage.landscapeId ? data.userImage.landscapeId : ""
+        });
         setId(data._id);
       });
   };
 
   const editUser = (e: any) => {
     e.preventDefault();
-    requestPut(
-      `/api/userProfile/updateUser/${id}`,
-      { name: userName, email, userInfo: { bio: bio } },
-      addToast("User updated", {
-        appearance: "success",
-        autoDismiss: true
-      })
-    );
+    requestPut(`/api/userProfile/updateUser/${id}`, {
+      name: userName,
+      email,
+      userInfo: { bio: bio }
+    }, addToast);
   };
 
   const fetchStalks = () => {
@@ -88,7 +95,7 @@ function MyProfile({ auth, errors, history }: Props) {
           <UserCard
             user={{
               name: userName,
-              userImage: { image: userImage.image },
+              userImage: { image: userImage.image, landscape: userLandscape.landscape },
               userInfo: { bio: bio }
             }}
             showAddButton={false}
@@ -109,13 +116,27 @@ function MyProfile({ auth, errors, history }: Props) {
           </Link>
         </div>
         <br />
+        <Button onClick={() => setlandscapeForm(!landscapeForm)}>
+          Upload new landscape Image
+        </Button>
+        <br />
         <Button onClick={() => setImageForm(!imageForm)}>
           Upload new profile Image
         </Button>
         <br />
+        {landscapeForm && (
+          <PicCropUpload
+            setCroppedImage={setCroppedImage}
+            landscape={true}
+            addToast={addToast}
+            fetchUser={fetchUser}
+            id={id}
+          />
+        )}
         {imageForm && (
           <PicCropUpload
             setCroppedImage={setCroppedImage}
+            landscape={false}
             addToast={addToast}
             fetchUser={fetchUser}
             id={id}
