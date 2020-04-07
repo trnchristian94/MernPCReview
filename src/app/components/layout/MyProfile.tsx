@@ -23,12 +23,12 @@ function MyProfile({ auth, errors, history }: Props) {
   const [date, setDate] = useState("");
   const [userImage, setUserImage] = useState({
     image: "",
-    imageId: ""
+    imageId: "",
   });
-  
+
   const [userLandscape, setUserLandscape] = useState({
     landscape: "",
-    landscapeId: ""
+    landscapeId: "",
   });
   const [image, setImage] = useState();
   const [croppedImage, setCroppedImage] = useState(null);
@@ -43,11 +43,11 @@ function MyProfile({ auth, errors, history }: Props) {
   const fetchUser = () => {
     fetch("/api/userProfile/" + user.id, {
       headers: {
-        Authorization: localStorage.jwtToken
-      }
+        Authorization: localStorage.jwtToken,
+      },
     })
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setUsername(data.name);
         setEmail(data.email);
         setDate(data.date);
@@ -55,11 +55,13 @@ function MyProfile({ auth, errors, history }: Props) {
         setBio(data.userInfo ? data.userInfo.bio : "");
         setUserImage({
           image: data.userImage ? data.userImage.image : "",
-          imageId: data.userImage ? data.userImage.imageId : ""
+          imageId: data.userImage ? data.userImage.imageId : "",
         });
         setUserLandscape({
           landscape: data.userImage.landscape ? data.userImage.landscape : "",
-          landscapeId: data.userImage.landscapeId ? data.userImage.landscapeId : ""
+          landscapeId: data.userImage.landscapeId
+            ? data.userImage.landscapeId
+            : "",
         });
         setId(data._id);
       });
@@ -67,11 +69,15 @@ function MyProfile({ auth, errors, history }: Props) {
 
   const editUser = (e: any) => {
     e.preventDefault();
-    requestPut(`/api/userProfile/updateUser/${id}`, {
-      name: userName,
-      email,
-      userInfo: { bio: bio }
-    }, addToast);
+    requestPut(
+      `/api/userProfile/updateUser/${id}`,
+      {
+        name: userName,
+        email,
+        userInfo: { bio: bio },
+      },
+      addToast
+    );
   };
 
   const fetchStalks = () => {
@@ -95,8 +101,11 @@ function MyProfile({ auth, errors, history }: Props) {
           <UserCard
             user={{
               name: userName,
-              userImage: { image: userImage.image, landscape: userLandscape.landscape },
-              userInfo: { bio: bio }
+              userImage: {
+                image: userImage.image,
+                landscape: userLandscape.landscape,
+              },
+              userInfo: { bio: bio },
             }}
             showAddButton={false}
           />
@@ -105,7 +114,7 @@ function MyProfile({ auth, errors, history }: Props) {
           style={{
             display: "flex",
             justifyContent: "center",
-            marginTop: "10px"
+            marginTop: "10px",
           }}
         >
           <Link to={"/stalkers"} className="nav-link">
@@ -188,6 +197,6 @@ function MyProfile({ auth, errors, history }: Props) {
 }
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
 });
 export default connect(mapStateToProps)(MyProfile);

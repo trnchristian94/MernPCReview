@@ -11,6 +11,14 @@ import { Link, useHistory, withRouter } from "react-router-dom";
 
 import { Navbar, Nav, Form, Button } from "react-bootstrap";
 
+import {
+  AddRounded,
+  HomeRounded,
+  PlaylistAddCheckRounded,
+  GroupRounded,
+  AccountCircleRounded,
+  PowerOffRounded,
+} from "@material-ui/icons";
 interface Props {
   auth: any;
   stalks: any;
@@ -85,9 +93,11 @@ function NavbarHeader({
       <Navbar variant="dark">
         <Nav className="mr-auto">
           <Link to={"/"} className="nav-link">
+            <HomeRounded />
             Home
           </Link>
           <Link to={"/tasks"} className="nav-link">
+            <PlaylistAddCheckRounded />
             Tasks
           </Link>
           {!auth.isAuthenticated ? (
@@ -102,6 +112,7 @@ function NavbarHeader({
           ) : (
             <>
               <Link to={"/userList"} className="nav-link">
+                <GroupRounded />
                 Users
               </Link>
               <Link
@@ -109,6 +120,7 @@ function NavbarHeader({
                 className="nav-link"
                 onClick={() => getStalkRequests(user)}
               >
+                <AccountCircleRounded />
                 My profile
               </Link>
               {stalkReq > 0 && (
@@ -126,13 +138,19 @@ function NavbarHeader({
           <>
             <Button
               onClick={() => setShowSubmitPost(!showSubmitPost)}
-              style={{ marginRight: "100px" }}
+              style={{
+                marginRight: "100px",
+                width: "120px",
+                borderRadius: "20px",
+              }}
             >
-              Post
+              <span style={{ paddingRight: "5px" }}>Post</span>
+              <AddRounded />
             </Button>
             <div>
               <span className="mr-2">Welcome {user.name.split(" ")[0]}!</span>
               <Button variant="dark" size="sm" onClick={onLogoutClick}>
+                <PowerOffRounded />
                 Logout
               </Button>
             </div>

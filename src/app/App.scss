@@ -21,6 +21,8 @@
 
     .nav-link {
       color: rgba(59, 81, 236, 0.5) !important;
+      vertical-align: middle ;
+      display: flex ;
     }
 
     .nav-link.stalkerRequests {
@@ -87,6 +89,7 @@
       }
 
       &__footer {
+
         .stalkReqButton,
         .stalkingButton,
         .stalkCanceledButton {
@@ -124,6 +127,7 @@
     height: 100%;
     vertical-align: middle;
   }
+
   .floatingSubmitPost {
     z-index: 2;
     background: rgba(0, 0, 0, 0.6);
@@ -133,12 +137,22 @@
     bottom: 0;
     position: fixed;
     text-align: center;
+
     .floatingSubmitPostDialog {
       background-color: #fff;
       display: inline-block;
       vertical-align: middle;
       padding: 1em;
       border-radius: 5px;
+      position: relative;
+
+      .closeDialogIcon{
+        position: absolute;
+        right: 5px;
+        top: 5px;
+        cursor: pointer;
+        z-index: 2;
+      }
     }
   }
 
@@ -235,17 +249,20 @@
           }
         }
       }
+
       @media (max-width: 767px) {
         .userImage {
           top: 23vw;
           width: 21vw;
           height: 21vw;
+
           .userImg {
             width: 21vw;
             height: 21vw;
           }
         }
       }
+
       .userImage {
         margin: auto;
         display: block;
@@ -263,11 +280,13 @@
         }
       }
     }
+
     .userName {
       margin-left: 63vh;
       font-size: calc(1em + 0.5vw);
       color: #6c85ad;
     }
+
     .userBio {
       text-align: center;
       padding-top: 6vh;
@@ -277,9 +296,10 @@
     .userPosts {
       margin-bottom: 10px;
 
-      .userPost:last-child{
+      .userPost:last-child {
         border-bottom: 1px solid #eaeaea;
       }
+
       .userPost {
         border: 1px solid #eaeaea;
         border-bottom: none;
@@ -288,6 +308,7 @@
         .postDate {
           text-align: right;
         }
+
         .postText {
           padding-bottom: 20px;
         }

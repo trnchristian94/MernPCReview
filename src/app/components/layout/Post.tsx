@@ -2,8 +2,10 @@ import React, { useEffect, useState } from "react";
 import { Form, Col, Button } from "react-bootstrap";
 import { requestGet, requestPost } from "utils/request";
 import { useToasts } from "react-toast-notifications";
+import CloseRoundedIcon from '@material-ui/icons/CloseRounded';
 
 import { connect } from "react-redux";
+import { } from '@material-ui/icons';
 
 interface Props {
   auth: any;
@@ -15,6 +17,15 @@ function Post({ auth, errors, setShowSubmitPost }: Props) {
   const { addToast } = useToasts();
   const { user } = auth;
   const [postText, setPostText] = useState("");
+  let textInput: any = null;
+
+  useEffect(() => {
+    const listener = (event: KeyboardEvent) => {
+      if(event.keyCode === 27) setShowSubmitPost(false)
+    }
+    document.addEventListener("keydown", listener, false);
+    textInput.select();
+  }, [])
 
   const showToast = (message: string) => {
     addToast(message, {
@@ -40,6 +51,7 @@ function Post({ auth, errors, setShowSubmitPost }: Props) {
       className="floatingSubmitPost"
     >
       <div className="floatingSubmitPostDialog">
+        <CloseRoundedIcon className="closeDialogIcon" onClick={() => setShowSubmitPost(false)} />
         <Form.Row>
           <Form.Group as={Col}>
             <Form.Label>Write a text:</Form.Label>
@@ -52,18 +64,19 @@ function Post({ auth, errors, setShowSubmitPost }: Props) {
               style={{ width: "25vw" }}
               value={postText}
               onChange={(e: any) => setPostText(e.target.value)}
+              ref={(text: any) => {textInput = text}}
               required
             />
           </Form.Group>
         </Form.Row>
-        <Button type="submit" className="submit-btn" style={{marginRight: "10px"}}>
+        <Button type="submit" className="submit-btn" style={{marginRight: "10px", borderRadius: "20px"}}>
           Submit
         </Button>
         <Button
           className="cancel-btn"
           variant="secondary"
           onClick={() => setShowSubmitPost(false)}
-          style={{marginLeft: "10px"}}
+          style={{marginLeft: "10px", borderRadius: "20px"}}
         >
           Cancel
         </Button>
