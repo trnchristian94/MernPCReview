@@ -4,6 +4,7 @@ import UserCard from "components/layout/UserCard";
 import { connect } from "react-redux";
 import { requestGet } from "utils/request";
 import { withRouter } from "react-router-dom";
+import { formatDate, formatHour } from "utils/date";
 
 interface Props {
   auth: any;
@@ -15,13 +16,19 @@ function Profile({ auth, errors, match }: Props) {
   const [publicUser, setUser]: any = useState();
   const { user } = auth;
   const [username, setUsername] = useState(match.params.username);
+  const [posts, setPosts] = useState([]);
 
   useEffect(() => {
     fetchUser();
   }, []);
 
   const fetchUser = () => {
-    requestGet("/api/userProfile/user/" + username, setUser);
+    new Promise((resolve, reject) => {
+      requestGet("/api/userProfile/user/" + username, resolve);
+    }).then((user: any) => {
+      setUser(user);
+      requestGet("/api/posts/from/" + user[0]._id, setPosts);
+    });
   };
 
   return (
@@ -47,12 +54,25 @@ function Profile({ auth, errors, match }: Props) {
         <div className="userBio">
           {publicUser && publicUser[0].userInfo.bio}
         </div>
+        <div className="userPosts">
+          {posts &&
+            posts.map((post) => {
+              return (
+                <div className="userPost" key={post._id}>
+                  <div className="postDate">{`${formatDate(
+                    post.date
+                  )} ${formatHour(post.date)}`}</div>
+                  <div className="postText">{post.text}</div>
+                </div>
+              );
+            })}
+        </div>
       </Col>
     </Container>
   );
 }
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
-  errors: state.errors,
+  errors: state.errors
 });
 export default connect(mapStateToProps)(Profile);

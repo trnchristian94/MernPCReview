@@ -16,7 +16,7 @@ export default function picCropUpload({
   landscape,
   addToast,
   fetchUser,
-  id,
+  id
 }: IProps) {
   const [crop, setCrop] = useState({
     width: 75,
@@ -24,7 +24,7 @@ export default function picCropUpload({
     x: 0,
     y: 0,
     aspect: 1 / 1,
-    unit: "px",
+    unit: "px"
   } as Crop);
   const [croppedImageUrl, setCroppedImageUrl] = useState(null);
   const [src, setSrc] = useState();
@@ -35,14 +35,17 @@ export default function picCropUpload({
   let inputElement: any;
 
   useEffect(() => {
-    inputElement.click();
     if (landscape) {
       setCrop({
         width: 400,
         height: 150,
+        x: 0,
+        y: 0,
         aspect: 8 / 3,
+        unit: "px"
       } as Crop);
     }
+    inputElement.click();
   }, []);
 
   const resetForm = () => {
@@ -50,7 +53,7 @@ export default function picCropUpload({
       setCrop({
         width: 75,
         height: 75,
-        aspect: 1 / 1,
+        aspect: 1 / 1
       } as Crop);
     }
 
@@ -163,7 +166,7 @@ export default function picCropUpload({
     const callback = () => {
       addToast("Image uploaded", {
         appearance: "success",
-        autoDismiss: true,
+        autoDismiss: true
       });
       fetchUser();
       resetForm();
@@ -193,7 +196,6 @@ export default function picCropUpload({
       crop.width = 400;
       crop.height = 150;
     }
-
     getCroppedImg(target, crop);
   };
 
@@ -225,7 +227,11 @@ export default function picCropUpload({
               circularCrop={!landscape}
             />
             {croppedImageUrl && previewImage && (
-              <img className={landscape?"croppedLandscape":"croppedImage"} alt="Crop" src={croppedImageUrl} />
+              <img
+                className={landscape ? "croppedLandscape" : "croppedImage"}
+                alt="Crop"
+                src={croppedImageUrl}
+              />
             )}
             <div>
               {croppedImageUrl && (

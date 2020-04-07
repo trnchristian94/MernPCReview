@@ -3,6 +3,7 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { loginUser, logoutUser } from "userLogic/actions/authActions";
 import { getStalkRequests } from "userLogic/actions/stalkRequestActions";
+import Post from "components/layout/Post";
 
 import { useToasts } from "react-toast-notifications";
 
@@ -31,6 +32,7 @@ function NavbarHeader({
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [connected, setConnected] = useState(false);
+  const [showSubmitPost, setShowSubmitPost] = useState(false);
   //const [stalkRequests, setStalkRequests] = useState(0);
   const stalkReq = stalks.stalkRequests;
   const { user } = auth;
@@ -121,12 +123,20 @@ function NavbarHeader({
           )}
         </Nav>
         {auth.isAuthenticated ? (
-          <div>
-            <span className="mr-2">Welcome {user.name.split(" ")[0]}!</span>
-            <Button variant="dark" size="sm" onClick={onLogoutClick}>
-              Logout
+          <>
+            <Button
+              onClick={() => setShowSubmitPost(!showSubmitPost)}
+              style={{ marginRight: "100px" }}
+            >
+              Post
             </Button>
-          </div>
+            <div>
+              <span className="mr-2">Welcome {user.name.split(" ")[0]}!</span>
+              <Button variant="dark" size="sm" onClick={onLogoutClick}>
+                Logout
+              </Button>
+            </div>
+          </>
         ) : (
           <Form inline onSubmit={onSubmit}>
             <Form.Row>
@@ -160,6 +170,9 @@ function NavbarHeader({
           </Form>
         )}
       </Navbar>
+      {auth.isAuthenticated && showSubmitPost && (
+        <Post setShowSubmitPost={setShowSubmitPost} />
+      )}
     </>
   );
 }

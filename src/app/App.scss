@@ -116,6 +116,32 @@
     }
   }
 
+  // Floating submit
+  .floatingSubmitPost:before {
+    /* Center vertically, part 1 */
+    content: "";
+    display: inline-block;
+    height: 100%;
+    vertical-align: middle;
+  }
+  .floatingSubmitPost {
+    z-index: 2;
+    background: rgba(0, 0, 0, 0.6);
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    position: fixed;
+    text-align: center;
+    .floatingSubmitPostDialog {
+      background-color: #fff;
+      display: inline-block;
+      vertical-align: middle;
+      padding: 1em;
+      border-radius: 5px;
+    }
+  }
+
   // Pic Crop
   .floatingPicCrop:before {
     /* Center vertically, part 1 */
@@ -238,10 +264,34 @@
       }
     }
     .userName {
+      margin-left: 63vh;
+      font-size: calc(1em + 0.5vw);
+      color: #6c85ad;
     }
     .userBio {
       text-align: center;
       padding-top: 6vh;
+      padding-bottom: 8vh;
+    }
+
+    .userPosts {
+      margin-bottom: 10px;
+
+      .userPost:last-child{
+        border-bottom: 1px solid #eaeaea;
+      }
+      .userPost {
+        border: 1px solid #eaeaea;
+        border-bottom: none;
+        padding: 15px;
+
+        .postDate {
+          text-align: right;
+        }
+        .postText {
+          padding-bottom: 20px;
+        }
+      }
     }
   }
 }
