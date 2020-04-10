@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Col, Row, Container, Card } from "react-bootstrap";
 import { useToasts } from "react-toast-notifications";
 import {
   requestGet,
@@ -7,6 +6,15 @@ import {
   requestPost,
   requestDelete
 } from "utils/request";
+
+
+import Container from "react-bootstrap/Container";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
+import Card from "react-bootstrap/Card";
+import Form from "react-bootstrap/Form";
+
 
 export default function Task() {
   const { addToast } = useToasts();

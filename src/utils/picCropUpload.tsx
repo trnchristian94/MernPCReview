@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
-import { Form, Col, Button } from "react-bootstrap";
 import { requestPostFile } from "./request";
+
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import Form from "react-bootstrap/Form";
 
 interface IProps {
   setCroppedImage: any;

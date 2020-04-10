@@ -8,8 +8,8 @@ const formatDate = (d: any) => {
 
 const formatHour = (d: any) => {
   let date = new Date(d);
-  const hours = formatZeros(date.getHours() + 1);
-  const minutes = formatZeros(date.getMinutes() + 1);
+  const hours = formatZeros(date.getHours());
+  const minutes = formatZeros(date.getMinutes());
   return `${hours}:${minutes}`;
 };
 

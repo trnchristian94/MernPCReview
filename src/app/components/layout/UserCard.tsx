@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Card, Button } from "react-bootstrap";
+import React, { useState } from "react";
 import { useToasts } from "react-toast-notifications";
 import { connect, useDispatch } from "react-redux";
 import { requestPost, requestDelete, requestPut } from "utils/request";
 import { getStalkRequests } from "userLogic/actions/stalkRequestActions";
 import { Link } from "react-router-dom";
+
+import Button from "react-bootstrap/Button";
+import Card from "react-bootstrap/Card";
 
 interface IProps {
   auth: any;

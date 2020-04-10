@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 
 import { connect } from "react-redux";
 import { loginUser } from "userLogic/actions/authActions";
-import { Form, Button, Col } from "react-bootstrap";
+
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
 
 type MyProps = {
   loginUser: any;

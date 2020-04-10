@@ -13,7 +13,8 @@ module.exports = {
       utils: path.resolve(__dirname, "src/utils/"),
       components: path.resolve(__dirname, "src/app/components/"),
       userLogic: path.resolve(__dirname, "src/userLogic/"),
-      db: path.resolve(__dirname, "src/db/")
+      db: path.resolve(__dirname, "src/db/"),
+      "@material-ui/core": "@material-ui/core/es"
     }
   },
   module: {
@@ -27,8 +28,26 @@ module.exports = {
         use: ["style-loader", "css-loader"]
       },
       {
-        test: /\.tsx?$/,
-        loader: "babel-loader"
+        test: /\.m?tsx$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: "babel-loader?optional=runtime&cacheDirectory",
+          options: {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-object-rest-spread"]
+          }
+        }
+      },
+      {
+        test: /\.m?js$/,
+        exclude: /(node_modules|bower_components)/,
+        use: {
+          loader: "babel-loader?optional=runtime&cacheDirectory",
+          options: {
+            presets: ["@babel/preset-env"],
+            plugins: ["@babel/plugin-proposal-object-rest-spread"]
+          }
+        }
       },
       {
         test: /\.tsx?$/,

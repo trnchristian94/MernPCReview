@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
 import UserCard from "components/layout/UserCard";
 import { requestGet } from "utils/request";
+
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 
 import { connect } from "react-redux";
 

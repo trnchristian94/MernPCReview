@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Container, Row, Col } from "react-bootstrap";
-import UserCard from "components/layout/UserCard";
 import { connect } from "react-redux";
 import { requestGet } from "utils/request";
-import { withRouter } from "react-router-dom";
 import { formatDate, formatHour } from "utils/date";
+
+import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
 
 interface Props {
   auth: any;

@@ -2,7 +2,11 @@ import React, { Component } from "react";
 import { Link, withRouter } from "react-router-dom";
 import { connect } from "react-redux";
 import { registerUser } from "userLogic/actions/authActions";
-import { Form, Button, InputGroup, Col } from "react-bootstrap";
+
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Col from "react-bootstrap/Col";
+import InputGroup from "react-bootstrap/InputGroup";
 
 type MyProps = {
   registerUser: any;

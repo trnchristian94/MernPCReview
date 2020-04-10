@@ -9,16 +9,18 @@ import { useToasts } from "react-toast-notifications";
 
 import { Link, useHistory, withRouter } from "react-router-dom";
 
-import { Navbar, Nav, Form, Button } from "react-bootstrap";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 
-import {
-  AddRounded,
-  HomeRounded,
-  PlaylistAddCheckRounded,
-  GroupRounded,
-  AccountCircleRounded,
-  PowerOffRounded,
-} from "@material-ui/icons";
+import Create from "@material-ui/icons/Create";
+import HomeRounded from "@material-ui/icons/HomeRounded";
+import PlaylistAddCheckRounded from "@material-ui/icons/PlaylistAddCheckRounded";
+import GroupRounded from "@material-ui/icons/GroupRounded";
+import AccountCircleRounded from "@material-ui/icons/AccountCircleRounded";
+import PowerOffRounded from "@material-ui/icons/PowerOffRounded";
+
 interface Props {
   auth: any;
   stalks: any;
@@ -141,11 +143,11 @@ function NavbarHeader({
               style={{
                 marginRight: "100px",
                 width: "120px",
-                borderRadius: "20px",
+                borderRadius: "20px"
               }}
             >
               <span style={{ paddingRight: "5px" }}>Post</span>
-              <AddRounded />
+              <Create />
             </Button>
             <div>
               <span className="mr-2">Welcome {user.name.split(" ")[0]}!</span>
