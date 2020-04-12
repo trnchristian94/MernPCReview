@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import { Provider } from "react-redux";
 import store from "src/store";
 
+import Images from "src/app/components/layout/Images";
 import Navbar from "src/app/components/layout/Navbar";
 import Landing from "src/app/components/layout/Landing";
 import Task from "components/layout/Task";
@@ -60,6 +61,7 @@ export default class App extends Component {
                   <Navbar />
                   <Route exact path="/" component={Landing} />
                   <Route exact path="/register" component={Register} />
+                  <Route exact path="/images" component={Images} />
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/tasks" component={Task} />
                   <Route exact path="/userList" component={UserList} />

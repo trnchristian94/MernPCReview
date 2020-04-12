@@ -5,6 +5,7 @@ import { formatDate, formatHour } from "utils/date";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
+import UserPosts from "./UserPosts";
 
 interface Props {
   auth: any;
@@ -54,19 +55,7 @@ function Profile({ auth, errors, match }: Props) {
         <div className="userBio">
           {publicUser && publicUser[0].userInfo.bio}
         </div>
-        <div className="userPosts">
-          {posts &&
-            posts.map((post) => {
-              return (
-                <div className="userPost" key={post._id}>
-                  <div className="postDate">{`${formatDate(
-                    post.date
-                  )} ${formatHour(post.date)}`}</div>
-                  <div className="postText">{post.text}</div>
-                </div>
-              );
-            })}
-        </div>
+        <UserPosts posts={posts} fetchPosts={fetchUser}/>
       </Col>
     </Container>
   );

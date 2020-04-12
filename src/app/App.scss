@@ -21,8 +21,8 @@
 
     .nav-link {
       color: rgba(59, 81, 236, 0.5) !important;
-      vertical-align: middle ;
-      display: flex ;
+      vertical-align: middle;
+      display: flex;
     }
 
     .nav-link.stalkerRequests {
@@ -36,8 +36,11 @@
   }
 
   // UserCard
+  .userCards {
+    justify-content: center;
+  }
   .userCard {
-    margin: 15px 0px 0px 15px;
+    margin: 15px;
     width: 350px;
 
     .userCard-body {
@@ -89,7 +92,6 @@
       }
 
       &__footer {
-
         .stalkReqButton,
         .stalkingButton,
         .stalkCanceledButton {
@@ -146,7 +148,7 @@
       border-radius: 5px;
       position: relative;
 
-      .closeDialogIcon{
+      .closeDialogIcon {
         position: absolute;
         right: 5px;
         top: 5px;
@@ -292,26 +294,54 @@
       padding-top: 6vh;
       padding-bottom: 8vh;
     }
+  }
 
-    .userPosts {
-      margin-bottom: 10px;
+  // Posts
 
-      .userPost:last-child {
-        border-bottom: 1px solid #eaeaea;
+  #userPosts {
+    margin-bottom: 10px;
+    width: 50%;
+    margin-right: auto;
+    margin-left: auto;
+
+    .userPost:last-child {
+      border-bottom: 1px solid #eaeaea;
+    }
+
+    .userPost {
+      border: 1px solid #eaeaea;
+      border-bottom: none;
+      padding: 15px;
+      position: relative;
+
+      .postHeader {
+        .user {
+          display: inline-flex;
+          margin-bottom: 15px;
+          .avatarImg {
+          }
+          .postUserName {
+            font-weight: 500;
+          }
+        }
       }
 
-      .userPost {
-        border: 1px solid #eaeaea;
-        border-bottom: none;
-        padding: 15px;
+      .postDate {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+      }
 
-        .postDate {
-          text-align: right;
-        }
-
-        .postText {
-          padding-bottom: 20px;
-        }
+      .postText {
+        padding-bottom: 20px;
+      }
+      .delete {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        bottom: 15px;
+        right: 15px;
+        cursor: pointer;
       }
     }
   }

@@ -40,13 +40,13 @@ function UserList({ auth, errors, history }: Props) {
   return (
     <Container fluid style={{ paddingTop: "4rem" }}>
       <Col lg={true}>
-        <Row>
+        <Row className="userCards">
           {users.map((publicUser: any) => {
             const stalkReq: {
               _id: String;
               recipient: String;
               status: number;
-            } = stalkRequests.find(f => f.recipient === publicUser._id);
+            } = stalkRequests.find((f) => f.recipient === publicUser._id);
             return (
               <UserCard
                 key={publicUser._id}

@@ -20,6 +20,7 @@ import PlaylistAddCheckRounded from "@material-ui/icons/PlaylistAddCheckRounded"
 import GroupRounded from "@material-ui/icons/GroupRounded";
 import AccountCircleRounded from "@material-ui/icons/AccountCircleRounded";
 import PowerOffRounded from "@material-ui/icons/PowerOffRounded";
+import PermMedia from "@material-ui/icons/PermMedia";
 
 interface Props {
   auth: any;
@@ -65,7 +66,7 @@ function NavbarHeader({
     e.preventDefault();
     logoutUser();
     setConnected(false);
-    history.push("/");
+    history.push("/login");
     addToast("User logged out", {
       appearance: "success",
       autoDismiss: true
@@ -113,6 +114,10 @@ function NavbarHeader({
             </>
           ) : (
             <>
+              <Link to={"/images"} className="nav-link">
+                <PermMedia />
+                Images
+              </Link>
               <Link to={"/userList"} className="nav-link">
                 <GroupRounded />
                 Users
