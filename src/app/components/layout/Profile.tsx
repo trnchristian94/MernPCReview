@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import { requestGet } from "utils/request";
-import { formatDate, formatHour } from "utils/date";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import UserPosts from "./UserPosts";
+import { getUserPosts } from "userLogic/actions/postActions";
 
 interface Props {
   auth: any;
   errors: any;
   match: any;
+  userPosts: any;
+  getUserPosts: any;
 }
 
-function Profile({ auth, errors, match }: Props) {
+function Profile({ auth, errors, match, userPosts, getUserPosts }: Props) {
   const [publicUser, setUser]: any = useState();
   const { user } = auth;
-  const [username, setUsername] = useState(match.params.username);
+  const username = match.params.username;
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -26,9 +28,13 @@ function Profile({ auth, errors, match }: Props) {
   const fetchUser = () => {
     new Promise((resolve, reject) => {
       requestGet("/api/userProfile/user/" + username, resolve);
-    }).then((user: any) => {
-      setUser(user);
-      requestGet("/api/posts/from/" + user[0]._id, setPosts);
+    }).then((u: any) => {
+      setUser(u);
+      if (user.name === username) {
+        getUserPosts(user);
+      } else {
+        requestGet("/api/posts/from/" + u[0]._id, setPosts);
+      }
     });
   };
 
@@ -55,13 +61,17 @@ function Profile({ auth, errors, match }: Props) {
         <div className="userBio">
           {publicUser && publicUser[0].userInfo.bio}
         </div>
-        <UserPosts posts={posts} fetchPosts={fetchUser}/>
+        <UserPosts
+          posts={user.name === username ? userPosts.userPosts : posts}
+          fetchPosts={fetchUser}
+        />
       </Col>
     </Container>
   );
 }
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  userPosts: state.userPosts
 });
-export default connect(mapStateToProps)(Profile);
+export default connect(mapStateToProps, { getUserPosts })(Profile);

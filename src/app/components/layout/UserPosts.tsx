@@ -38,6 +38,7 @@ function UserPosts({ auth, posts, fetchPosts }: IProps) {
   return (
     <div id="userPosts">
       {posts &&
+        posts.length > 0 &&
         posts.map((post: any) => {
           return (
             <div className="userPost" key={post._id}>

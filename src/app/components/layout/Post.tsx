@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { requestGet, requestPost } from "utils/request";
+import { requestPost } from "utils/request";
 import { useToasts } from "react-toast-notifications";
-import  CloseRounded  from "@material-ui/icons/CloseRounded";
+import CloseRounded from "@material-ui/icons/CloseRounded";
+import { getPosts, getUserPosts } from "userLogic/actions/postActions";
 
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -13,9 +14,17 @@ interface Props {
   auth: any;
   errors: any;
   setShowSubmitPost: any;
+  getPosts: any;
+  getUserPosts: any;
 }
 
-function Post({ auth, errors, setShowSubmitPost }: Props) {
+function Post({
+  auth,
+  errors,
+  setShowSubmitPost,
+  getPosts,
+  getUserPosts
+}: Props) {
   const { addToast } = useToasts();
   const { user } = auth;
   const [postText, setPostText] = useState("");
@@ -39,7 +48,15 @@ function Post({ auth, errors, setShowSubmitPost }: Props) {
   const submitPost = (e: any) => {
     const callback = () => {
       showToast("Posted");
-      setPostText("");
+      let direction =
+        location.pathname.substr(location.pathname.length - 1) === "/"
+          ? `/user/${user.name}/`
+          : `/user/${user.name}`;
+      if (location.pathname === direction) {
+        getUserPosts(user);
+      } else {
+        getPosts(user);
+      }
     };
     requestPost(`/api/posts/${user.id}`, { text: postText }, callback);
     setShowSubmitPost(false);
@@ -99,4 +116,4 @@ const mapStateToProps = (state: any) => ({
   auth: state.auth,
   errors: state.errors
 });
-export default connect(mapStateToProps)(Post);
+export default connect(mapStateToProps, { getPosts, getUserPosts })(Post);

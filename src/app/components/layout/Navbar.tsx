@@ -44,7 +44,6 @@ function NavbarHeader({
   const [password, setPassword] = useState("");
   const [connected, setConnected] = useState(false);
   const [showSubmitPost, setShowSubmitPost] = useState(false);
-  //const [stalkRequests, setStalkRequests] = useState(0);
   const stalkReq = stalks.stalkRequests;
   const { user } = auth;
   const history = useHistory();
