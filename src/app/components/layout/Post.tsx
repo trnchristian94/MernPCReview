@@ -2,7 +2,8 @@ import React, { useEffect, useState } from "react";
 import { requestPost } from "utils/request";
 import { useToasts } from "react-toast-notifications";
 import CloseRounded from "@material-ui/icons/CloseRounded";
-import { getPosts, getUserPosts } from "userLogic/actions/postActions";
+import { getPosts } from "userLogic/actions/postActions";
+import { getUserPosts } from "userLogic/actions/userPostActions";
 
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";

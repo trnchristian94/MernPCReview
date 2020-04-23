@@ -12,10 +12,10 @@ const requestGet = (url: string, _setValue: any): any => {
     });
 };
 
-const requestPut = (url: string, body: any, _callback?: any): any => {
+const requestPut = (url: string, body?: any, _callback?: any): any => {
   fetch(url, {
     method: "PUT",
-    body: JSON.stringify(body),
+    body: body?JSON.stringify(body):'',
     headers: {
       Authorization: localStorage.jwtToken ? localStorage.jwtToken : null,
       Accept: "application/json",

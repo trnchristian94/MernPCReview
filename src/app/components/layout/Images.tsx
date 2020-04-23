@@ -14,12 +14,20 @@ import { connect } from "react-redux";
 interface Props {
   auth: any;
   errors: any;
+  history: any;
 }
-function Images({ auth, errors }: Props) {
+function Images({ auth, errors, history }: Props) {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [images, setImages] = useState([]);
   const { addToast } = useToasts();
+
+  
+  useEffect(() => {
+    if (!auth.isAuthenticated) {
+      history.push("/login");
+    }
+  }, []);
 
   const onSubmit = (e: any) => {
     e.preventDefault();

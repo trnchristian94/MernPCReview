@@ -1,9 +1,10 @@
-import { GET_POSTS } from "./types";
-import { LIKE_POST } from "./types";
-import { REMOVE_LIKE_POST } from "./types";
+import { GET_USER_POSTS } from "./types";
+import { USER_LIKE_POST } from "./types";
+import { USER_REMOVE_LIKE_POST } from "./types";
 
-export const getPosts = (user: { id: String }) => (dispatch: any) => {
-  fetch(`/api/posts/fromStalkings/${user.id}`, {
+
+export const getUserPosts = (user: { id: String }) => (dispatch: any) => {
+  fetch(`/api/posts/from/${user.id}`, {
     headers: {
       Authorization: localStorage.jwtToken
     }
@@ -11,14 +12,14 @@ export const getPosts = (user: { id: String }) => (dispatch: any) => {
     .then((res) => res.json())
     .then((data) => {
       dispatch({
-        type: GET_POSTS,
+        type: GET_USER_POSTS,
         payload: data
       });
     })
     .catch((err) => console.log(err));
 };
 
-export const likePost = (postId: String) => (dispatch: any) => {
+export const userLikePost = (postId: String) => (dispatch: any) => {
   fetch(`/api/posts/like/${postId}`, {
     method: "PUT",
     headers: {
@@ -29,14 +30,14 @@ export const likePost = (postId: String) => (dispatch: any) => {
   }).then((res) => {
     res.json().then((data) => {
       dispatch({
-        type: LIKE_POST,
+        type: USER_LIKE_POST,
         payload: data
       });
     });
   });
 };
 
-export const removeLikePost = (postId: String) => (dispatch: any) => {
+export const userRemoveLikePost = (postId: String) => (dispatch: any) => {
   fetch(`/api/posts/removeLike/${postId}`, {
     method: "PUT",
     headers: {
@@ -47,7 +48,7 @@ export const removeLikePost = (postId: String) => (dispatch: any) => {
   }).then((res) => {
     res.json().then((data) => {
       dispatch({
-        type: REMOVE_LIKE_POST,
+        type: USER_REMOVE_LIKE_POST,
         payload: data
       });
     });

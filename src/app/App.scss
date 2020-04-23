@@ -335,6 +335,23 @@
       .postText {
         padding-bottom: 20px;
       }
+
+      .likeButton,
+      .likedButton {
+        cursor: pointer;
+        margin-right: 5px;
+        transition-duration: 0.2s;
+      }
+      .likedButton {
+        fill: #e0245e;
+      }
+      .like:hover {
+        color: rgb(224, 36, 94);
+      }
+      .likedButton:hover,
+      .likeButton:hover {
+        background-color: rgba(224, 36, 94, 0.1);
+      }
       .delete {
         position: absolute;
         bottom: 0;
@@ -344,5 +361,19 @@
         cursor: pointer;
       }
     }
+  }
+
+  // Makes exterior of element rounded
+  .rounded {
+    border-bottom-left-radius: 9999px !important;
+    border-bottom-right-radius: 9999px !important;
+    border-top-left-radius: 9999px !important;
+    border-top-right-radius: 9999px !important;
+  }
+
+  // Aligns items inside div vertically
+  .vAlign {
+    vertical-align: middle;
+    display: flex;
   }
 }

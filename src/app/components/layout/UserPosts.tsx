@@ -2,19 +2,41 @@ import React, { useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import { formatDate, formatHour } from "utils/date";
 import { Link } from "react-router-dom";
-import { requestDelete } from "utils/request";
+import { requestDelete, requestPut } from "utils/request";
 
 import Delete from "@material-ui/icons/Delete";
+import FavoriteBorderOutlined from "@material-ui/icons/FavoriteBorderOutlined";
+import Favorite from "@material-ui/icons/Favorite";
+
 import Avatar from "@material-ui/core/Avatar";
 import { useToasts } from "react-toast-notifications";
+
+import { likePost, removeLikePost } from "userLogic/actions/postActions";
+
+import {
+  userLikePost,
+  userRemoveLikePost
+} from "userLogic/actions/userPostActions";
 
 interface IProps {
   auth: any;
   posts: any;
   fetchPosts: any;
+  likePost: any;
+  removeLikePost: any;
+  userLikePost: any;
+  userRemoveLikePost: any;
 }
 
-function UserPosts({ auth, posts, fetchPosts }: IProps) {
+function UserPosts({
+  auth,
+  posts,
+  fetchPosts,
+  likePost,
+  removeLikePost,
+  userLikePost,
+  userRemoveLikePost
+}: IProps) {
   const { addToast } = useToasts();
   const { user } = auth;
 
@@ -32,6 +54,36 @@ function UserPosts({ auth, posts, fetchPosts }: IProps) {
         fetchPosts();
       };
       requestDelete(`/api/posts/${user.id}`, callback, { postId });
+    }
+  };
+
+  const likePost_ = (postId: string) => {
+    let direction =
+      location.pathname.substr(location.pathname.length - 1) === "/"
+        ? `/user/${user.name}/`
+        : `/user/${user.name}`;
+    if (location.pathname === direction) {
+      userLikePost(postId);
+    } else {
+      likePost(postId);
+      if (location.pathname.substr(1, 4) == "user") {
+        fetchPosts();
+      }
+    }
+  };
+
+  const removeLikePost_ = (postId: string) => {
+    let direction =
+      location.pathname.substr(location.pathname.length - 1) === "/"
+        ? `/user/${user.name}/`
+        : `/user/${user.name}`;
+    if (location.pathname === direction) {
+      userRemoveLikePost(postId);
+    } else {
+      removeLikePost(postId);
+      if (location.pathname.substr(1, 4) == "user") {
+        fetchPosts();
+      }
     }
   };
 
@@ -61,6 +113,25 @@ function UserPosts({ auth, posts, fetchPosts }: IProps) {
                 )} ${formatHour(post.date)}`}</div>
               </div>
               <div className="postText">{post.text}</div>
+              {post.likes &&
+              post.likes.length > 0 &&
+              post.likes.includes(user.id) ? (
+                <div className="liked vAlign">
+                  <Favorite
+                    className="likedButton rounded"
+                    onClick={() => removeLikePost_(post._id)}
+                  />
+                  {` ${post.likes.length}`}
+                </div>
+              ) : (
+                <div className="like vAlign">
+                  <FavoriteBorderOutlined
+                    className="likeButton rounded"
+                    onClick={() => likePost_(post._id)}
+                  />
+                  {` ${post.likes.length}`}
+                </div>
+              )}
               {post.creator._id === user.id && (
                 <Delete
                   className="delete"
@@ -77,4 +148,9 @@ const mapStateToProps = (state: any) => ({
   auth: state.auth,
   errors: state.errors
 });
-export default connect(mapStateToProps)(UserPosts);
+export default connect(mapStateToProps, {
+  likePost,
+  removeLikePost,
+  userLikePost,
+  userRemoveLikePost
+})(UserPosts);

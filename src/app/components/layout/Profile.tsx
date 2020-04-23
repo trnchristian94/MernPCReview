@@ -5,7 +5,7 @@ import { requestGet } from "utils/request";
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 import UserPosts from "./UserPosts";
-import { getUserPosts } from "userLogic/actions/postActions";
+import { getUserPosts } from "userLogic/actions/userPostActions";
 
 interface Props {
   auth: any;
@@ -13,16 +13,28 @@ interface Props {
   match: any;
   userPosts: any;
   getUserPosts: any;
+  history: any;
 }
 
-function Profile({ auth, errors, match, userPosts, getUserPosts }: Props) {
+function Profile({
+  auth,
+  errors,
+  match,
+  userPosts,
+  getUserPosts,
+  history
+}: Props) {
   const [publicUser, setUser]: any = useState();
   const { user } = auth;
   const username = match.params.username;
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
-    fetchUser();
+    if (!auth.isAuthenticated) {
+      history.push("/login");
+    } else {
+      fetchUser();
+    }
   }, []);
 
   const fetchUser = () => {
