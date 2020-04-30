@@ -7,14 +7,12 @@ import {
   requestDelete
 } from "utils/request";
 
-
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import Card from "react-bootstrap/Card";
 import Form from "react-bootstrap/Form";
-
 
 export default function Task() {
   const { addToast } = useToasts();
@@ -69,8 +67,8 @@ export default function Task() {
   // Buscar cómo crear función para esto.
   const editTask = (id: string) => {
     fetch(`/api/tasks/${id}`)
-      .then(res => res.json())
-      .then(data => {
+      .then((res) => res.json())
+      .then((data) => {
         setTitle(data.title);
         setDescription(data.description);
         setId(data._id);
@@ -85,7 +83,7 @@ export default function Task() {
     <Container fluid style={{ maxWidth: "75%", paddingTop: "4rem" }}>
       <Row>
         <Col lg={true}>
-          <Card style={{ padding: "15px", width: "400px" }}>
+          <Card className="pcCard" style={{ padding: "15px" }}>
             <Form noValidate onSubmit={addTask}>
               <Form.Row>
                 <Form.Group as={Col}>
@@ -119,10 +117,11 @@ export default function Task() {
         </Col>
         <Col lg={true}>
           <Row>
-            {tasks.map(task => {
+            {tasks.map((task) => {
               return (
                 <Card
                   key={task._id}
+                  className="pcCard"
                   style={{
                     width: "200px",
                     marginTop: "10px",

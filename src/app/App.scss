@@ -1,47 +1,125 @@
+html,
+#app,
+.App,
+.App > .row {
+  height: 100%;
+  min-height: 100vh;
+}
+body {
+  overflow: overlay;
+}
+body,
+#app,
 .App {
+  min-height: 100%;
+}
+
+$color1: #222831;
+$color2: #393e46;
+$color3: #00adb5;
+$color4: #eeeeee;
+$color5: #9197ae;
+$color6: #f87060;
+$color7: #8be8cb;
+
+a {
+  color: $color3;
+}
+.App {
+  background-color: $color1;
+  color: $color4;
   // General
 
-  // Navbar
-  #pc-principalNavbar .navbar-nav {
-    width: 100%;
-
-    .nav-link {
-      margin: 0 auto;
-    }
+  /******************** Sidebar **********************/
+  #midCol {
+    border-left: 1px solid $color4;
+    border-right: 1px solid $color4;
   }
 
-  .navbar.bg-primary {
-    background-color: transparent !important;
-  }
-
-  .navbar {
-    .navbar-brand {
-      color: #4a3e3e !important;
-    }
-
+  #sidebar {
     .nav-link {
-      color: rgba(59, 81, 236, 0.5) !important;
+      color: $color4 !important;
       vertical-align: middle;
       display: flex;
+      padding: 0.8rem 1rem;
+      font-weight: 700;
+      font-size: 22px;
+      align-items: center;
+
+      svg {
+        width: 1.2em;
+        height: 1.2em;
+        margin-right: 5px;
+      }
     }
 
-    .nav-link.stalkerRequests {
+    .mAlign {
+      display: flex;
+      justify-content: center;
+    }
+    .stalkerRequests {
       font-weight: 700;
-      color: #56d452 !important;
+      color: $color4 !important;
     }
 
     .nav-link:focus {
-      color: rgba(141, 165, 243, 0.5) !important;
+      color: $color3 !important;
+    }
+
+    .postBtn {
+      width: 160px;
+      border-radius: 20px;
     }
   }
 
-  // UserCard
+  /* Adaptative sidebar */
+  @media (max-width: 920px) {
+    #sidebarCol {
+      flex: 0 0 20%;
+      max-width: 20%;
+    }
+    #midCol {
+      flex: 0 0 80%;
+      max-width: 80%;
+    }
+    #rightCol {
+      display: none;
+    }
+    .nav-link {
+      margin-right: 5px;
+      width: 100%;
+      justify-content: center;
+    }
+    #sidebar > * {
+      flex-direction: row-reverse;
+    }
+    #sidebar .navText {
+      display: none;
+    }
+    .postBtn {
+      width: 10px !important;
+      width: 41px !important;
+      height: 41px;
+      justify-content: center;
+      display: flex;
+    }
+  }
+
+  /************************************************/
+
+  // UserCard or card
   .userCards {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 335px);
     justify-content: center;
+    align-content: flex-start;
   }
   .userCard {
     margin: 15px;
-    width: 350px;
+    height: 270px;
+    width: 300px;
+    background-color: $color2;
+    border: 1px solid $color4;
 
     .userCard-body {
       text-align: center;
@@ -55,11 +133,16 @@
           z-index: 0;
           top: 0;
           left: 0;
-          height: 45%;
+          height: 48.265%;
           width: 100%;
-          /*overflow: hidden;
-          background-size: cover;
-          background-position: center;*/
+          .landscapeImg {
+            height: 100%;
+          }
+          .landscapeImgUser {
+            height: 100%;
+            object-fit: cover;
+            filter: blur(2px);
+          }
         }
 
         .userImage {
@@ -84,10 +167,6 @@
         .userName {
           padding-top: 10px;
           margin-bottom: -7px;
-        }
-
-        .userBio {
-          color: #53adda;
         }
       }
 
@@ -147,6 +226,10 @@
       padding: 1em;
       border-radius: 5px;
       position: relative;
+
+      .form-label {
+        color: $color2;
+      }
 
       .closeDialogIcon {
         position: absolute;
@@ -237,31 +320,16 @@
         }
       }
 
-      @media (min-width: 768px) {
-        .userImage {
-          top: 11vw;
-          width: 11.1vw;
-          height: 11.1vw;
+      .userImage {
+        top: 11vw;
+        width: 11.1vw;
+        height: 11.1vw;
 
-          .userImg {
-            width: 11vw;
-            height: 11vw;
-            margin-top: 0.05vw;
-            margin-left: 0.05vw;
-          }
-        }
-      }
-
-      @media (max-width: 767px) {
-        .userImage {
-          top: 23vw;
-          width: 21vw;
-          height: 21vw;
-
-          .userImg {
-            width: 21vw;
-            height: 21vw;
-          }
+        .userImg {
+          width: 11vw;
+          height: 11vw;
+          margin-top: 0.05vw;
+          margin-left: 0.05vw;
         }
       }
 
@@ -284,7 +352,6 @@
     }
 
     .userName {
-      margin-left: 63vh;
       font-size: calc(1em + 0.5vw);
       color: #6c85ad;
     }
@@ -300,7 +367,6 @@
 
   #userPosts {
     margin-bottom: 10px;
-    width: 50%;
     margin-right: auto;
     margin-left: auto;
 
@@ -371,9 +437,48 @@
     border-top-right-radius: 9999px !important;
   }
 
+  /****************** TO DELETE IN THE FUTURE ***************************/
+
+  .pcCard {
+    background-color: $color2;
+    color: $color4;
+    border: 1px solid $color4;
+  }
+
+  .imgCard > div {
+    padding: 5px;
+    height: 162px;
+  }
+  .imgCard {
+    height: 250px;
+    width: 12rem;
+    margin: 5px;
+    text-align: center;
+
+    .card-title {
+      text-align: center;
+    }
+    button {
+      bottom: 0;
+      position: absolute;
+      left: 32%;
+    }
+    .main-image {
+      max-height: 100%;
+      max-width: 100%;
+    }
+  }
+
+  /**********************************************************************/
+
   // Aligns items inside div vertically
   .vAlign {
     vertical-align: middle;
     display: flex;
+  }
+
+  .mAlign {
+    display: flex;
+    justify-content: center;
   }
 }

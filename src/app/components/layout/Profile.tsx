@@ -52,7 +52,7 @@ function Profile({
 
   return (
     <Container id="profile" fluid style={{ paddingTop: "4rem" }}>
-      <Col md={{ span: 6, offset: 3 }}>
+      <div>
         <div className="imageHeader">
           <div className="landscape">
             {publicUser && publicUser[0].userImage && (
@@ -77,7 +77,7 @@ function Profile({
           posts={user.name === username ? userPosts.userPosts : posts}
           fetchPosts={fetchUser}
         />
-      </Col>
+      </div>
     </Container>
   );
 }

@@ -35,7 +35,7 @@ function Stalking({ auth, errors, history }: Props) {
     <Container fluid style={{ paddingTop: "4rem" }}>
       <Col lg={true}>
         <div>Stalking :</div>
-        <Row>
+        <div className="userCards">
           {stalking.map((publicUser: any) => {
             return (
               <UserCard
@@ -47,7 +47,7 @@ function Stalking({ auth, errors, history }: Props) {
               />
             );
           })}
-        </Row>
+        </div>
       </Col>
     </Container>
   );

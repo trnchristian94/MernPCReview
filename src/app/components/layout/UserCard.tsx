@@ -170,9 +170,9 @@ function UserCard({
           <div className="landscape">
             {user.userImage && (
               <Card.Img
-                className="landscapeImg"
+                className={user.userImage.landscape?"landscapeImg":"landscapeImgUser"}
                 variant="top"
-                src={user.userImage.landscape}
+                src={user.userImage.landscape?user.userImage.landscape:user.userImage.image}
               />
             )}
           </div>

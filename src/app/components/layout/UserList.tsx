@@ -37,10 +37,40 @@ function UserList({ auth, errors, history }: Props) {
     requestGet("/api/userList", setUsers);
   };
 
+  const createUserList = () => {
+    let content: any = [];
+    let row: any = [];
+
+    users.map((publicUser: any, i: number) => {
+      const stalkReq: {
+        _id: String;
+        recipient: String;
+        status: number;
+      } = stalkRequests.find((f) => f.recipient === publicUser._id);
+
+      row.push(
+        <UserCard
+          key={publicUser._id}
+          user={publicUser}
+          showAddButton={publicUser._id === user.id ? false : true}
+          status={stalkReq ? stalkReq.status : 0}
+          fetchUsers={fetchStalkRequests}
+        />
+      );
+
+      if (((i + 1) % 1 === 0 && i !== 0) || i === users.length - 1) {
+        content.push(<Row className="userCards">{row}</Row>);
+        row = [];
+      }
+    });
+    return content;
+  };
+
   return (
     <Container fluid style={{ paddingTop: "4rem" }}>
       <Col lg={true}>
-        <Row className="userCards">
+        <div className="userCards">
+          {/*createUserList()*/}
           {users.map((publicUser: any) => {
             const stalkReq: {
               _id: String;
@@ -57,7 +87,7 @@ function UserList({ auth, errors, history }: Props) {
               />
             );
           })}
-        </Row>
+        </div>
       </Col>
     </Container>
   );

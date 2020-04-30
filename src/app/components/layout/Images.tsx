@@ -22,7 +22,6 @@ function Images({ auth, errors, history }: Props) {
   const [images, setImages] = useState([]);
   const { addToast } = useToasts();
 
-  
   useEffect(() => {
     if (!auth.isAuthenticated) {
       history.push("/login");
@@ -110,20 +109,21 @@ function Images({ auth, errors, history }: Props) {
       <div>
         <Col>
           <Row>
-            {images.map(im => {
+            {images.map((im) => {
               return (
                 <Card
                   key={im._id}
                   id={im.imageId}
-                  style={{ width: "12rem", margin: "5px" }}
+                  className="imgCard pcCard"
                 >
-                  <Card.Img
-                    variant="top"
-                    src={im.image}
-                    className="main-image"
-                    alt="This is a terrible description!"
-                    style={{ padding: "5px", maxHeight: "10rem" }}
-                  />
+                  <div>
+                    <img
+                      src={im.image}
+                      className="main-image"
+                      alt="This is a terrible description!"
+                    />
+                  </div>
+
                   <Card.Title>{im.title}</Card.Title>
                   <Button onClick={() => deleteImage(im)}>Delete</Button>
                 </Card>

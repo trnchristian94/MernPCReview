@@ -18,6 +18,7 @@ import MyProfile from "components/layout/MyProfile";
 import Stalking from "components/layout/Stalking";
 import Stalkers from "components/layout/Stalkers";
 import StalkerRequests from "components/layout/StalkerRequests";
+import Notifications from "components/layout/Notifications";
 
 import Register from "components/auth/Register";
 import Login from "components/auth/Login";
@@ -27,6 +28,10 @@ import Dashboard from "components/dashboard/Dashboard";
 import jwt_decode from "jwt-decode";
 import setAuthToken from "utils/setAuthToken";
 import { setCurrentUser, logoutUser } from "userLogic/actions/authActions";
+
+import Container from "react-bootstrap/Container";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 
 import "./App.scss";
 
@@ -57,13 +62,14 @@ export default class App extends Component {
     return (
       <ToastProvider>
         <Provider store={store}>
-          <div>
-            {/* Navigation */}
-
-            <div>
+          <Container fluid className="App">
+            <Row>
+              {/* Navigation */}
               <Router>
-                <div className="App">
+                <Col xs={3} id="sidebarCol">
                   <Navbar />
+                </Col>
+                <Col xs={6} id="midCol">
                   <Route exact path="/" component={Landing} />
                   <Route exact path="/register" component={Register} />
                   <Route exact path="/images" component={Images} />
@@ -73,6 +79,11 @@ export default class App extends Component {
                   <Route exact path="/profile" component={MyProfile} />
                   <Route exact path="/stalking" component={Stalking} />
                   <Route exact path="/stalkers" component={Stalkers} />
+                  <Route
+                    exact
+                    path="/notifications"
+                    component={Notifications}
+                  />
                   <Route exact path={`/user/:username`} component={Profile} />
                   <Route
                     exact
@@ -86,10 +97,11 @@ export default class App extends Component {
                       Component={Dashboard}
                     />
                   </Switch>
-                </div>
+                </Col>
+                <Col xs={3} id="rightCol"></Col>
               </Router>
-            </div>
-          </div>
+            </Row>
+          </Container>
         </Provider>
       </ToastProvider>
     );
