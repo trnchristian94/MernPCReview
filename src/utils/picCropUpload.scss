@@ -1,0 +1,57 @@
+@import "core/colors.scss";
+
+/***************** User Posts *******************/
+.floatingPicCrop:before {
+  /* Center vertically, part 1 */
+  content: "";
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.floatingPicCrop {
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.6);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  text-align: center;
+  /* Center horizontally */
+
+  .picCropDialog {
+    background-color: #fff;
+    display: inline-block;
+    vertical-align: middle;
+    /* Center vertically, part 2 */
+    padding: 1em;
+    border-radius: 5px;
+
+    .croppedImage {
+      border-radius: 50%;
+      position: fixed;
+      width: 150px;
+      height: 150px;
+      top: 15px;
+      left: 15px;
+    }
+
+    .croppedLandscape {
+      position: fixed;
+      width: 400px;
+      height: 150px;
+      top: 15px;
+      left: 15px;
+    }
+
+    .submit-btn,
+    .cancel-btn {
+      margin-right: 15px;
+    }
+  }
+
+  .ReactCrop__image {
+    max-height: calc(100vh - 150px);
+  }
+}

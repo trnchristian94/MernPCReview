@@ -1,0 +1,63 @@
+@import "core/colors.scss";
+
+/***************** Profile *******************/
+
+#profile {
+  .imageHeader {
+    position: relative;
+    margin-bottom: 10px;
+
+    .landscape {
+      width: 100%;
+      padding-top: 37%;
+
+      .landscapeImg {
+        height: 100%;
+        width: 100%;
+        position: absolute;
+        top: 0vw;
+      }
+    }
+
+    .userImage {
+      top: 11vw;
+      width: 11.1vw;
+      height: 11.1vw;
+
+      .userImg {
+        width: 11vw;
+        height: 11vw;
+        margin-top: 0.05vw;
+        margin-left: 0.05vw;
+      }
+    }
+
+    .userImage {
+      margin: auto;
+      display: block;
+      border: 4px solid white !important;
+      border-radius: 50%;
+      box-sizing: content-box;
+      position: absolute;
+      left: 0;
+      right: 0;
+      margin-left: auto;
+      margin-right: auto;
+
+      .userImg {
+        border-radius: 50%;
+      }
+    }
+  }
+
+  .userName {
+    font-size: calc(1em + 0.5vw);
+    color: #6c85ad;
+  }
+
+  .userBio {
+    text-align: center;
+    padding-top: 6vh;
+    padding-bottom: 8vh;
+  }
+}

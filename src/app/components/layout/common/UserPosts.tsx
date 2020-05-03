@@ -1,14 +1,15 @@
-import React, { useState } from "react";
-import { connect, useDispatch } from "react-redux";
-import { formatDate, formatHour } from "utils/date";
+import React from "react";
+import { connect } from "react-redux";
 import { Link } from "react-router-dom";
+
+import { formatDate, formatHour } from "utils/date";
 import { requestDelete, requestPut } from "utils/request";
 
 import Delete from "@material-ui/icons/Delete";
 import FavoriteBorderOutlined from "@material-ui/icons/FavoriteBorderOutlined";
 import Favorite from "@material-ui/icons/Favorite";
-
 import Avatar from "@material-ui/core/Avatar";
+
 import { useToasts } from "react-toast-notifications";
 
 import { likePost, removeLikePost } from "userLogic/actions/postActions";
@@ -18,6 +19,7 @@ import {
   userRemoveLikePost
 } from "userLogic/actions/userPostActions";
 
+import "./UserPosts.scss";
 interface IProps {
   auth: any;
   posts: any;

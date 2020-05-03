@@ -1,3 +1,5 @@
+@import "core/colors.scss";
+
 html,
 #app,
 .App,
@@ -14,427 +16,21 @@ body,
   min-height: 100%;
 }
 
-$color1: #222831;
-$color2: #393e46;
-$color3: #00adb5;
-$color4: #eeeeee;
-$color5: #9197ae;
-$color6: #f87060;
-$color7: #8be8cb;
-
 a {
   color: $color3;
 }
 .App {
   background-color: $color1;
   color: $color4;
-  // General
 
-  /******************** Sidebar **********************/
   #midCol {
     border-left: 1px solid $color4;
     border-right: 1px solid $color4;
   }
 
-  #sidebar {
-    .nav-link {
-      color: $color4 !important;
-      vertical-align: middle;
-      display: flex;
-      padding: 0.8rem 1rem;
-      font-weight: 700;
-      font-size: 22px;
-      align-items: center;
-
-      svg {
-        width: 1.2em;
-        height: 1.2em;
-        margin-right: 5px;
-      }
-    }
-
-    .mAlign {
-      display: flex;
-      justify-content: center;
-    }
-    .stalkerRequests {
-      font-weight: 700;
-      color: $color4 !important;
-    }
-
-    .nav-link:focus {
-      color: $color3 !important;
-    }
-
-    .postBtn {
-      width: 160px;
-      border-radius: 20px;
-    }
-  }
-
-  /* Adaptative sidebar */
-  @media (max-width: 920px) {
-    #sidebarCol {
-      flex: 0 0 20%;
-      max-width: 20%;
-    }
-    #midCol {
-      flex: 0 0 80%;
-      max-width: 80%;
-    }
-    #rightCol {
-      display: none;
-    }
-    .nav-link {
-      margin-right: 5px;
-      width: 100%;
-      justify-content: center;
-    }
-    #sidebar > * {
-      flex-direction: row-reverse;
-    }
-    #sidebar .navText {
-      display: none;
-    }
-    .postBtn {
-      width: 10px !important;
-      width: 41px !important;
-      height: 41px;
-      justify-content: center;
-      display: flex;
-    }
-  }
-
-  /************************************************/
-
-  // UserCard or card
-  .userCards {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, 335px);
-    justify-content: center;
-    align-content: flex-start;
-  }
-  .userCard {
-    margin: 15px;
-    height: 270px;
-    width: 300px;
-    background-color: $color2;
-    border: 1px solid $color4;
-
-    .userCard-body {
-      text-align: center;
-      padding: 1rem;
-
-      &__header {
-        height: 200px;
-
-        .landscape {
-          position: absolute;
-          z-index: 0;
-          top: 0;
-          left: 0;
-          height: 48.265%;
-          width: 100%;
-          .landscapeImg {
-            height: 100%;
-          }
-          .landscapeImgUser {
-            height: 100%;
-            object-fit: cover;
-            filter: blur(2px);
-          }
-        }
-
-        .userImage {
-          width: 102px;
-          height: 102px;
-          display: block;
-          margin: auto;
-          border: 2px solid white !important;
-          border-radius: 50%;
-          box-sizing: content-box;
-          position: relative;
-          z-index: 1;
-
-          .userImg {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            margin-top: 1px;
-          }
-        }
-
-        .userName {
-          padding-top: 10px;
-          margin-bottom: -7px;
-        }
-      }
-
-      &__footer {
-        .stalkReqButton,
-        .stalkingButton,
-        .stalkCanceledButton {
-          width: 120px;
-          font-size: 0.95em;
-          font-weight: 700;
-          border-radius: 20px;
-        }
-
-        .stalkingButton:hover {
-          background-color: #d61f31;
-          border-color: #d61f31;
-        }
-
-        .stalkCanceledButton:hover {
-          color: #007bff;
-          background-color: rgba(29, 161, 242, 0.1);
-          border-color: #007bff;
-        }
-
-        .stalkReqButton:hover {
-          color: #007bff;
-          background-color: rgba(29, 161, 242, 0.1);
-          border-color: #007bff;
-        }
-      }
-    }
-  }
-
-  // Floating submit
-  .floatingSubmitPost:before {
-    /* Center vertically, part 1 */
-    content: "";
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
-  }
-
-  .floatingSubmitPost {
-    z-index: 2;
-    background: rgba(0, 0, 0, 0.6);
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    position: fixed;
-    text-align: center;
-
-    .floatingSubmitPostDialog {
-      background-color: #fff;
-      display: inline-block;
-      vertical-align: middle;
-      padding: 1em;
-      border-radius: 5px;
-      position: relative;
-
-      .form-label {
-        color: $color2;
-      }
-
-      .closeDialogIcon {
-        position: absolute;
-        right: 5px;
-        top: 5px;
-        cursor: pointer;
-        z-index: 2;
-      }
-    }
-  }
-
-  // Pic Crop
-  .floatingPicCrop:before {
-    /* Center vertically, part 1 */
-    content: "";
-    display: inline-block;
-    height: 100%;
-    vertical-align: middle;
-  }
-
-  .floatingPicCrop {
-    z-index: 2;
-    background: rgba(0, 0, 0, 0.6);
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    position: fixed;
-    text-align: center;
-    /* Center horizontally */
-
-    .picCropDialog {
-      background-color: #fff;
-      display: inline-block;
-      vertical-align: middle;
-      /* Center vertically, part 2 */
-      padding: 1em;
-      border-radius: 5px;
-
-      .croppedImage {
-        border-radius: 50%;
-        position: fixed;
-        width: 150px;
-        height: 150px;
-        top: 15px;
-        left: 15px;
-      }
-
-      .croppedLandscape {
-        position: fixed;
-        width: 400px;
-        height: 150px;
-        top: 15px;
-        left: 15px;
-      }
-
-      .submit-btn,
-      .cancel-btn {
-        margin-right: 15px;
-      }
-    }
-
-    .ReactCrop__image {
-      max-height: calc(100vh - 150px);
-    }
-  }
-
   .btn:focus {
     outline: none !important;
     outline-offset: none !important;
-  }
-
-  // Profile
-  #profile {
-    .imageHeader {
-      position: relative;
-      margin-bottom: 10px;
-
-      .landscape {
-        width: 100%;
-        padding-top: 37%;
-
-        .landscapeImg {
-          height: 100%;
-          width: 100%;
-          position: absolute;
-          top: 0vw;
-        }
-      }
-
-      .userImage {
-        top: 11vw;
-        width: 11.1vw;
-        height: 11.1vw;
-
-        .userImg {
-          width: 11vw;
-          height: 11vw;
-          margin-top: 0.05vw;
-          margin-left: 0.05vw;
-        }
-      }
-
-      .userImage {
-        margin: auto;
-        display: block;
-        border: 4px solid white !important;
-        border-radius: 50%;
-        box-sizing: content-box;
-        position: absolute;
-        left: 0;
-        right: 0;
-        margin-left: auto;
-        margin-right: auto;
-
-        .userImg {
-          border-radius: 50%;
-        }
-      }
-    }
-
-    .userName {
-      font-size: calc(1em + 0.5vw);
-      color: #6c85ad;
-    }
-
-    .userBio {
-      text-align: center;
-      padding-top: 6vh;
-      padding-bottom: 8vh;
-    }
-  }
-
-  // Posts
-
-  #userPosts {
-    margin-bottom: 10px;
-    margin-right: auto;
-    margin-left: auto;
-
-    .userPost:last-child {
-      border-bottom: 1px solid #eaeaea;
-    }
-
-    .userPost {
-      border: 1px solid #eaeaea;
-      border-bottom: none;
-      padding: 15px;
-      position: relative;
-
-      .postHeader {
-        .user {
-          display: inline-flex;
-          margin-bottom: 15px;
-          .avatarImg {
-          }
-          .postUserName {
-            font-weight: 500;
-          }
-        }
-      }
-
-      .postDate {
-        position: absolute;
-        top: 15px;
-        right: 15px;
-      }
-
-      .postText {
-        padding-bottom: 20px;
-      }
-
-      .likeButton,
-      .likedButton {
-        cursor: pointer;
-        margin-right: 5px;
-        transition-duration: 0.2s;
-      }
-      .likedButton {
-        fill: #e0245e;
-      }
-      .like:hover {
-        color: rgb(224, 36, 94);
-      }
-      .likedButton:hover,
-      .likeButton:hover {
-        background-color: rgba(224, 36, 94, 0.1);
-      }
-      .delete {
-        position: absolute;
-        bottom: 0;
-        right: 0;
-        bottom: 15px;
-        right: 15px;
-        cursor: pointer;
-      }
-    }
-  }
-
-  // Makes exterior of element rounded
-  .rounded {
-    border-bottom-left-radius: 9999px !important;
-    border-bottom-right-radius: 9999px !important;
-    border-top-left-radius: 9999px !important;
-    border-top-right-radius: 9999px !important;
   }
 
   /****************** TO DELETE IN THE FUTURE ***************************/
@@ -471,12 +67,21 @@ a {
 
   /**********************************************************************/
 
+  // Makes exterior of element rounded
+  .rounded {
+    border-bottom-left-radius: 9999px !important;
+    border-bottom-right-radius: 9999px !important;
+    border-top-left-radius: 9999px !important;
+    border-top-right-radius: 9999px !important;
+  }
+
   // Aligns items inside div vertically
   .vAlign {
     vertical-align: middle;
     display: flex;
   }
 
+  // Aligns items inside div in center
   .mAlign {
     display: flex;
     justify-content: center;

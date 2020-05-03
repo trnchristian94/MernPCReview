@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from "react";
 import { useToasts } from "react-toast-notifications";
-import { requestGet, requestPut } from "utils/request";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";

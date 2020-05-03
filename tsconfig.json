@@ -12,6 +12,9 @@
       "src/*": ["./src/*"],
       "utils/*": ["./src/utils/*"],
       "components/*": ["./src/app/components/*"],
+      "layout/*": ["./src/app/components/layout/*"],
+      "common/*": ["./src/app/components/layout/common/*"],
+      "core/*": ["./src/app/components/core/*"],
       "userLogic/*": ["./src/userLogic/*"],
       "db/*": ["./src/db/*"]
     }

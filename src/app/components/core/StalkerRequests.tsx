@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import UserCard from "components/layout/UserCard";
+import UserCard from "layout/common/UserCard";
 import { requestGet } from "utils/request";
 
 import Container from "react-bootstrap/Container";

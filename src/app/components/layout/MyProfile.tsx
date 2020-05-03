@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useToasts } from "react-toast-notifications";
 import { Link } from "react-router-dom";
-import UserCard from "components/layout/UserCard";
+
+import { useToasts } from "react-toast-notifications";
+
+import UserCard from "layout/common/UserCard";
+
 import PicCropUpload from "utils/picCropUpload";
 import { requestGet, requestPut } from "utils/request";
 import { formatDate } from "utils/date";

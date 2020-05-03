@@ -3,9 +3,10 @@ import { connect } from "react-redux";
 import { requestGet } from "utils/request";
 
 import Container from "react-bootstrap/Container";
-import Col from "react-bootstrap/Col";
 import UserPosts from "./UserPosts";
 import { getUserPosts } from "userLogic/actions/userPostActions";
+
+import "./Profile.scss";
 
 interface Props {
   auth: any;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useToasts } from "react-toast-notifications";
-import UserCard from "components/layout/UserCard";
+
+import UserCard from "layout/common/UserCard";
 import { requestGet } from "utils/request";
 
 import Container from "react-bootstrap/Container";
@@ -15,7 +15,7 @@ interface Props {
   history: any;
 }
 
-function UserList({ auth, errors, history }: Props) {
+function Users({ auth, errors, history }: Props) {
   const [users, setUsers] = useState([]);
   const [stalkRequests, setStalkRequests] = useState([]);
   const { user } = auth;
@@ -96,4 +96,4 @@ const mapStateToProps = (state: any) => ({
   auth: state.auth,
   errors: state.errors
 });
-export default connect(mapStateToProps)(UserList);
+export default connect(mapStateToProps)(Users);

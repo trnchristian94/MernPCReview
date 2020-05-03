@@ -3,15 +3,14 @@ import Container from "react-bootstrap/Container";
 import { getPosts } from "userLogic/actions/postActions";
 
 import { connect } from "react-redux";
-import UserPosts from "./UserPosts";
-
+import UserPosts from "common/UserPosts";
 interface Props {
   auth: any;
   errors: any;
   posts: any;
   getPosts: any;
 }
-function Landing({ auth, errors, posts, getPosts }: Props) {
+function Home({ auth, errors, posts, getPosts }: Props) {
   const { user } = auth;
 
   useEffect(() => {
@@ -38,4 +37,4 @@ const mapStateToProps = (state: any) => ({
   errors: state.errors,
   posts: state.posts.posts
 });
-export default connect(mapStateToProps, { getPosts })(Landing);
+export default connect(mapStateToProps, { getPosts })(Home);

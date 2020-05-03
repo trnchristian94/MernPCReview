@@ -3,15 +3,12 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { loginUser, logoutUser } from "userLogic/actions/authActions";
 import { getStalkRequests } from "userLogic/actions/stalkRequestActions";
-import Post from "components/layout/Post";
+import Post from "layout/common/Post";
 
 import { useToasts } from "react-toast-notifications";
 
 import { Link, useHistory, withRouter } from "react-router-dom";
 
-import Navbar from "react-bootstrap/Navbar";
-import Col from "react-bootstrap/Col";
-import Nav from "react-bootstrap/Nav";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
@@ -24,6 +21,8 @@ import PowerOffRounded from "@material-ui/icons/PowerOffRounded";
 import PermMedia from "@material-ui/icons/PermMedia";
 import NotificationsNone from "@material-ui/icons/NotificationsNone";
 
+import "./Sidebar.scss";
+
 interface Props {
   auth: any;
   stalks: any;
@@ -33,7 +32,7 @@ interface Props {
   errors: any;
 }
 
-function NavbarHeader({
+function Sidebar({
   auth,
   loginUser,
   logoutUser,
@@ -211,7 +210,5 @@ const mapStateToProps = (state: any) => ({
   stalks: state.stalks
 });
 export default withRouter(
-  connect(mapStateToProps, { logoutUser, loginUser, getStalkRequests })(
-    NavbarHeader
-  )
+  connect(mapStateToProps, { logoutUser, loginUser, getStalkRequests })(Sidebar)
 );

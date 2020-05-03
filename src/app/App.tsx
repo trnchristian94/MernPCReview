@@ -9,21 +9,21 @@ import {
 import { Provider } from "react-redux";
 import store from "src/store";
 
-import Images from "src/app/components/layout/Images";
-import Navbar from "src/app/components/layout/Navbar";
-import Landing from "src/app/components/layout/Landing";
-import Task from "components/layout/Task";
-import UserList from "components/layout/UserList";
-import MyProfile from "components/layout/MyProfile";
-import Stalking from "components/layout/Stalking";
-import Stalkers from "components/layout/Stalkers";
-import StalkerRequests from "components/layout/StalkerRequests";
-import Notifications from "components/layout/Notifications";
+import Navbar from "core/Sidebar";
+import StalkerRequests from "core/StalkerRequests";
+import Images from "layout/Images";
+import Landing from "layout/Home";
+import Task from "layout/Tasks";
+import Users from "layout/Users";
+import MyProfile from "src/app/components/layout/MyProfile";
+import Stalking from "layout/common/Stalking";
+import Stalkers from "layout/common/Stalkers";
+import Notifications from "src/app/components/layout/Notifications";
 
 import Register from "components/auth/Register";
 import Login from "components/auth/Login";
 import PrivateRoute from "components/private-route/PrivateRoute";
-import Dashboard from "components/dashboard/Dashboard";
+import Dashboard from "layout/Dashboard";
 
 import jwt_decode from "jwt-decode";
 import setAuthToken from "utils/setAuthToken";
@@ -36,7 +36,7 @@ import Col from "react-bootstrap/Col";
 import "./App.scss";
 
 import { ToastProvider } from "react-toast-notifications";
-import Profile from "./components/layout/Profile";
+import Profile from "layout/common/Profile";
 // Check for token to keep user logged in
 
 if (localStorage.jwtToken) {
@@ -75,7 +75,7 @@ export default class App extends Component {
                   <Route exact path="/images" component={Images} />
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/tasks" component={Task} />
-                  <Route exact path="/userList" component={UserList} />
+                  <Route exact path="/userList" component={Users} />
                   <Route exact path="/profile" component={MyProfile} />
                   <Route exact path="/stalking" component={Stalking} />
                   <Route exact path="/stalkers" component={Stalkers} />

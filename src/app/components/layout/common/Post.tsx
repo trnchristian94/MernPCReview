@@ -11,6 +11,8 @@ import Form from "react-bootstrap/Form";
 
 import { connect } from "react-redux";
 
+import "./Post.scss";
+
 interface Props {
   auth: any;
   errors: any;

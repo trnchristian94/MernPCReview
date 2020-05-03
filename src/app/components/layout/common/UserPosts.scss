@@ -1,0 +1,67 @@
+@import "core/colors.scss";
+
+/***************** User Posts *******************/
+
+#userPosts {
+  margin-bottom: 10px;
+  margin-right: auto;
+  margin-left: auto;
+
+  .userPost:last-child {
+    border-bottom: 1px solid #eaeaea;
+  }
+
+  .userPost {
+    border: 1px solid #eaeaea;
+    border-bottom: none;
+    padding: 15px;
+    position: relative;
+
+    .postHeader {
+      .user {
+        display: inline-flex;
+        margin-bottom: 15px;
+        .avatarImg {
+        }
+        .postUserName {
+          font-weight: 500;
+        }
+      }
+    }
+
+    .postDate {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+    }
+
+    .postText {
+      padding-bottom: 20px;
+    }
+
+    .likeButton,
+    .likedButton {
+      cursor: pointer;
+      margin-right: 5px;
+      transition-duration: 0.2s;
+    }
+    .likedButton {
+      fill: #e0245e;
+    }
+    .like:hover {
+      color: rgb(224, 36, 94);
+    }
+    .likedButton:hover,
+    .likeButton:hover {
+      background-color: rgba(224, 36, 94, 0.1);
+    }
+    .delete {
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      bottom: 15px;
+      right: 15px;
+      cursor: pointer;
+    }
+  }
+}

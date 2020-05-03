@@ -1,0 +1,42 @@
+@import "core/colors.scss";
+
+/***************** Post *******************/
+
+.floatingSubmitPost:before {
+  content: "";
+  display: inline-block;
+  height: 100%;
+  vertical-align: middle;
+}
+
+.floatingSubmitPost {
+  z-index: 2;
+  background: rgba(0, 0, 0, 0.6);
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: fixed;
+  text-align: center;
+
+  .floatingSubmitPostDialog {
+    background-color: #fff;
+    display: inline-block;
+    vertical-align: middle;
+    padding: 1em;
+    border-radius: 5px;
+    position: relative;
+
+    .form-label {
+      color: $color2;
+    }
+
+    .closeDialogIcon {
+      position: absolute;
+      right: 5px;
+      top: 5px;
+      cursor: pointer;
+      z-index: 2;
+    }
+  }
+}

@@ -1,0 +1,72 @@
+@import "core/colors.scss";
+
+/******************** Sidebar **********************/
+
+#sidebar {
+    .nav-link {
+      color: $color4 !important;
+      vertical-align: middle;
+      display: flex;
+      padding: 0.8rem 1rem;
+      font-weight: 700;
+      font-size: 22px;
+      align-items: center;
+
+      svg {
+        width: 1.2em;
+        height: 1.2em;
+        margin-right: 5px;
+      }
+    }
+
+    .mAlign {
+      display: flex;
+      justify-content: center;
+    }
+    .stalkerRequests {
+      font-weight: 700;
+      color: $color4 !important;
+    }
+
+    .nav-link:focus {
+      color: $color3 !important;
+    }
+
+    .postBtn {
+      width: 160px;
+      border-radius: 20px;
+    }
+  }
+
+  /* Adaptative sidebar */
+  @media (max-width: 920px) {
+    #sidebarCol {
+      flex: 0 0 20%;
+      max-width: 20%;
+    }
+    #midCol {
+      flex: 0 0 80%;
+      max-width: 80%;
+    }
+    #rightCol {
+      display: none;
+    }
+    .nav-link {
+      margin-right: 5px;
+      width: 100%;
+      justify-content: center;
+    }
+    #sidebar > * {
+      flex-direction: row-reverse;
+    }
+    #sidebar .navText {
+      display: none;
+    }
+    .postBtn {
+      width: 10px !important;
+      width: 41px !important;
+      height: 41px;
+      justify-content: center;
+      display: flex;
+    }
+  }

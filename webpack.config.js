@@ -12,6 +12,9 @@ module.exports = {
       src: path.resolve(__dirname, "src/"),
       utils: path.resolve(__dirname, "src/utils/"),
       components: path.resolve(__dirname, "src/app/components/"),
+      layout: path.resolve(__dirname, "src/app/components/layout/"),
+      core: path.resolve(__dirname, "src/app/components/core/"),
+      common: path.resolve(__dirname, "src/app/components/layout/common/"),
       userLogic: path.resolve(__dirname, "src/userLogic/"),
       db: path.resolve(__dirname, "src/db/"),
       "@material-ui/core": "@material-ui/core/es"
