@@ -33,6 +33,19 @@ a {
     outline-offset: none !important;
   }
 
+  /****************** LoadingBar ****************************************/
+  .loadingBar {
+    position: fixed;
+    height: 70px;
+    right: 50%;
+    z-index: 3;
+    top: 50%;
+
+    img {
+      max-height: 100%;
+    }
+  }
+
   /****************** TO DELETE IN THE FUTURE ***************************/
 
   .pcCard {

@@ -18,6 +18,7 @@ import Users from "layout/Users";
 import MyProfile from "src/app/components/layout/MyProfile";
 import Stalking from "layout/common/Stalking";
 import Stalkers from "layout/common/Stalkers";
+import LoadingBar from "layout/common/LoadingBar";
 import Notifications from "src/app/components/layout/Notifications";
 
 import Register from "components/auth/Register";
@@ -66,6 +67,7 @@ export default class App extends Component {
             <Row>
               {/* Navigation */}
               <Router>
+                <LoadingBar />
                 <Col xs={3} id="sidebarCol">
                   <Navbar />
                 </Col>

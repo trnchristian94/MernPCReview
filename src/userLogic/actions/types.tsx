@@ -8,3 +8,4 @@ export const USER_LIKE_POST = "USER_LIKE_POST";
 export const REMOVE_LIKE_POST = "REMOVE_LIKE_POST";
 export const USER_REMOVE_LIKE_POST = "USER_REMOVE_LIKE_POST";
 export const GET_STALKERS = "GET_STALKERS";
+export const SET_LOADING = "SET_LOADING";
