@@ -34,7 +34,7 @@ function UserCard({
   auth,
   fetchUsers,
   stalker,
-  getStalkRequests,
+  getStalkRequests
 }: IProps) {
   const { addToast } = useToasts();
   const { dispatch } = useDispatch();
@@ -44,7 +44,7 @@ function UserCard({
     const callback = () => {
       addToast("User added", {
         appearance: "success",
-        autoDismiss: true,
+        autoDismiss: true
       });
       fetchUsers();
     };
@@ -55,12 +55,12 @@ function UserCard({
     const callback = () => {
       addToast("Stalk removed", {
         appearance: "success",
-        autoDismiss: true,
+        autoDismiss: true
       });
       fetchUsers();
     };
     requestDelete(`/api/stalks/cancel/${auth.user.id}`, callback, {
-      recipient: userId,
+      recipient: userId
     });
   };
 
@@ -74,7 +74,7 @@ function UserCard({
     const callback = () => {
       addToast(message, {
         appearance: "success",
-        autoDismiss: true,
+        autoDismiss: true
       });
       fetchUsers();
       getStalkRequests(auth.user);
@@ -101,7 +101,7 @@ function UserCard({
       case 1:
         if (stalker) {
           return (
-            <div style={{ display: "flex" }}>
+            <div style={{ display: "flex", justifyContent: "center" }}>
               <Button
                 variant="success"
                 className="stalkReqButton"
@@ -174,9 +174,15 @@ function UserCard({
           <div className="landscape">
             {user.userImage && (
               <Card.Img
-                className={user.userImage.landscape?"landscapeImg":"landscapeImgUser"}
+                className={
+                  user.userImage.landscape ? "landscapeImg" : "landscapeImgUser"
+                }
                 variant="top"
-                src={user.userImage.landscape?user.userImage.landscape:user.userImage.image}
+                src={
+                  user.userImage.landscape
+                    ? user.userImage.landscape
+                    : user.userImage.image
+                }
               />
             )}
           </div>
@@ -202,6 +208,6 @@ function UserCard({
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
   errors: state.errors,
-  stalkers: state.stalkers,
+  stalkers: state.stalkers
 });
 export default connect(mapStateToProps, { getStalkRequests })(UserCard);

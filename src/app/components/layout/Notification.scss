@@ -1,0 +1,35 @@
+@import "core/colors.scss";
+
+.notification:last-child {
+  border-bottom: 1px solid $color4;
+}
+.notification {
+  border: 1px solid $color4;
+  border-bottom: none;
+  padding: 15px;
+  position: relative;
+  .avatarHeader {
+    display: flex;
+    align-items: center;
+    div {
+        margin-right: 10px;
+    }
+  }
+  .avatarImg {
+    cursor: pointer;
+  }
+
+  .liked {
+    fill: $color6;
+  }
+  .stalk{
+    fill: $color7;
+  }
+  &__icon svg{width: 35px;
+    height: 35px;
+  }
+  &__content {
+    padding: 10px;
+    color: $color5;
+  }
+}

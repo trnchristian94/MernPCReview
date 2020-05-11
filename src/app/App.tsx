@@ -9,7 +9,7 @@ import {
 import { Provider } from "react-redux";
 import store from "src/store";
 
-import Navbar from "core/Sidebar";
+import Sidebar from "core/Sidebar";
 import StalkerRequests from "core/StalkerRequests";
 import Images from "layout/Images";
 import Landing from "layout/Home";
@@ -69,7 +69,7 @@ export default class App extends Component {
               <Router>
                 <LoadingBar />
                 <Col xs={3} id="sidebarCol">
-                  <Navbar />
+                  <Sidebar />
                 </Col>
                 <Col xs={6} id="midCol">
                   <Route exact path="/" component={Landing} />

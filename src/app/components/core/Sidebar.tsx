@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 
 import { connect } from "react-redux";
 import { loginUser, logoutUser } from "userLogic/actions/authActions";
 import { getStalkRequests } from "userLogic/actions/stalkRequestActions";
+import { getNewNotifications } from "userLogic/actions/notificationActions";
 import Post from "layout/common/Post";
 
 import { useToasts } from "react-toast-notifications";
@@ -20,15 +21,20 @@ import AccountCircleRounded from "@material-ui/icons/AccountCircleRounded";
 import PowerOffRounded from "@material-ui/icons/PowerOffRounded";
 import PermMedia from "@material-ui/icons/PermMedia";
 import NotificationsNone from "@material-ui/icons/NotificationsNone";
+import Notifications from "@material-ui/icons/Notifications";
+
+import Avatar from "@material-ui/core/Avatar";
 
 import "./Sidebar.scss";
 
 interface Props {
   auth: any;
   stalks: any;
+  newNotifications: any;
   loginUser: any;
   logoutUser: any;
   getStalkRequests: any;
+  getNewNotifications: any;
   errors: any;
 }
 
@@ -37,8 +43,10 @@ function Sidebar({
   loginUser,
   logoutUser,
   getStalkRequests,
+  getNewNotifications,
   errors,
-  stalks
+  stalks,
+  newNotifications
 }: Props) {
   const { addToast } = useToasts();
   const [email, setEmail] = useState("");
@@ -46,6 +54,7 @@ function Sidebar({
   const [connected, setConnected] = useState(false);
   const [showSubmitPost, setShowSubmitPost] = useState(false);
   const stalkReq = stalks.stalkRequests;
+  const newNotifs = newNotifications.newNotifications;
   const { user } = auth;
   const history = useHistory();
 
@@ -56,9 +65,22 @@ function Sidebar({
         appearance: "success",
         autoDismiss: true
       });
-      getStalkRequests(user);
     }
   }, [auth.isAuthenticated]);
+
+  // Fetch the amounts every time user changes menu
+  const fetchAmounts = () => {
+    if (auth.isAuthenticated) {
+      getStalkRequests(user);
+      getNewNotifications(user);
+    }
+  };
+  const fetchTheAmounts = useCallback(() => {}, [location.pathname]);
+  useEffect(() => {
+    if (auth.isAuthenticated) {
+      fetchAmounts();
+    }
+  }, [fetchTheAmounts]);
 
   const onLogoutClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -84,56 +106,93 @@ function Sidebar({
 
   return (
     <div id="sidebar" className="float-right sticky-top">
-      <Link to={"/"} className="nav-link">
-        <span className="navText">The PC Review</span>
+      <Link to={"/"} id="brandName" className="nav-link">
+        <div className="mAlign">
+          <span className="navText">The PC Review</span>
+        </div>
+
+        <div className="mAlign">
+          <img
+            src="https://res.cloudinary.com/dz6ogknjd/image/upload/v1583751665/favicon/favicon.ico"
+            title="PC Review Icon"
+          />
+        </div>
       </Link>
       <Link to={"/"} className="nav-link">
-        <HomeRounded />
-        <span className="navText">Home</span>
+        <div className="sidebar-link">
+          <HomeRounded />
+          <span className="navText">Home</span>
+        </div>
       </Link>
       <Link to={"/tasks"} className="nav-link">
-        <PlaylistAddCheckRounded />
-        <span className="navText">Tasks</span>
+        <div className="sidebar-link">
+          <PlaylistAddCheckRounded />
+          <span className="navText">Tasks</span>
+        </div>
       </Link>
       {!auth.isAuthenticated ? (
         <>
           <Link to={"/register"} className="nav-link">
-            <span className="navText">Register</span>
+            <div className="sidebar-link">
+              <span className="navText">Register</span>
+            </div>
           </Link>
           <Link to={"/login"} className="nav-link">
-            <span className="navText">Login</span>
+            <div className="sidebar-link">
+              <span className="navText">Login</span>
+            </div>
           </Link>
         </>
       ) : (
         <>
           <Link to={"/images"} className="nav-link">
-            <PermMedia />
+            <div className="sidebar-link">
+              <PermMedia />
 
-            <span className="navText">Images</span>
+              <span className="navText">Images</span>
+            </div>
           </Link>
           <Link to={"/userList"} className="nav-link">
-            <GroupRounded />
-            <span className="navText">Users</span>
+            <div className="sidebar-link">
+              <GroupRounded />
+              <span className="navText">Users</span>
+            </div>
           </Link>
           <Link
             to={"/profile"}
             className="nav-link"
-            onClick={() => getStalkRequests(user)}
+            //onClick={() => getStalkRequests(user)}
           >
-            <AccountCircleRounded />
+            <div className="sidebar-link">
+              <AccountCircleRounded />
 
-            <span className="navText">My profile</span>
+              <span className="navText">My profile</span>
+            </div>
+          </Link>
+          <Link
+            to={"/notifications"}
+            className="nav-link"
+            style={{ position: "relative" }}
+          >
+            <div className="sidebar-link">
+              {newNotifs === 0 ? (
+                <NotificationsNone />
+              ) : (
+                <>
+                  <Notifications />
+                  <div className="notificationBubble rounded">
+                    <span className="newNotifications">{newNotifs}</span>
+                  </div>
+                </>
+              )}
+              <span className="navText">Notifications</span>
+            </div>
           </Link>
           {stalkReq > 0 && (
             <Link to={"/stalkerRequests"} className="nav-link stalkerRequests">
-              Stalker Requests : {stalkReq}
+              <div className="sidebar-link">Stalker Requests : {stalkReq}</div>
             </Link>
           )}
-          <Link to={"/notifications"} className="nav-link">
-            <NotificationsNone />
-
-            <span className="navText">Notifications</span>
-          </Link>
         </>
       )}
       {auth.isAuthenticated ? (
@@ -150,9 +209,17 @@ function Sidebar({
             </Button>
           </div>
           <div>
-            <div className="navText mr-2 mAlign">
+            <div className="navText mAlign">
               Welcome {user.name.split(" ")[0]}!
             </div>
+            {user.userImage && (
+              <Avatar
+                alt={`${user.name} profile image`}
+                className="avatarImg"
+                src={user.userImage}
+                onClick={() => history.push("/profile")}
+              />
+            )}
             <div className="mAlign">
               <Button variant="dark" size="sm" onClick={onLogoutClick}>
                 <PowerOffRounded />
@@ -207,8 +274,14 @@ function Sidebar({
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
   errors: state.errors,
-  stalks: state.stalks
+  stalks: state.stalks,
+  newNotifications: state.newNotifications
 });
 export default withRouter(
-  connect(mapStateToProps, { logoutUser, loginUser, getStalkRequests })(Sidebar)
+  connect(mapStateToProps, {
+    logoutUser,
+    loginUser,
+    getStalkRequests,
+    getNewNotifications
+  })(Sidebar)
 );

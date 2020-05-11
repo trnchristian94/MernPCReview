@@ -5,11 +5,13 @@ import stalkRequestReducer from "./stalkRequestReducer";
 import postReducer from "./postReducer";
 import userPostReducer from "./userPostReducer";
 import loadingReducer from "./loadingReducer";
+import notificationReducer from "./notificationReducer";
 export default combineReducers({
   auth: authReducer,
   errors: errorReducer,
   stalks: stalkRequestReducer,
   posts: postReducer,
   userPosts: userPostReducer,
-  loadingStatus: loadingReducer
+  loadingStatus: loadingReducer,
+  newNotifications: notificationReducer
 });
