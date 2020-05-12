@@ -187,7 +187,7 @@ function UserCard({
             )}
           </div>
           <Card.Title className="userName">
-            <Link to={`user/${user.name}`} className="nav-link">
+            <Link to={`/user/${user.name}`} className="nav-link">
               <span>@{user.name}</span>
             </Link>
           </Card.Title>

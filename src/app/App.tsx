@@ -16,8 +16,7 @@ import Landing from "layout/Home";
 import Task from "layout/Tasks";
 import Users from "layout/Users";
 import MyProfile from "src/app/components/layout/MyProfile";
-import Stalking from "layout/common/Stalking";
-import Stalkers from "layout/common/Stalkers";
+import Stalks from "layout/common/Stalks";
 import LoadingBar from "layout/common/LoadingBar";
 import Notifications from "src/app/components/layout/Notifications";
 
@@ -79,14 +78,16 @@ export default class App extends Component {
                   <Route exact path="/tasks" component={Task} />
                   <Route exact path="/userList" component={Users} />
                   <Route exact path="/profile" component={MyProfile} />
-                  <Route exact path="/stalking" component={Stalking} />
-                  <Route exact path="/stalkers" component={Stalkers} />
+                  <Route exact path="/stalking" component={Stalks} />
+                  <Route exact path="/stalkers" component={Stalks} />
                   <Route
                     exact
                     path="/notifications"
                     component={Notifications}
                   />
                   <Route exact path={`/user/:username`} component={Profile} />
+                  <Route exact path={`/user/:username/stalking`} component={Stalks} />
+                  <Route exact path={`/user/:username/stalkers`} component={Stalks} />
                   <Route
                     exact
                     path="/stalkerRequests"

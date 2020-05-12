@@ -3,10 +3,13 @@ import { connect } from "react-redux";
 import { requestGet } from "utils/request";
 
 import Container from "react-bootstrap/Container";
+import Col from "react-bootstrap/Col";
+import Row from "react-bootstrap/Row";
 import UserPosts from "./UserPosts";
 import { getUserPosts } from "userLogic/actions/userPostActions";
 
 import "./Profile.scss";
+import { Link } from "react-router-dom";
 
 interface Props {
   auth: any;
@@ -29,6 +32,13 @@ function Profile({
   const { user } = auth;
   const username = match.params.username;
   const [posts, setPosts] = useState([]);
+  const [stalkers, setStalkers] = useState({ stalkers: 0 });
+  const [stalking, setStalking] = useState({ stalking: 0 });
+
+  const fetchStalks = (u: any) => {
+    requestGet(`/api/stalks/stalkers/${u[0]._id}/amount`, setStalkers);
+    requestGet(`/api/stalks/stalking/${u[0]._id}/amount`, setStalking);
+  };
 
   useEffect(() => {
     if (!auth.isAuthenticated) {
@@ -43,6 +53,7 @@ function Profile({
       requestGet("/api/userProfile/user/" + username, resolve);
     }).then((u: any) => {
       setUser(u);
+      fetchStalks(u);
       if (user.name === username) {
         getUserPosts(user);
       } else {
@@ -58,8 +69,16 @@ function Profile({
           <div className="landscape">
             {publicUser && publicUser[0].userImage && (
               <img
-                className="landscapeImg"
-                src={publicUser[0].userImage.landscape}
+                className={
+                  publicUser[0].userImage.landscape
+                    ? "landscapeImg"
+                    : "landscapeImg no-landscape"
+                }
+                src={
+                  publicUser[0].userImage.landscape
+                    ? publicUser[0].userImage.landscape
+                    : publicUser[0].userImage.image
+                }
               />
             )}
           </div>
@@ -70,6 +89,22 @@ function Profile({
           )}
         </div>
         <div className="userName">{`@${username}`}</div>
+        <Row>
+          <Col xs={6}>
+            <div className="stalking">
+              <Link
+                to={`/user/${username}/stalking`}
+              >{`Stalking: ${stalking.stalking}`}</Link>
+            </div>
+          </Col>
+          <Col xs={6}>
+            <div className="stalkers">
+              <Link
+                to={`/user/${username}/stalkers`}
+              >{`Stalkers: ${stalkers.stalkers}`}</Link>
+            </div>
+          </Col>
+        </Row>
 
         <div className="userBio">
           {publicUser && publicUser[0].userInfo.bio}

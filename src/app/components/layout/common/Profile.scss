@@ -17,6 +17,10 @@
         position: absolute;
         top: 0vw;
       }
+      .no-landscape {
+        object-fit: cover;
+        filter: blur(2px);
+      }
     }
 
     .userImage {
@@ -52,12 +56,39 @@
 
   .userName {
     font-size: calc(1em + 0.5vw);
-    color: #6c85ad;
+    color: $color3;
   }
-
+  .stalkers a,
+  .stalking a {
+    color: $color7;
+    text-decoration: none;
+  }
+  .stalking {
+    padding-right: 7vw;
+    text-align: right;
+  }
+  .stalkers {
+    padding-left: 7vw;
+  }
   .userBio {
     text-align: center;
     padding-top: 6vh;
     padding-bottom: 8vh;
+  }
+}
+@media (max-width: 920px) {
+  #profile {
+    .imageHeader {
+      .userImage {
+        top: 16vw;
+        width: 18.1vw;
+        height: 18.1vw;
+
+        .userImg {
+          width: 18vw;
+          height: 18vw;
+        }
+      }
+    }
   }
 }

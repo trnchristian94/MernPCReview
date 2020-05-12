@@ -4,6 +4,7 @@ import { setLoadingStatus } from "userLogic/actions/loadingActions";
 import store from "src/store";
 
 const requestGet = (url: string, _setValue: any): any => {
+  const oldLoc = location.pathname;
   store.dispatch(setLoadingStatus(2));
   fetch(url, {
     headers: {
@@ -13,7 +14,9 @@ const requestGet = (url: string, _setValue: any): any => {
     .then((res) => res.json())
     .then((data) => {
       store.dispatch(setLoadingStatus(1));
-      _setValue(data);
+      if(oldLoc === location.pathname){
+        _setValue(data);
+      }
     });
 };
 
