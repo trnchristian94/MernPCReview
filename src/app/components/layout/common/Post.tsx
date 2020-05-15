@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { requestPost } from "utils/request";
+import { requestPostFile } from "utils/request";
 import { useToasts } from "react-toast-notifications";
 import CloseRounded from "@material-ui/icons/CloseRounded";
+import AddAPhoto from "@material-ui/icons/AddAPhoto";
 import { getPosts } from "userLogic/actions/postActions";
 import { getUserPosts } from "userLogic/actions/userPostActions";
 
@@ -19,6 +20,7 @@ interface Props {
   setShowSubmitPost: any;
   getPosts: any;
   getUserPosts: any;
+  answer?: string;
 }
 
 function Post({
@@ -26,12 +28,15 @@ function Post({
   errors,
   setShowSubmitPost,
   getPosts,
-  getUserPosts
+  getUserPosts,
+  answer
 }: Props) {
   const { addToast } = useToasts();
   const { user } = auth;
   const [postText, setPostText] = useState("");
+  const [image, setImage]: any = useState();
   let textInput: any = null;
+  let inputImage: any;
 
   useEffect(() => {
     const listener = (event: KeyboardEvent) => {
@@ -49,6 +54,7 @@ function Post({
   };
 
   const submitPost = (e: any) => {
+    e.preventDefault();
     const callback = () => {
       showToast("Posted");
       let direction =
@@ -61,9 +67,21 @@ function Post({
         getPosts(user);
       }
     };
-    requestPost(`/api/posts/${user.id}`, { text: postText }, callback);
+    let formData = new FormData();
+    formData.append("text", postText);
+    if (image) {
+      if(image.size > 3500000 ){
+        alert("Image exceeds max size 3.5MB, please upload another image.");
+        return false;
+      }
+      formData.append("image", image);
+    }
+    if(answer){
+      requestPostFile(`/api/posts/${user.id}/answer/${answer}`, formData, callback);
+    } else {
+      requestPostFile(`/api/posts/${user.id}`, formData, callback);
+    }
     setShowSubmitPost(false);
-    e.preventDefault();
   };
 
   return (
@@ -97,6 +115,23 @@ function Post({
           </Form.Group>
         </Form.Row>
         <Button
+          className="postImg-btn"
+          style={{ marginRight: "10px", borderRadius: "20px" }}
+          onClick={() => {
+            inputImage.click();
+          }}
+        >
+          <AddAPhoto />
+          Image
+        </Button>
+        <input
+          ref={(input) => (inputImage = input)}
+          type="file"
+          className="form-input"
+          style={{ display: "none" }}
+          onChange={(e: any) => setImage(e.target.files[0])}
+        />
+        <Button
           type="submit"
           className="submit-btn"
           style={{ marginRight: "10px", borderRadius: "20px" }}
@@ -107,10 +142,13 @@ function Post({
           className="cancel-btn"
           variant="secondary"
           onClick={() => setShowSubmitPost(false)}
-          style={{ marginLeft: "10px", borderRadius: "20px" }}
+          style={{ borderRadius: "20px" }}
         >
           Cancel
         </Button>
+        <div style={{ height: "15px" }}>
+          {image && `${image.name.substr(0, 25)}...`}
+        </div>
       </div>
     </Form>
   );

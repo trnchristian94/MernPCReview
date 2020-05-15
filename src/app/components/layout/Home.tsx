@@ -24,9 +24,9 @@ function Home({ auth, errors, posts, getPosts }: Props) {
   };
 
   return (
-    <Container fluid style={{ maxWidth: "75%", paddingTop: "4rem" }}>
+    <Container fluid style={{ paddingTop: "4rem" }} className="pr-0 pl-0">
       <div>
-        <h2>The PC Review</h2>
+        <h2 className='ml-5'>The PC Review</h2>
         {posts && <UserPosts posts={posts} fetchPosts={fetchPosts} />}
       </div>
     </Container>

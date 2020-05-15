@@ -11,6 +11,7 @@
 
 .floatingSubmitPost {
   z-index: 2;
+  color: $color1;
   background: rgba(0, 0, 0, 0.6);
   top: 0;
   left: 0;
@@ -38,5 +39,10 @@
       cursor: pointer;
       z-index: 2;
     }
+  }
+
+  .postImg-btn {
+    display: inline-flex;
+    align-items: center;
   }
 }

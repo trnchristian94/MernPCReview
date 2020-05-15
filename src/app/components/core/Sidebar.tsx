@@ -175,15 +175,15 @@ function Sidebar({
             style={{ position: "relative" }}
           >
             <div className="sidebar-link">
-              {newNotifs === 0 ? (
-                <NotificationsNone />
+              {newNotifs > 0 ? (
+                 <>
+                <Notifications />
+                <div className="notificationBubble rounded">
+                  <span className="newNotifications">{newNotifs}</span>
+                </div>
+              </>
               ) : (
-                <>
-                  <Notifications />
-                  <div className="notificationBubble rounded">
-                    <span className="newNotifications">{newNotifs}</span>
-                  </div>
-                </>
+                <NotificationsNone />
               )}
               <span className="navText">Notifications</span>
             </div>

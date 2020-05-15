@@ -111,11 +111,7 @@ function Images({ auth, errors, history }: Props) {
           <Row>
             {images.map((im) => {
               return (
-                <Card
-                  key={im._id}
-                  id={im.imageId}
-                  className="imgCard pcCard"
-                >
+                <Card key={im._id} id={im.imageId} className="imgCard pcCard">
                   <div>
                     <img
                       src={im.image}

@@ -70,7 +70,7 @@ export default class App extends Component {
                 <Col xs={3} id="sidebarCol">
                   <Sidebar />
                 </Col>
-                <Col xs={6} id="midCol">
+                <Col xs={6} className='p-0' id="midCol">
                   <Route exact path="/" component={Landing} />
                   <Route exact path="/register" component={Register} />
                   <Route exact path="/images" component={Images} />

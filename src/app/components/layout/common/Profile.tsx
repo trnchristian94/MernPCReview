@@ -63,7 +63,7 @@ function Profile({
   };
 
   return (
-    <Container id="profile" fluid style={{ paddingTop: "4rem" }}>
+    <Container id="profile" className='pl-0 pr-0' fluid style={{ paddingTop: "4rem" }}>
       <div>
         <div className="imageHeader">
           <div className="landscape">

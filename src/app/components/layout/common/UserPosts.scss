@@ -14,13 +14,13 @@
   .userPost {
     border: 1px solid #eaeaea;
     border-bottom: none;
-    padding: 15px;
+    padding: 15px 25px 15px 25px;
     position: relative;
 
     .postHeader {
       .user {
         display: inline-flex;
-        margin-bottom: 15px;
+        margin-bottom: 5px;
         .avatarImg {
         }
         .postUserName {
@@ -30,19 +30,85 @@
     }
 
     .postDate {
-      position: absolute;
-      top: 15px;
-      right: 15px;
+      float: right;
     }
 
     .postText {
       padding-bottom: 20px;
+      margin-left: 56px;
+    }
+
+    // Floating post image when clicked
+    .postImg {
+      margin-bottom: 20px;
+      margin-left: 56px;
+      > .postImg__img {
+        cursor: pointer;
+        border-radius: 12px;
+        max-height: 22vh;
+        max-width: 43vw;
+      }
+    }
+    .floatingImg::before {
+      content: "";
+      display: inline-block;
+      height: 100%;
+      vertical-align: middle;
+    }
+    .floatingImg {
+      z-index: 2000;
+      background: rgba(0, 0, 0, 0.6);
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      position: fixed;
+      text-align: center;
+      cursor: pointer;
+      > .postImg__img {
+        max-height: 85%;
+        max-width: 85%;
+      }
+    }
+
+    // Answer to post
+    .answeredPost {
+      border: 1px solid $color2;
+      padding: 10px;
+      background-color: $color2;
+      margin-top: 3px;
+      margin-bottom: 3px;
+      border-radius: 6px;
+
+      &__header {
+        display: inline-flex;
+        align-items: center;
+      }
+      &__creatorName {
+        color: $color3;
+      }
+      &__image {
+        margin-right: 10px;
+      }
+      &__text {
+        margin-left: 50px;
+      }
+    }
+
+    .userPostActions {
+      display: inline-flex;
+      align-items: center;
+      div {
+        margin-right: 10px;
+      }
+      svg {
+        margin-right: 5px;
+        cursor: pointer;
+      }
     }
 
     .likeButton,
     .likedButton {
-      cursor: pointer;
-      margin-right: 5px;
       transition-duration: 0.2s;
     }
     .likedButton {
@@ -57,12 +123,13 @@
     }
     .delete {
       position: absolute;
-      bottom: 0;
-      right: 0;
       bottom: 15px;
-      right: 15px;
+      right: 25px;
       cursor: pointer;
     }
+  }
+  .floatingSubmitPost {
+    z-index: 2001;
   }
 }
 @media (max-width: 920px) {

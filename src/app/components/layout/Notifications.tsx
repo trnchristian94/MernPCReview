@@ -9,6 +9,7 @@ import { requestGet } from "utils/request";
 
 import Favorite from "@material-ui/icons/Favorite";
 import GroupRounded from "@material-ui/icons/GroupRounded";
+import FeedbackIcon from "@material-ui/icons/Feedback";
 import Avatar from "@material-ui/core/Avatar";
 import { formatDate, formatHour } from "utils/date";
 
@@ -56,8 +57,11 @@ function Notifications({ auth, errors, history }: Props) {
       case "like":
         icon.push(<Favorite className="liked" />);
         break;
-        case "stalk":
+      case "stalk":
         icon.push(<GroupRounded className="stalk" />);
+        break;
+      case "answer":
+        icon.push(<FeedbackIcon className="answer" />);
       default:
         break;
     }
@@ -71,34 +75,37 @@ function Notifications({ auth, errors, history }: Props) {
   return (
     <Container style={{ paddingTop: "4rem" }}>
       <Col lg={true}>Notifications</Col>
-      {notifications.length > 0 && notifications.map((notification: any) => {
-        return (
-          <div className="notification" key={notification.id}>
-            <div className="avatarHeader">
-              <div className="notification__icon">
-                {formatIcon(notification.iconType)}
+      {notifications.length > 0 &&
+        notifications.map((notification: any) => {
+          return (
+            <div className="notification" key={notification.id}>
+              <div className="avatarHeader">
+                <div className="notification__icon">
+                  {formatIcon(notification.iconType)}
+                </div>
+                <Avatar
+                  alt={`${notification.fromUser.name} profile image`}
+                  className="avatarImg"
+                  src={notification.fromUser.userImage.image}
+                  onClick={() => goToProfile(notification.fromUser.name)}
+                />
+                <div className="notification__date">
+                  {`${formatDate(notification.date)} ${formatHour(
+                    notification.date
+                  )}`}
+                </div>
               </div>
-              <Avatar
-                alt={`${notification.fromUser.name} profile image`}
-                className="avatarImg"
-                src={notification.fromUser.userImage.image}
-                onClick={() => goToProfile(notification.fromUser.name)}
-              />
-              <div className="notification__date">
-                {`${formatDate(notification.date)} ${formatHour(
-                  notification.date
-                )}`}
+
+              <div className="notification__message">
+                {notification.message}
+              </div>
+
+              <div className="notification__content">
+                {formatContent(notification.type, notification.typeModel)}
               </div>
             </div>
-
-            <div className="notification__message">{notification.message}</div>
-
-            <div className="notification__content">
-              {formatContent(notification.type, notification.typeModel)}
-            </div>
-          </div>
-        );
-      })}
+          );
+        })}
     </Container>
   );
 }

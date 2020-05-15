@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
@@ -7,10 +7,13 @@ import { requestDelete, requestPut } from "utils/request";
 
 import Delete from "@material-ui/icons/Delete";
 import FavoriteBorderOutlined from "@material-ui/icons/FavoriteBorderOutlined";
+import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import Favorite from "@material-ui/icons/Favorite";
 import Avatar from "@material-ui/core/Avatar";
 
 import { useToasts } from "react-toast-notifications";
+
+import Post from "layout/common/Post";
 
 import { likePost, removeLikePost } from "userLogic/actions/postActions";
 
@@ -41,6 +44,10 @@ function UserPosts({
 }: IProps) {
   const { addToast } = useToasts();
   const { user } = auth;
+  const [floatingImg, setFloatingImg] = useState(false);
+  const [clickedImg, setClickedImg] = useState("");
+  const [answeredPost, setAnsweredPost] = useState("");
+  const [showSubmitPost, setShowSubmitPost] = useState(false);
 
   const showToast = (message: string) => {
     addToast(message, {
@@ -89,6 +96,16 @@ function UserPosts({
     }
   };
 
+  const setFullScreen = (big: boolean, imgId: string) => {
+    setClickedImg(imgId);
+    setFloatingImg(big);
+  };
+
+  const submitNewPost = (postId: string) => {
+    setShowSubmitPost(true);
+    setAnsweredPost(postId);
+  };
+
   return (
     <div id="userPosts">
       {posts &&
@@ -110,39 +127,97 @@ function UserPosts({
                     >{`@${post.creator.name}`}</Link>
                   </div>
                 </div>
-                <div className="postDate">{`${formatDate(
+                <span className="postDate">{`${formatDate(
                   post.date
-                )} ${formatHour(post.date)}`}</div>
+                )} ${formatHour(post.date)}`}</span>
               </div>
+              {/* Answer of a post */}
+              {post.answeredPost && (
+                <div className="answeredPost">
+                  <div className="answeredPost__header">
+                    {post.answeredPost.creator.userImage && (
+                      <div className="answeredPost__image">
+                        <Avatar
+                          src={post.answeredPost.creator.userImage.image}
+                        ></Avatar>
+                      </div>
+                    )}
+                    <div className="answeredPost__creatorName">
+                      @{post.answeredPost.creator.name}
+                    </div>
+                  </div>
+                  <div className="answeredPost__text">
+                    {post.answeredPost.text}
+                  </div>
+                </div>
+              )}
+              {/* Content of the post */}
               <div className="postText">{post.text}</div>
-              {post.likes &&
-              post.likes.length > 0 &&
-              post.likes.includes(user.id) ? (
-                <div className="liked vAlign">
-                  <Favorite
-                    className="likedButton rounded"
-                    onClick={() => removeLikePost_(post._id)}
+              {post.postImage && (
+                <div className="postImg">
+                  <img
+                    className="postImg__img"
+                    onClick={() => setFullScreen(!floatingImg, post._id)}
+                    src={post.postImage.image}
+                    title={`${post.creator.name} post image`}
                   />
-                  {` ${post.likes.length}`}
-                </div>
-              ) : (
-                <div className="like vAlign">
-                  <FavoriteBorderOutlined
-                    className="likeButton rounded"
-                    onClick={() => likePost_(post._id)}
-                  />
-                  {` ${post.likes.length}`}
                 </div>
               )}
-              {post.creator._id === user.id && (
-                <Delete
-                  className="delete"
-                  onClick={() => removePost(post._id)}
-                />
+              {floatingImg && clickedImg == post._id && (
+                <div
+                  className="floatingImg"
+                  onClick={() => {
+                    setFullScreen(false, post._id);
+                  }}
+                >
+                  <img
+                    className="postImg__img"
+                    src={post.postImage.image}
+                    title={`${post.creator.name} post image bigger`}
+                  />
+                </div>
               )}
+              {/* User actions of the post */}
+              <div className="userPostActions">
+                {post.likes &&
+                post.likes.length > 0 &&
+                post.likes.includes(user.id) ? (
+                  <div className="liked">
+                    <Favorite
+                      className="likedButton rounded"
+                      onClick={() => removeLikePost_(post._id)}
+                    />
+                    {` ${post.likes.length}`}
+                  </div>
+                ) : (
+                  <div className="like">
+                    <FavoriteBorderOutlined
+                      className="likeButton rounded"
+                      onClick={() => likePost_(post._id)}
+                    />
+                    {` ${post.likes.length}`}
+                  </div>
+                )}
+                <div className="comment">
+                  <ChatBubbleOutlineIcon
+                    onClick={() => submitNewPost(post._id)}
+                  />
+                  {post.answers.length}
+                </div>
+
+                {post.creator._id === user.id && (
+                  <Delete
+                    className="delete"
+                    onClick={() => removePost(post._id)}
+                  />
+                )}
+              </div>
             </div>
           );
         })}
+      {showSubmitPost && (
+        <Post setShowSubmitPost={setShowSubmitPost} answer={answeredPost} />
+      )}
     </div>
   );
 }
