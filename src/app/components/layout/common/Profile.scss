@@ -24,13 +24,13 @@
     }
 
     .userImage {
-      top: 11vw;
-      width: 11.1vw;
-      height: 11.1vw;
+      top: 14vh;
+      width: 14.1vw;
+      height: 14.1vw;
 
       .userImg {
-        width: 11vw;
-        height: 11vw;
+        width: 14vw;
+        height: 14vw;
         margin-top: 0.05vw;
         margin-left: 0.05vw;
       }
@@ -60,21 +60,42 @@
     margin-left: 25px;
   }
   .stalkers a,
+  .stalking a,
+  .linkLikes,
+  .linkPostsAmount {
+    text-decoration: none;
+    font-size: 1.2em;
+  }
+  .stalkers a,
   .stalking a {
     color: $color7;
-    text-decoration: none;
   }
-  .stalking {
+  .likes {
+    color: $color6;
+  }
+  .postsAmount {
+    color: $color5;
+  }
+  .stalking,
+  .postsAmount {
     padding-right: 7vw;
     text-align: right;
   }
-  .stalkers {
+  .stalkers,
+  .likes {
     padding-left: 7vw;
   }
+
+  .postsAmount, .likes{
+    border: 1px solid $color4;
+    padding-top: 20px;
+    padding-bottom: 20px;
+  }
+  
   .userBio {
     text-align: center;
-    padding-top: 6vh;
-    padding-bottom: 8vh;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
   }
 }
 @media (max-width: 920px) {
@@ -90,6 +111,9 @@
           height: 18vw;
         }
       }
+    }
+    .likes {
+      margin-top: 0vh !important;
     }
   }
 }

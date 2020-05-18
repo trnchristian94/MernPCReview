@@ -43,8 +43,8 @@ function MyProfile({ auth, errors, history }: Props) {
   const [landscapeForm, setlandscapeForm] = useState(false);
   const [imageForm, setImageForm] = useState(false);
   const [id, setId] = useState("");
-  const [stalkers, setStalkers] = useState({ stalkers: 0 });
-  const [stalking, setStalking] = useState({ stalking: 0 });
+  const [stalkers, setStalkers] = useState(0);
+  const [stalking, setStalking] = useState(0);
 
   const { user } = auth;
 
@@ -126,10 +126,10 @@ function MyProfile({ auth, errors, history }: Props) {
           }}
         >
           <Link to={"/stalkers"} className="nav-link">
-            Stalkers: {stalkers.stalkers}
+            Stalkers: {stalkers}
           </Link>
           <Link to={"/stalking"} className="nav-link">
-            Stalking: {stalking.stalking}
+            Stalking: {stalking}
           </Link>
         </div>
         <br />

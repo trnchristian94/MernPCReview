@@ -86,6 +86,7 @@ export default class App extends Component {
                     component={Notifications}
                   />
                   <Route exact path={`/user/:username`} component={Profile} />
+                  <Route exact path={`/user/:username/likes`} component={Profile} />
                   <Route exact path={`/user/:username/stalking`} component={Stalks} />
                   <Route exact path={`/user/:username/stalkers`} component={Stalks} />
                   <Route

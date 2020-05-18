@@ -2,14 +2,17 @@ import React, { useState } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
-import { formatDate, formatHour } from "utils/date";
-import { requestDelete, requestPut } from "utils/request";
+import { formatDate, formatHour, getTimeUntilNow } from "utils/date";
+import { requestDelete, requestPost } from "utils/request";
+import { getUrlDir } from "utils/string";
 
 import Delete from "@material-ui/icons/Delete";
 import FavoriteBorderOutlined from "@material-ui/icons/FavoriteBorderOutlined";
 import ChatBubbleOutlineIcon from "@material-ui/icons/ChatBubbleOutline";
 import Favorite from "@material-ui/icons/Favorite";
+import Cached from "@material-ui/icons/Cached";
 import Avatar from "@material-ui/core/Avatar";
+import Tooltip from "@material-ui/core/Tooltip";
 
 import { useToasts } from "react-toast-notifications";
 
@@ -48,6 +51,7 @@ function UserPosts({
   const [clickedImg, setClickedImg] = useState("");
   const [answeredPost, setAnsweredPost] = useState("");
   const [showSubmitPost, setShowSubmitPost] = useState(false);
+  //const direction = getUrlDir(1);
 
   const showToast = (message: string) => {
     addToast(message, {
@@ -66,6 +70,16 @@ function UserPosts({
     }
   };
 
+  const removeRepost = (postId: string) => {
+    if (confirm("Remove repost?")) {
+      const callback = () => {
+        showToast("Repost deleted");
+        fetchPosts();
+      };
+      requestDelete(`/api/repost/${user.id}`, callback, { postId });
+    }
+  };
+
   const likePost_ = (postId: string) => {
     let direction =
       location.pathname.substr(location.pathname.length - 1) === "/"
@@ -79,6 +93,13 @@ function UserPosts({
         fetchPosts();
       }
     }
+  };
+
+  const repost = (postId: string) => {
+    const callback = () => {
+      fetchPosts();
+    };
+    requestPost(`/api/repost/${user.id}`, { postId }, callback);
   };
 
   const removeLikePost_ = (postId: string) => {
@@ -106,111 +127,174 @@ function UserPosts({
     setAnsweredPost(postId);
   };
 
+  const renderDate = (d: Date, key: any) => {
+    let ret = [];
+    ret.push(
+      <Tooltip key={key} title={`${formatDate(d)} ${formatHour(d)}`}>
+        <span className="postDate">{getTimeUntilNow(d)}</span>
+      </Tooltip>
+    );
+    return ret;
+  };
+
   return (
     <div id="userPosts">
       {posts &&
         posts.length > 0 &&
-        posts.map((post: any) => {
+        posts.map((p: any, key: any) => {
+          let post = p;
+          // Checks if it's a repost and adds its values to the post
+          if (p.post) {
+            post = p.post;
+            post.repostDate = p.date;
+            post.reposter = p.reposter;
+            post.repostId = p._id;
+          }
           return (
-            <div className="userPost" key={post._id}>
-              <div className="postHeader">
-                <div className="user">
+            <div className="userPost" key={key}>
+              {/* Reposter info */}
+              {post.reposter && (
+                <div className="repostHeader">
                   <Avatar
-                    alt={`${post.creator.name} profile image`}
+                    alt={`${post.creator.name} reposter image`}
                     className="avatarImg"
-                    src={post.creator.userImage.image}
+                    src={post.reposter.userImage.image}
                   />
-                  <div className="postUserName">
+                  <Cached className="repostedButton" />
+                  <span>Repost from </span>
+                  <span>
                     <Link
-                      to={`user/${post.creator.name}`}
-                      className="nav-link"
-                    >{`@${post.creator.name}`}</Link>
-                  </div>
+                      to={`/user/${post.reposter.name}`}
+                    >{`@${post.reposter.name}`}</Link>
+                  </span>
+                  {renderDate(post.repostDate, key)}
                 </div>
-                <span className="postDate">{`${formatDate(
-                  post.date
-                )} ${formatHour(post.date)}`}</span>
-              </div>
-              {/* Answer of a post */}
-              {post.answeredPost && (
-                <div className="answeredPost">
-                  <div className="answeredPost__header">
-                    {post.answeredPost.creator.userImage && (
-                      <div className="answeredPost__image">
-                        <Avatar
-                          src={post.answeredPost.creator.userImage.image}
-                        ></Avatar>
-                      </div>
-                    )}
-                    <div className="answeredPost__creatorName">
-                      @{post.answeredPost.creator.name}
+              )}
+              {/* Post info */}
+              <div className={post.reposter ? "repostBody" : "postBody"}>
+                <div className="postHeader">
+                  <div className="user">
+                    <Avatar
+                      alt={`${post.creator.name} profile image`}
+                      className="avatarImg"
+                      src={post.creator.userImage.image}
+                    />
+                    <div className="postUserName">
+                      <span>
+                        <Link
+                          to={`/user/${post.creator.name}`}
+                        >{`@${post.creator.name}`}</Link>
+                      </span>
                     </div>
                   </div>
-                  <div className="answeredPost__text">
-                    {post.answeredPost.text}
-                  </div>
+                  {renderDate(post.date, key)}
                 </div>
-              )}
-              {/* Content of the post */}
-              <div className="postText">{post.text}</div>
-              {post.postImage && (
-                <div className="postImg">
-                  <img
-                    className="postImg__img"
-                    onClick={() => setFullScreen(!floatingImg, post._id)}
-                    src={post.postImage.image}
-                    title={`${post.creator.name} post image`}
-                  />
-                </div>
-              )}
-              {floatingImg && clickedImg == post._id && (
-                <div
-                  className="floatingImg"
-                  onClick={() => {
-                    setFullScreen(false, post._id);
-                  }}
-                >
-                  <img
-                    className="postImg__img"
-                    src={post.postImage.image}
-                    title={`${post.creator.name} post image bigger`}
-                  />
-                </div>
-              )}
-              {/* User actions of the post */}
-              <div className="userPostActions">
-                {post.likes &&
-                post.likes.length > 0 &&
-                post.likes.includes(user.id) ? (
-                  <div className="liked">
-                    <Favorite
-                      className="likedButton rounded"
-                      onClick={() => removeLikePost_(post._id)}
-                    />
-                    {` ${post.likes.length}`}
-                  </div>
-                ) : (
-                  <div className="like">
-                    <FavoriteBorderOutlined
-                      className="likeButton rounded"
-                      onClick={() => likePost_(post._id)}
-                    />
-                    {` ${post.likes.length}`}
+                {/* Answer of a post */}
+                {post.answeredPost && (
+                  <div className="answeredPost">
+                    <div className="answeredPostHeader">
+                      {post.answeredPost.creator.userImage && (
+                        <div className="answeredPost__image">
+                          <Avatar
+                            src={post.answeredPost.creator.userImage.image}
+                          ></Avatar>
+                        </div>
+                      )}
+                      <div className="answeredPost__creatorName">
+                      <span>
+                        <Link
+                          to={`/user/${post.answeredPost.creator.name}`}
+                        >{`@${post.answeredPost.creator.name}`}</Link>
+                      </span>
+                        
+                      </div>
+                      {renderDate(post.answeredPost.date, key)}
+                    </div>
+                    <div className="answeredPost__text">
+                      {post.answeredPost.text}
+                    </div>
                   </div>
                 )}
-                <div className="comment">
-                  <ChatBubbleOutlineIcon
-                    onClick={() => submitNewPost(post._id)}
-                  />
-                  {post.answers.length}
-                </div>
+                {/* Content of the post */}
+                <div className="postText">{post.text}</div>
+                {post.postImage && (
+                  <div className="postImg">
+                    <img
+                      className="postImg__img"
+                      onClick={() => setFullScreen(!floatingImg, post._id)}
+                      src={post.postImage.image}
+                      title={`${post.creator.name} post image`}
+                    />
+                  </div>
+                )}
 
-                {post.creator._id === user.id && (
-                  <Delete
-                    className="delete"
-                    onClick={() => removePost(post._id)}
-                  />
+                {floatingImg && clickedImg == post._id && (
+                  <div
+                    className="floatingImg"
+                    onClick={() => {
+                      setFullScreen(false, post._id);
+                    }}
+                  >
+                    <img
+                      className="postImg__img"
+                      src={post.postImage.image}
+                      title={`${post.creator.name} post image bigger`}
+                    />
+                  </div>
                 )}
+                {/* User actions of the post */}
+                <div className="userPostActions">
+                  {/* Likes */}
+                  {post.likes &&
+                  post.likes.length > 0 &&
+                  post.likes.includes(user.id) ? (
+                    <div className="liked">
+                      <Favorite
+                        className="likedButton rounded"
+                        onClick={() => removeLikePost_(post._id)}
+                      />
+                      {` ${post.likes.length}`}
+                    </div>
+                  ) : (
+                    <div className="like">
+                      <FavoriteBorderOutlined
+                        className="likeButton rounded"
+                        onClick={() => likePost_(post._id)}
+                      />
+                      {` ${post.likes.length}`}
+                    </div>
+                  )}
+                  {/* Repost */}
+                  <div className={post.reposter ? "reposted" : "repost"}>
+                    <Cached
+                      className={
+                        post.reposter && post.reposter._id === user.id
+                          ? "repostedButton"
+                          : "repostButton"
+                      }
+                      onClick={() =>
+                        post.reposter && post.reposter._id === user.id
+                          ? removeRepost(post.repostId)
+                          : repost(post._id)
+                      }
+                    />
+                    {`${post.reposts.length}`}
+                  </div>
+                  {/* Comment */}
+                  <div className="comment">
+                    <ChatBubbleOutlineIcon
+                      onClick={() => submitNewPost(post._id)}
+                    />
+                    {post.answers? post.answers.length: 0}
+                  </div>
+                  {/* Delete */}
+                  {post.creator._id === user.id && (
+                    <Delete
+                      className="delete"
+                      onClick={() => removePost(post._id)}
+                    />
+                  )}
+                </div>
               </div>
             </div>
           );

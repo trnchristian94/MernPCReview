@@ -11,7 +11,7 @@ export const getStalkRequests = (user: { id: String }) => (dispatch: any) => {
       .then((data) => {
         dispatch({
           type: GET_STALKERS,
-          payload: data.stalkRequests
+          payload: data
         });
       })
       .catch((err) => console.log(err));

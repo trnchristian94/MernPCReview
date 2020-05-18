@@ -8,31 +8,43 @@
   margin-left: auto;
 
   .userPost:last-child {
-    border-bottom: 1px solid #eaeaea;
+    border-bottom: 2px solid $color4;
   }
-
   .userPost {
-    border: 1px solid #eaeaea;
+    border: 2px solid $color4;
     border-bottom: none;
     padding: 15px 25px 15px 25px;
     position: relative;
 
+    .repostBody {
+      border: 2px solid $color9;
+      border-radius: 5px;
+      padding: 12px;
+      margin-bottom: 5px;
+    }
+    .repostHeader,
+    .postHeader,
+    .answeredPostHeader {
+      display: inline-flex;
+      margin-bottom: 5px;
+      align-items: center;
+      span {
+        margin-left: 6px;
+      }
+      .avatarImg {
+        margin-right: 6px;
+      }
+    }
+
     .postHeader {
       .user {
         display: inline-flex;
-        margin-bottom: 5px;
-        .avatarImg {
-        }
+        align-items: center;
         .postUserName {
           font-weight: 500;
         }
       }
     }
-
-    .postDate {
-      float: right;
-    }
-
     .postText {
       padding-bottom: 20px;
       margin-left: 56px;
@@ -80,10 +92,6 @@
       margin-bottom: 3px;
       border-radius: 6px;
 
-      &__header {
-        display: inline-flex;
-        align-items: center;
-      }
       &__creatorName {
         color: $color3;
       }
@@ -100,6 +108,8 @@
       align-items: center;
       div {
         margin-right: 10px;
+        display: inline-flex;
+        align-items: center;
       }
       svg {
         margin-right: 5px;
@@ -108,7 +118,9 @@
     }
 
     .likeButton,
-    .likedButton {
+    .likedButton,
+    .repostButton,
+    .repostedButton {
       transition-duration: 0.2s;
     }
     .likedButton {
@@ -117,10 +129,18 @@
     .like:hover {
       color: rgb(224, 36, 94);
     }
+    .repostedButton {
+      fill: $color9;
+    }
+    .repost:hover {
+      color: $color9;
+    }
+
     .likedButton:hover,
     .likeButton:hover {
       background-color: rgba(224, 36, 94, 0.1);
     }
+
     .delete {
       position: absolute;
       bottom: 15px;
@@ -130,10 +150,5 @@
   }
   .floatingSubmitPost {
     z-index: 2001;
-  }
-}
-@media (max-width: 920px) {
-  #userPosts .userPost .postDate {
-    display: none;
   }
 }

@@ -128,6 +128,7 @@ function Post({
           ref={(input) => (inputImage = input)}
           type="file"
           className="form-input"
+          accept="image/x-png,image/gif,image/jpeg" 
           style={{ display: "none" }}
           onChange={(e: any) => setImage(e.target.files[0])}
         />

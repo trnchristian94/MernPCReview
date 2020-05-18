@@ -11,7 +11,7 @@ export const getNewNotifications = (user: { id: String }) => (dispatch: any) => 
       .then(data => {
         dispatch({
           type: GET_NEW_NOTIFICATIONS,
-          payload: data.newNotifications
+          payload: data
         });
       })
       .catch(err => console.log(err));

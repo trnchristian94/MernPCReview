@@ -10,6 +10,7 @@ import { requestGet } from "utils/request";
 import Favorite from "@material-ui/icons/Favorite";
 import GroupRounded from "@material-ui/icons/GroupRounded";
 import FeedbackIcon from "@material-ui/icons/Feedback";
+import Cached from "@material-ui/icons/Cached";
 import Avatar from "@material-ui/core/Avatar";
 import { formatDate, formatHour } from "utils/date";
 
@@ -44,6 +45,9 @@ function Notifications({ auth, errors, history }: Props) {
       case "Post":
         formatedContent.push(<span>{content.text}</span>);
         break;
+        case "Repost":
+        formatedContent.push(<span>{content.post.text}</span>);
+        break;
       default:
         formatedContent.push(<span>{content.text}</span>);
         break;
@@ -62,6 +66,10 @@ function Notifications({ auth, errors, history }: Props) {
         break;
       case "answer":
         icon.push(<FeedbackIcon className="answer" />);
+        break;
+      case "repost":
+        icon.push(<Cached className="repost" />);
+        break;
       default:
         break;
     }
