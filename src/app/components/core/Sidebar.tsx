@@ -8,6 +8,8 @@ import Post from "layout/common/Post";
 
 import { useToasts } from "react-toast-notifications";
 
+import { getUrlDir } from "utils/string";
+
 import { Link, useHistory, withRouter } from "react-router-dom";
 
 import Form from "react-bootstrap/Form";
@@ -53,6 +55,7 @@ function Sidebar({
   const [password, setPassword] = useState("");
   const [connected, setConnected] = useState(false);
   const [showSubmitPost, setShowSubmitPost] = useState(false);
+  const [showLoginForm, setShowLoginForm] = useState(true);
   const stalkReq = stalks.stalkRequests;
   const newNotifs = newNotifications.newNotifications;
   const { user } = auth;
@@ -75,12 +78,14 @@ function Sidebar({
       getNewNotifications(user);
     }
   };
-  const fetchTheAmounts = useCallback(() => {}, [location.pathname]);
+
+  const routeChanged = useCallback(() => {}, [location.pathname]);
   useEffect(() => {
+    setShowLoginForm(getUrlDir(1) !== "login");
     if (auth.isAuthenticated) {
       fetchAmounts();
     }
-  }, [fetchTheAmounts]);
+  }, [routeChanged]);
 
   const onLogoutClick = (
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
@@ -176,12 +181,12 @@ function Sidebar({
           >
             <div className="sidebar-link">
               {newNotifs > 0 ? (
-                 <>
-                <Notifications />
-                <div className="notificationBubble rounded">
-                  <span className="newNotifications">{newNotifs}</span>
-                </div>
-              </>
+                <>
+                  <Notifications />
+                  <div className="notificationBubble rounded">
+                    <span className="newNotifications">{newNotifs}</span>
+                  </div>
+                </>
               ) : (
                 <NotificationsNone />
               )}
@@ -229,7 +234,7 @@ function Sidebar({
           </div>
         </>
       ) : (
-        <Form onSubmit={onSubmit}>
+        showLoginForm && <Form onSubmit={onSubmit}>
           <Form.Row>
             <Form.Group className="mr-2">
               <Form.Label className="mr-2">Email</Form.Label>
@@ -239,7 +244,6 @@ function Sidebar({
                 placeholder="Enter email"
                 onChange={(e: any) => setEmail(e.target.value)}
                 value={email}
-                id="email"
               />
             </Form.Group>
           </Form.Row>
@@ -252,7 +256,6 @@ function Sidebar({
                 placeholder="Password"
                 onChange={(e: any) => setPassword(e.target.value)}
                 value={password}
-                id="password"
               />
             </Form.Group>
           </Form.Row>
