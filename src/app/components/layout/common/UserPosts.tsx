@@ -51,6 +51,7 @@ function UserPosts({
   const [clickedImg, setClickedImg] = useState("");
   const [answeredPost, setAnsweredPost] = useState("");
   const [showSubmitPost, setShowSubmitPost] = useState(false);
+  const [postss, setPosts] = useState(posts);
   //const direction = getUrlDir(1);
 
   const showToast = (message: string) => {
@@ -70,17 +71,9 @@ function UserPosts({
     }
   };
 
-  const removeRepost = (postId: string) => {
-    if (confirm("Remove repost?")) {
-      const callback = () => {
-        showToast("Repost deleted");
-        fetchPosts();
-      };
-      requestDelete(`/api/repost/${user.id}`, callback, { postId });
-    }
-  };
+  
 
-  const likePost_ = (postId: string) => {
+  const likePost_ = (postId: string, hasRepost: boolean) => {
     let direction =
       location.pathname.substr(location.pathname.length - 1) === "/"
         ? `/user/${user.name}/`
@@ -89,7 +82,22 @@ function UserPosts({
       userLikePost(postId);
     } else {
       likePost(postId);
-      if (location.pathname.substr(1, 4) == "user") {
+      if (location.pathname.substr(1, 4) == "user" || hasRepost) {
+        fetchPosts();
+      }
+    }
+  };
+
+  const removeLikePost_ = (postId: string, hasRepost: boolean) => {
+    let direction =
+      location.pathname.substr(location.pathname.length - 1) === "/"
+        ? `/user/${user.name}/`
+        : `/user/${user.name}`;
+    if (location.pathname === direction) {
+      userRemoveLikePost(postId);
+    } else {
+      removeLikePost(postId);
+      if (location.pathname.substr(1, 4) == "user" || hasRepost) {
         fetchPosts();
       }
     }
@@ -101,19 +109,13 @@ function UserPosts({
     };
     requestPost(`/api/repost/${user.id}`, { postId }, callback);
   };
-
-  const removeLikePost_ = (postId: string) => {
-    let direction =
-      location.pathname.substr(location.pathname.length - 1) === "/"
-        ? `/user/${user.name}/`
-        : `/user/${user.name}`;
-    if (location.pathname === direction) {
-      userRemoveLikePost(postId);
-    } else {
-      removeLikePost(postId);
-      if (location.pathname.substr(1, 4) == "user") {
+  const removeRepost = (postId: string) => {
+    if (confirm("Remove repost?")) {
+      const callback = () => {
+        showToast("Repost deleted");
         fetchPosts();
-      }
+      };
+      requestDelete(`/api/repost/${user.id}`, callback, { postId });
     }
   };
 
@@ -148,7 +150,6 @@ function UserPosts({
             post = p.post;
             post.repostDate = p.date;
             post.reposter = p.reposter;
-            post.repostId = p._id;
           }
           return (
             <div className="userPost" key={key}>
@@ -251,7 +252,7 @@ function UserPosts({
                     <div className="liked">
                       <Favorite
                         className="likedButton rounded"
-                        onClick={() => removeLikePost_(post._id)}
+                        onClick={() => removeLikePost_(post._id, post.reposter||post.reposts.length>0?true:false)}
                       />
                       {` ${post.likes.length}`}
                     </div>
@@ -259,7 +260,7 @@ function UserPosts({
                     <div className="like">
                       <FavoriteBorderOutlined
                         className="likeButton rounded"
-                        onClick={() => likePost_(post._id)}
+                        onClick={() => likePost_(post._id, post.reposter||post.reposts.length>0?true:false)}
                       />
                       {` ${post.likes.length}`}
                     </div>
@@ -268,17 +269,17 @@ function UserPosts({
                   <div className={post.reposter ? "reposted" : "repost"}>
                     <Cached
                       className={
-                        post.reposter && post.reposter._id === user.id
+                        post.reposts && post.reposts.includes(user.id)
                           ? "repostedButton"
                           : "repostButton"
                       }
                       onClick={() =>
-                        post.reposter && post.reposter._id === user.id
-                          ? removeRepost(post.repostId)
+                        post.reposts && post.reposts.includes(user.id)
+                          ? removeRepost(post._id)
                           : repost(post._id)
                       }
                     />
-                    {`${post.reposts.length}`}
+                    {post.reposts.length}
                   </div>
                   {/* Comment */}
                   <div className="comment">
