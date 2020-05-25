@@ -71,7 +71,6 @@ function MyProfile({ auth, errors, history }: Props) {
             ? data.userImage.landscapeId
             : "",
         });
-        setId(data._id);
       });
   };
 
@@ -147,7 +146,7 @@ function MyProfile({ auth, errors, history }: Props) {
             landscape={true}
             addToast={addToast}
             fetchUser={fetchUser}
-            id={id}
+            id={user.id}
           />
         )}
         {imageForm && (
@@ -156,7 +155,7 @@ function MyProfile({ auth, errors, history }: Props) {
             landscape={false}
             addToast={addToast}
             fetchUser={fetchUser}
-            id={id}
+            id={user.id}
           />
         )}
         <Form noValidate onSubmit={editUser}>

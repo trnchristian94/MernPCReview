@@ -14,7 +14,7 @@ const requestGet = (url: string, _setValue: any): any => {
     .then((res) => res.json())
     .then((data) => {
       store.dispatch(setLoadingStatus(1));
-      if(oldLoc === location.pathname){
+      if(oldLoc === location.pathname || `${oldLoc}/` === location.pathname){
         _setValue(data);
       }
     });
@@ -61,7 +61,7 @@ const requestPost = (url: string, body: any, _callback: any): any => {
     .catch((err) => console.log(err));
 };
 
-const requestPostFile = (url: string, body: any, _callback: any): any => {
+const requestPostFile = (url: string, body: any, _callback: any, addToast?: any): any => {
   store.dispatch(setLoadingStatus(2));
   fetch(url, {
     method: "POST",
@@ -70,15 +70,17 @@ const requestPostFile = (url: string, body: any, _callback: any): any => {
       Authorization: localStorage.jwtToken ? localStorage.jwtToken : null
     }
   })
-    .then((res) => res.json())
-    .then((data) => {
+    .then((res) => res.json().then((data) => {
       store.dispatch(setLoadingStatus(1));
+      if (res.status && addToast) {
+        showAlert(res.status, data.status, addToast);
+      }
       _callback();
     })
-    .catch((err) => console.log(err));
+    .catch((err) => console.log(err)));
 };
 
-const requestDelete = (url: string, _callback: any, body?: any): any => {
+const requestDelete = (url: string, _callback: any, body?: any, addToast?: any): any => {
   store.dispatch(setLoadingStatus(2));
   fetch(url, {
     method: "DELETE",
@@ -89,11 +91,13 @@ const requestDelete = (url: string, _callback: any, body?: any): any => {
       "Content-Type": "application/json"
     }
   })
-    .then((res) => res.json())
-    .then((data) => {
+  .then((res) => res.json().then((data) => {
       store.dispatch(setLoadingStatus(1));
+      if (res.status && addToast) {
+        showAlert(res.status, data.status, addToast);
+      }
       _callback();
-    })
+    }))
     .catch((err) => console.log(err));
 };
 

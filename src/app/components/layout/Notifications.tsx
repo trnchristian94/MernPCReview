@@ -86,7 +86,7 @@ function Notifications({ auth, errors, history }: Props) {
       {notifications.length > 0 &&
         notifications.map((notification: any) => {
           return (
-            <div className="notification" key={notification.id}>
+            <div className={`notification ${!notification.read?"unread":""}`} key={notification.id}>
               <div className="avatarHeader">
                 <div className="notification__icon">
                   {formatIcon(notification.iconType)}

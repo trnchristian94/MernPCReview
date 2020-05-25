@@ -110,7 +110,7 @@ function UserPosts({
     requestPost(`/api/repost/${user.id}`, { postId }, callback);
   };
   const removeRepost = (postId: string) => {
-    if (confirm("Remove repost?")) {
+    if (confirm("Remove repost ?")) {
       const callback = () => {
         showToast("Repost deleted");
         fetchPosts();

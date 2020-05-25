@@ -3,6 +3,9 @@
 .notification:last-child {
   border-bottom: 1px solid $color4;
 }
+div.notification.unread{
+  background-color: $color2;
+}
 .notification {
   border: 1px solid $color4;
   border-bottom: none;

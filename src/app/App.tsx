@@ -19,6 +19,7 @@ import MyProfile from "src/app/components/layout/MyProfile";
 import Stalks from "layout/common/Stalks";
 import LoadingBar from "layout/common/LoadingBar";
 import Notifications from "src/app/components/layout/Notifications";
+import Hardware from "src/app/components/layout/Hardware";
 
 import Register from "components/auth/Register";
 import Login from "components/auth/Login";
@@ -80,6 +81,7 @@ export default class App extends Component {
                   <Route exact path="/profile" component={MyProfile} />
                   <Route exact path="/stalking" component={Stalks} />
                   <Route exact path="/stalkers" component={Stalks} />
+                  <Route exact path="/hardware" component={Hardware} />
                   <Route
                     exact
                     path="/notifications"

@@ -99,4 +99,19 @@ a {
     display: flex;
     justify-content: center;
   }
+
+  // Button special
+  .roundBtn {
+    width: auto;
+    border-radius: 999px;
+    padding: 7px 20px;
+    svg{
+      margin-left: 5px;
+    }
+  }
+
+  // Clases colors
+  .error{
+    color:$color6;
+  }
 }

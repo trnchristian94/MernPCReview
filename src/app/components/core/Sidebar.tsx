@@ -24,6 +24,7 @@ import PowerOffRounded from "@material-ui/icons/PowerOffRounded";
 import PermMedia from "@material-ui/icons/PermMedia";
 import NotificationsNone from "@material-ui/icons/NotificationsNone";
 import Notifications from "@material-ui/icons/Notifications";
+import DesktopWindows from '@material-ui/icons/DesktopWindows';
 
 import Avatar from "@material-ui/core/Avatar";
 
@@ -163,10 +164,15 @@ function Sidebar({
               <span className="navText">Users</span>
             </div>
           </Link>
+          <Link to={"/hardware"} className="nav-link">
+            <div className="sidebar-link">
+              <DesktopWindows />
+              <span className="navText">Hardware</span>
+            </div>
+          </Link>
           <Link
             to={"/profile"}
             className="nav-link"
-            //onClick={() => getStalkRequests(user)}
           >
             <div className="sidebar-link">
               <AccountCircleRounded />
