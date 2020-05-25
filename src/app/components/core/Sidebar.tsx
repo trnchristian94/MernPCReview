@@ -24,7 +24,9 @@ import PowerOffRounded from "@material-ui/icons/PowerOffRounded";
 import PermMedia from "@material-ui/icons/PermMedia";
 import NotificationsNone from "@material-ui/icons/NotificationsNone";
 import Notifications from "@material-ui/icons/Notifications";
-import DesktopWindows from '@material-ui/icons/DesktopWindows';
+import DesktopWindows from "@material-ui/icons/DesktopWindows";
+import VpnKeyIcon from "@material-ui/icons/VpnKey";
+import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 
 import Avatar from "@material-ui/core/Avatar";
 
@@ -110,13 +112,25 @@ function Sidebar({
     loginUser(userData); // since we handle the redirect within our component, we don't need to pass in this.props.history as a parameter
   };
 
+  const createLink = (linkTo: string, navText: string, icon: any) => {
+    let ret = [];
+    ret.push(
+      <Link key={linkTo} to={`/${linkTo}`} className="nav-link">
+        <div className="sidebar-link">
+          {icon}
+          <span className="navText">{navText}</span>
+        </div>
+      </Link>
+    );
+    return ret;
+  };
+
   return (
     <div id="sidebar" className="float-right sticky-top">
       <Link to={"/"} id="brandName" className="nav-link">
         <div className="mAlign">
           <span className="navText">The PC Review</span>
         </div>
-
         <div className="mAlign">
           <img
             src="https://res.cloudinary.com/dz6ogknjd/image/upload/v1583751665/favicon/favicon.ico"
@@ -124,62 +138,17 @@ function Sidebar({
           />
         </div>
       </Link>
-      <Link to={"/"} className="nav-link">
-        <div className="sidebar-link">
-          <HomeRounded />
-          <span className="navText">Home</span>
-        </div>
-      </Link>
-      <Link to={"/tasks"} className="nav-link">
-        <div className="sidebar-link">
-          <PlaylistAddCheckRounded />
-          <span className="navText">Tasks</span>
-        </div>
-      </Link>
+      {createLink("", "Home", <HomeRounded />)}
       {!auth.isAuthenticated ? (
         <>
-          <Link to={"/register"} className="nav-link">
-            <div className="sidebar-link">
-              <span className="navText">Register</span>
-            </div>
-          </Link>
-          <Link to={"/login"} className="nav-link">
-            <div className="sidebar-link">
-              <span className="navText">Login</span>
-            </div>
-          </Link>
+          {createLink("register", "Register", <PersonOutlineIcon />)}
+          {createLink("login", "Login", <VpnKeyIcon />)}
         </>
       ) : (
         <>
-          <Link to={"/images"} className="nav-link">
-            <div className="sidebar-link">
-              <PermMedia />
-
-              <span className="navText">Images</span>
-            </div>
-          </Link>
-          <Link to={"/userList"} className="nav-link">
-            <div className="sidebar-link">
-              <GroupRounded />
-              <span className="navText">Users</span>
-            </div>
-          </Link>
-          <Link to={"/hardware"} className="nav-link">
-            <div className="sidebar-link">
-              <DesktopWindows />
-              <span className="navText">Hardware</span>
-            </div>
-          </Link>
-          <Link
-            to={"/profile"}
-            className="nav-link"
-          >
-            <div className="sidebar-link">
-              <AccountCircleRounded />
-
-              <span className="navText">My profile</span>
-            </div>
-          </Link>
+          {createLink("userList", "Users", <GroupRounded />)}
+          {createLink("hardware", "Hardware", <DesktopWindows />)}
+          {createLink("profile", "My profile", <AccountCircleRounded />)}
           <Link
             to={"/notifications"}
             className="nav-link"
@@ -240,38 +209,40 @@ function Sidebar({
           </div>
         </>
       ) : (
-        showLoginForm && <Form onSubmit={onSubmit}>
-          <Form.Row>
-            <Form.Group className="mr-2">
-              <Form.Label className="mr-2">Email</Form.Label>
-              <Form.Control
-                size="sm"
-                type="email"
-                placeholder="Enter email"
-                onChange={(e: any) => setEmail(e.target.value)}
-                value={email}
-              />
-            </Form.Group>
-          </Form.Row>
-          <Form.Row>
-            <Form.Group className="mr-2">
-              <Form.Label className="mr-2">Password</Form.Label>
-              <Form.Control
-                size="sm"
-                type="password"
-                placeholder="Password"
-                onChange={(e: any) => setPassword(e.target.value)}
-                value={password}
-              />
-            </Form.Group>
-          </Form.Row>
+        showLoginForm && (
+          <Form className="loginForm" onSubmit={onSubmit}>
+            <Form.Row>
+              <Form.Group className="mr-2">
+                <Form.Label className="mr-2">Email</Form.Label>
+                <Form.Control
+                  size="sm"
+                  type="email"
+                  placeholder="Enter email"
+                  onChange={(e: any) => setEmail(e.target.value)}
+                  value={email}
+                />
+              </Form.Group>
+            </Form.Row>
+            <Form.Row>
+              <Form.Group className="mr-2">
+                <Form.Label className="mr-2">Password</Form.Label>
+                <Form.Control
+                  size="sm"
+                  type="password"
+                  placeholder="Password"
+                  onChange={(e: any) => setPassword(e.target.value)}
+                  value={password}
+                />
+              </Form.Group>
+            </Form.Row>
 
-          <Form.Row>
-            <Button variant="dark" type="submit" size="sm">
-              Login
-            </Button>
-          </Form.Row>
-        </Form>
+            <Form.Row>
+              <Button variant="dark" type="submit" size="sm">
+                Login
+              </Button>
+            </Form.Row>
+          </Form>
+        )
       )}
       {auth.isAuthenticated && showSubmitPost && (
         <Post setShowSubmitPost={setShowSubmitPost} />

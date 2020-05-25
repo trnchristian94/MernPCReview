@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { useToasts } from "react-toast-notifications";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -22,8 +21,7 @@ interface Props {
   history: any;
 }
 
-function Notifications({ auth, errors, history }: Props) {
-  const { addToast } = useToasts();
+function Notifications({ auth, history }: Props) {
   const { user } = auth;
   const [notifications, setNotifications] = useState([]);
 

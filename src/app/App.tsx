@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import {
   BrowserRouter as Router,
   Route,
-  Switch,
-  withRouter
+  Switch
 } from "react-router-dom";
 
 import { Provider } from "react-redux";
@@ -11,9 +10,7 @@ import store from "src/store";
 
 import Sidebar from "core/Sidebar";
 import StalkerRequests from "core/StalkerRequests";
-import Images from "layout/Images";
 import Landing from "layout/Home";
-import Task from "layout/Tasks";
 import Users from "layout/Users";
 import MyProfile from "src/app/components/layout/MyProfile";
 import Stalks from "layout/common/Stalks";
@@ -74,9 +71,7 @@ export default class App extends Component {
                 <Col xs={6} className='p-0' id="midCol">
                   <Route exact path="/" component={Landing} />
                   <Route exact path="/register" component={Register} />
-                  <Route exact path="/images" component={Images} />
                   <Route exact path="/login" component={Login} />
-                  <Route exact path="/tasks" component={Task} />
                   <Route exact path="/userList" component={Users} />
                   <Route exact path="/profile" component={MyProfile} />
                   <Route exact path="/stalking" component={Stalks} />

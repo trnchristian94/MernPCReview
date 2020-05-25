@@ -46,38 +46,6 @@ a {
     }
   }
 
-  /****************** TO DELETE IN THE FUTURE ***************************/
-
-  .pcCard {
-    background-color: $color2;
-    color: $color4;
-    border: 1px solid $color4;
-  }
-
-  .imgCard > div {
-    padding: 5px;
-    height: 162px;
-  }
-  .imgCard {
-    height: 250px;
-    width: 12rem;
-    margin: 5px;
-    text-align: center;
-
-    .card-title {
-      text-align: center;
-    }
-    button {
-      bottom: 0; 
-      position: absolute;
-      left: 32%;
-    }
-    .main-image {
-      max-height: 100%;
-      max-width: 100%;
-    }
-  }
-
   /**********************************************************************/
 
   // Makes exterior of element rounded

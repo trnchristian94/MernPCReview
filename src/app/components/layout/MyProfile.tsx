@@ -19,11 +19,10 @@ import { connect } from "react-redux";
 
 interface Props {
   auth: any;
-  errors: any;
   history: any;
 }
 
-function MyProfile({ auth, errors, history }: Props) {
+function MyProfile({ auth, history }: Props) {
   const { addToast } = useToasts();
   const [userName, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -38,11 +37,9 @@ function MyProfile({ auth, errors, history }: Props) {
     landscape: "",
     landscapeId: "",
   });
-  const [image, setImage] = useState();
   const [croppedImage, setCroppedImage] = useState(null);
   const [landscapeForm, setlandscapeForm] = useState(false);
   const [imageForm, setImageForm] = useState(false);
-  const [id, setId] = useState("");
   const [stalkers, setStalkers] = useState(0);
   const [stalking, setStalking] = useState(0);
 
@@ -77,7 +74,7 @@ function MyProfile({ auth, errors, history }: Props) {
   const editUser = (e: any) => {
     e.preventDefault();
     requestPut(
-      `/api/userProfile/updateUser/${id}`,
+      `/api/userProfile/updateUser/${user.id}`,
       {
         name: userName,
         email,
