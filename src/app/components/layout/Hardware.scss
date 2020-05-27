@@ -21,6 +21,18 @@
       height: 7vw;
       margin-right: 10px;
       margin-bottom: 10px;
+      position: relative;
+      .imageOptions {
+        position: absolute;
+        top: 2px;
+        right: 2px;
+        svg {
+          fill: white;
+          background: rgba(0, 0, 0, 0.6);
+          cursor: pointer;
+          margin-left: 1px;
+        }
+      }
     }
   }
   img {
@@ -58,6 +70,10 @@
   .addIt {
     color: $color9;
     font-weight: 500;
+    cursor: pointer;
+  }
+  .editHardware,
+  .removeHardware {
     cursor: pointer;
   }
 }

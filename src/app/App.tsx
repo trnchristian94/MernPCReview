@@ -1,9 +1,5 @@
 import React, { Component } from "react";
-import {
-  BrowserRouter as Router,
-  Route,
-  Switch
-} from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import { Provider } from "react-redux";
 import store from "src/store";
@@ -62,13 +58,12 @@ export default class App extends Component {
         <Provider store={store}>
           <Container fluid className="App">
             <Row>
-              {/* Navigation */}
               <Router>
                 <LoadingBar />
                 <Col xs={3} id="sidebarCol">
                   <Sidebar />
                 </Col>
-                <Col xs={6} className='p-0' id="midCol">
+                <Col xs={6} className="p-0" id="midCol">
                   <Route exact path="/" component={Landing} />
                   <Route exact path="/register" component={Register} />
                   <Route exact path="/login" component={Login} />
@@ -83,9 +78,21 @@ export default class App extends Component {
                     component={Notifications}
                   />
                   <Route exact path={`/user/:username`} component={Profile} />
-                  <Route exact path={`/user/:username/likes`} component={Profile} />
-                  <Route exact path={`/user/:username/stalking`} component={Stalks} />
-                  <Route exact path={`/user/:username/stalkers`} component={Stalks} />
+                  <Route
+                    exact
+                    path={`/user/:username/likes`}
+                    component={Profile}
+                  />
+                  <Route
+                    exact
+                    path={`/user/:username/stalking`}
+                    component={Stalks}
+                  />
+                  <Route
+                    exact
+                    path={`/user/:username/stalkers`}
+                    component={Stalks}
+                  />
                   <Route
                     exact
                     path="/stalkerRequests"

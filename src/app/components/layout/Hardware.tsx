@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import { requestGet, requestPostFile, requestDelete } from "utils/request";
+import {
+  requestGet,
+  requestPostFile,
+  requestDelete,
+  requestPut
+} from "utils/request";
 import { useToasts } from "react-toast-notifications";
 
 import Container from "react-bootstrap/Container";
@@ -11,6 +16,8 @@ import Button from "react-bootstrap/Button";
 import Create from "@material-ui/icons/Create";
 import DoneIcon from "@material-ui/icons/Done";
 import AddAPhoto from "@material-ui/icons/AddAPhoto";
+import DeleteIcon from "@material-ui/icons/Delete";
+import WallpaperIcon from "@material-ui/icons/Wallpaper";
 
 import { connect } from "react-redux";
 
@@ -24,10 +31,12 @@ interface Props {
 
 function Hardware({ auth, errors, history }: Props) {
   const { user } = auth;
+  const [pieceId, setPieceId] = useState("");
   const [pieceName, setPieceName] = useState("");
   const [pieceType, setPieceType] = useState("");
   const [hardware, setHardware] = useState([]);
   const [addingPiece, setAddingPiece] = useState(false);
+  const [editingPiece, setEditingPiece] = useState(false);
   const [pieceDesc, setPieceDesc] = useState("");
   const [pieceMinVal, setMinVal]: any = useState(0);
   const [pieceMaxVal, setMaxVal]: any = useState(10000);
@@ -63,23 +72,7 @@ function Hardware({ auth, errors, history }: Props) {
   }, []);
 
   useEffect(() => {
-    if (images) {
-      setError({ images: "" });
-      if (images.length > 6)
-        setError({ images: "Max image files exceeded, upload max 6." });
-      let imagesHtml: any = [];
-      for (let i = 0; i < images.length; i++) {
-        let img = new Image();
-        img.src = URL.createObjectURL(images[i]);
-        img.title = images[i].name;
-        imagesHtml.push(
-          <div key={i} className="pieceImage">
-            <img src={img.src} title={img.title} />
-          </div>
-        );
-        setImagesPreview(imagesHtml);
-      }
-    }
+    refreshImages();
   }, [images]);
 
   const fetchHardwares = () => {
@@ -88,15 +81,54 @@ function Hardware({ auth, errors, history }: Props) {
 
   const removePiece = (hardwareId: string) => {
     if (confirm("Remove hardware ?")) {
+      const callback = () => {
+        fetchHardwares();
+      };
+      requestDelete(
+        `/api/hardware/${user.id}`,
+        callback,
+        { hardwareId },
+        addToast
+      );
+    }
+  };
+
+  const setPrincipalImage = (pieceId: string, index: number) => {
     const callback = () => {
       fetchHardwares();
+      let temp = images[0];
+      images[0] = images[index];
+      images[index] = temp;
+      refreshImages();
     };
-    requestDelete(
-      `/api/hardware/${user.id}`,
+    requestPut(
+      `/api/hardware/setPrincipalImage/${user.id}`,
+      {
+        pieceId,
+        index,
+        images
+      },
       callback,
-      { hardwareId },
       addToast
-    );}
+    );
+  };
+
+  const removeImage = (pieceId: string, index: number) => {
+    const callback = () => {
+      fetchHardwares();
+      images.splice(index, 1);
+      refreshImages();
+    };
+    requestPut(
+      `/api/hardware/removeImage/${user.id}`,
+      {
+        pieceId,
+        index,
+        images
+      },
+      callback,
+      addToast
+    );
   };
 
   const searchPiece = (e: any) => {
@@ -115,39 +147,58 @@ function Hardware({ auth, errors, history }: Props) {
     const callback = () => {
       fetchHardwares();
     };
-    let formData = new FormData();
-    formData.append("name", pieceName);
-    formData.append(
-      "type",
-      pieceType ? pieceType : Object.keys(hardwarePieces)[1]
-    );
-    formData.append("price", pieceVal);
-    formData.append("description", pieceDesc);
-    if (images) {
-      for (let i = 0; i < images.length; i++) {
-        if (images[i].size > 3500000) {
-          alert("Image exceeds max size 3.5MB, please upload another image.");
-          return false;
+
+    if (editingPiece) {
+      requestPut(
+        `/api/hardware/${user.id}`,
+        {
+          pieceId: pieceId,
+          name: pieceName,
+          type: pieceType,
+          description: pieceDesc,
+          price: pieceVal
+        },
+        callback,
+        addToast
+      );
+    } else {
+      let formData = new FormData();
+      formData.append("name", pieceName);
+      formData.append(
+        "type",
+        pieceType ? pieceType : Object.keys(hardwarePieces)[1]
+      );
+      formData.append("price", pieceVal);
+      formData.append("description", pieceDesc);
+      if (images && !editingPiece) {
+        for (let i = 0; i < images.length; i++) {
+          if (images[i].size > 3500000) {
+            alert("Image exceeds max size 3.5MB, please upload another image.");
+            return false;
+          }
+          formData.append("images", images[i]);
         }
-        formData.append("images", images[i]);
       }
+      requestPostFile(
+        `/api/hardware/add/${user.id}`,
+        formData,
+        callback,
+        addToast
+      );
     }
-    requestPostFile(
-      `/api/hardware/add/${user.id}`,
-      formData,
-      callback,
-      addToast
-    );
+
     closeSubmit();
   };
 
   const closeSubmit = () => {
+    setPieceId("");
     setPieceName("");
     setPieceDesc("");
     setImages();
     setImagesPreview([]);
     setError({ images: "" });
     setAddingPiece(false);
+    setEditingPiece(false);
   };
 
   const clearSearch = () => {
@@ -172,8 +223,54 @@ function Hardware({ auth, errors, history }: Props) {
         </option>
       );
     }
-
     return options;
+  };
+
+  const editPiece = (hardware: any) => {
+    setAddingPiece(true);
+    setEditingPiece(true);
+    setPieceId(hardware._id);
+    setPieceName(hardware.name);
+    setPieceType(hardware.type);
+    setPieceVal(hardware.price);
+    setPieceDesc(hardware.description);
+    setImages(hardware.images);
+  };
+
+  const refreshImages = () => {
+    if (images) {
+      setError({ images: "" });
+      if (images.length > 6)
+        setError({ images: "Max image files exceeded, upload max 6." });
+      let imagesHtml: any = [];
+      for (let i = 0; i < images.length; i++) {
+        let img = new Image();
+        img.src = images[i].image
+          ? images[i].image
+          : URL.createObjectURL(images[i]);
+        img.title = images[i].name;
+        imagesHtml.push(
+          <div key={i} className="pieceImage">
+            {editingPiece && (
+              <div className="imageOptions">
+                {i !== 0 && (
+                  <WallpaperIcon
+                    className="principalImage"
+                    onClick={() => setPrincipalImage(pieceId, i)}
+                  />
+                )}
+                <DeleteIcon
+                  className="deleteImage"
+                  onClick={() => removeImage(pieceId, i)}
+                />
+              </div>
+            )}
+            <img src={img.src} title={img.title} />
+          </div>
+        );
+        setImagesPreview(imagesHtml);
+      }
+    }
   };
 
   const getHardwareHtml = (hardware: any) => {
@@ -196,13 +293,12 @@ function Hardware({ auth, errors, history }: Props) {
           </div>
           <div className="pieceDesc">{hardware.description}</div>
         </Col>
-        <div>
-          {hardware.creator._id === user.id && (
-            <Button variant="danger" onClick={() => removePiece(hardware._id)}>
-              Remove
-            </Button>
-          )}
-        </div>
+        {hardware.creator._id === user.id && (
+          <Col md={3} className="align-self-center">
+              <Create className="editHardware mr-2" onClick={() => editPiece(hardware)} />
+              <DeleteIcon className="removeHardware" onClick={() => removePiece(hardware._id)} />
+          </Col>
+        )}
       </Row>
     );
   };
@@ -242,7 +338,7 @@ function Hardware({ auth, errors, history }: Props) {
                     {componentOptions()}
                   </Form.Control>
                 </Form.Group>
-                <Form.Group as={Col} md={1}>
+                <Form.Group as={Col} md={2}>
                   <Form.Label>Min. Price</Form.Label>
                   <div className="priceValue">
                     <Form.Control
@@ -256,7 +352,7 @@ function Hardware({ auth, errors, history }: Props) {
                     <span>€</span>
                   </div>
                 </Form.Group>
-                <Form.Group as={Col} md={1}>
+                <Form.Group as={Col} md={2}>
                   <Form.Label>Max. Price</Form.Label>
                   <div className="priceValue">
                     <Form.Control
@@ -299,7 +395,7 @@ function Hardware({ auth, errors, history }: Props) {
           </>
         ) : (
           <>
-            <h1>Add new hardware piece</h1>
+            <h1>{`${editingPiece ? "Editing" : "Add new"} hardware piece`}</h1>
             <Form
               encType="multipart/form-data"
               className="mb-3"
@@ -362,25 +458,30 @@ function Hardware({ auth, errors, history }: Props) {
               <div className="pieceImages">
                 {images && images.length > 0 && imagesPreview}
               </div>
-              <Button
-                className="roundBtn mr-2"
-                onClick={() => {
-                  inputImage.click();
-                }}
-              >
-                Add Images
-                <AddAPhoto />
-              </Button>
-              <input
-                ref={(input) => (inputImage = input)}
-                type="file"
-                className="form-input"
-                accept="image/x-png,image/gif,image/jpeg"
-                style={{ display: "none" }}
-                name="images"
-                onChange={(e: any) => setImages(e.target.files)}
-                multiple
-              />
+              {!editingPiece && (
+                <>
+                  <Button
+                    className="roundBtn mr-2"
+                    onClick={() => {
+                      inputImage.click();
+                    }}
+                  >
+                    Add Images
+                    <AddAPhoto />
+                  </Button>
+                  <input
+                    ref={(input) => (inputImage = input)}
+                    type="file"
+                    className="form-input"
+                    accept="image/x-png,image/gif,image/jpeg"
+                    style={{ display: "none" }}
+                    name="images"
+                    onChange={(e: any) => setImages(e.target.files)}
+                    multiple
+                  />
+                </>
+              )}
+
               <Button type="submit" variant="success" className="roundBtn mr-2">
                 Done <DoneIcon />
               </Button>
