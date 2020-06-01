@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import req from "utils/request";
+import { checkLogin } from "utils/connection";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -41,11 +42,7 @@ function ProfileHardware({ auth, match, history }: Props) {
   const direction = getUrlDir(1);
 
   useEffect(() => {
-    if (!auth.isAuthenticated) {
-      history.push("/login");
-    } else {
-      fetchUserHardware();
-    }
+    if (checkLogin(auth, history)) fetchUserHardware();
   }, [username]);
 
   const fetchUserHardware = () => {
@@ -59,14 +56,16 @@ function ProfileHardware({ auth, match, history }: Props) {
       );
     });
   };
-  
+
   const getHardwarePrice = () => {
     let price = 0;
-    for(let i = 0 ; i < userHardware.length ; i++ ){
+    for (let i = 0; i < userHardware.length; i++) {
       price += userHardware[i].price;
     }
-    return <span className="price">Total hardware value: {price.toFixed(2)} €</span>
-  }
+    return (
+      <span className="price">Total hardware value: {price.toFixed(2)} €</span>
+    );
+  };
 
   return (
     <Container
@@ -76,18 +75,18 @@ function ProfileHardware({ auth, match, history }: Props) {
       style={{ paddingTop: "4rem" }}
     >
       <div>
-        {publicUser && <div className="pcComponents">{`${publicUser.name}'s PC Components`}</div>}
+        {publicUser && (
+          <div className="pcComponents">{`${publicUser.name}'s PC Components`}</div>
+        )}
         <div className="hardwareList">
           {userHardware &&
             userHardware.map((hardware: any) => {
               return (
                 <div className="hardware" key={hardware._id}>
                   <div className="pieceType">
-                      {hardware.type && hardwarePieces[hardware.type]}
+                    {hardware.type && hardwarePieces[hardware.type]}
                   </div>
-                  <div className="pieceName">
-                    {hardware.name}
-                  </div>
+                  <div className="pieceName">{hardware.name}</div>
                   <div className="pieceImage">
                     {hardware.images && hardware.images.length > 0 && (
                       <img src={hardware.images[0].image} />
@@ -96,7 +95,7 @@ function ProfileHardware({ auth, match, history }: Props) {
                 </div>
               );
             })}
-            {getHardwarePrice()}
+          {getHardwarePrice()}
         </div>
       </div>
     </Container>

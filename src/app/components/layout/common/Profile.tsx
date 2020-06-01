@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import req from "utils/request";
+import { checkLogin } from "utils/connection";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -41,11 +42,7 @@ function Profile({
   const direction = getUrlDir(1);
 
   useEffect(() => {
-    if (!auth.isAuthenticated) {
-      history.push("/login");
-    } else {
-      fetchUser();
-    }
+    if (checkLogin(auth, history)) fetchUser();
   }, [username]);
 
   const fetchAmounts = (u: any) => {

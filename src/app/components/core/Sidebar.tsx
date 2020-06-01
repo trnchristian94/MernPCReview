@@ -31,6 +31,7 @@ import PersonOutlineIcon from "@material-ui/icons/PersonOutline";
 import Avatar from "@material-ui/core/Avatar";
 
 import "./Sidebar.scss";
+import { setUrl } from "src/userLogic/actions/urlActions";
 
 interface Props {
   auth: any;
@@ -94,6 +95,7 @@ function Sidebar({
     e: React.MouseEvent<HTMLButtonElement, MouseEvent>
   ) => {
     e.preventDefault();
+    setUrl(location.pathname);
     logoutUser();
     setConnected(false);
     history.push("/login");
@@ -262,6 +264,7 @@ export default withRouter(
     logoutUser,
     loginUser,
     getStalkRequests,
-    getNewNotifications
+    getNewNotifications,
+    setUrl
   })(Sidebar)
 );

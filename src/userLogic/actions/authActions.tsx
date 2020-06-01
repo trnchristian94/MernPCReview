@@ -1,6 +1,7 @@
 import axios from "axios";
 import setAuthToken from "utils/setAuthToken";
 import jwt_decode from "jwt-decode";
+import store from "src/store";
 import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING, SET_CURRENT_PROFILE_IMG } from "./types";
 // Register User
 export const registerUser = (userData: any, history: any) => (

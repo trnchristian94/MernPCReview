@@ -17,6 +17,7 @@ const showAlert = (
     autoDismiss: true
   });
 };
+
 const get = (url: string, _setValue: any): any => {
   const oldLoc = location.pathname;
   store.dispatch(setLoadingStatus(2));
@@ -31,15 +32,11 @@ const get = (url: string, _setValue: any): any => {
       if (oldLoc === location.pathname || `${oldLoc}/` === location.pathname) {
         _setValue(data);
       }
-    });
+    })
+    .catch(() => store.dispatch(setLoadingStatus(1)));
 };
 
-const put = (
-  url: string,
-  body?: any,
-  _callback?: any,
-  addToast?: any
-): any => {
+const put = (url: string, body?: any, _callback?: any, addToast?: any): any => {
   store.dispatch(setLoadingStatus(2));
   fetch(url, {
     method: "PUT",
@@ -49,13 +46,16 @@ const put = (
       Accept: "application/json",
       "Content-Type": "application/json"
     }
-  }).then((res) =>
-    res.json().then((data) => {
-      store.dispatch(setLoadingStatus(1));
-      if (res.status && addToast) showAlert(res.status, data.status, addToast);
-      if (_callback) _callback();
-    })
-  );
+  })
+    .then((res) =>
+      res.json().then((data) => {
+        store.dispatch(setLoadingStatus(1));
+        if (res.status && addToast)
+          showAlert(res.status, data.status, addToast);
+        if (_callback) _callback();
+      })
+    )
+    .catch(() => store.dispatch(setLoadingStatus(1)));
 };
 
 const post = (url: string, body: any, _callback: any): any => {
@@ -74,7 +74,7 @@ const post = (url: string, body: any, _callback: any): any => {
       store.dispatch(setLoadingStatus(1));
       _callback();
     })
-    .catch((err) => console.log(err));
+    .catch(() => store.dispatch(setLoadingStatus(1)));
 };
 
 const postFile = (
@@ -99,16 +99,11 @@ const postFile = (
           showAlert(res.status, data.status, addToast);
         _callback();
       })
-      .catch((err) => console.log(err))
+      .catch(() => store.dispatch(setLoadingStatus(1)))
   );
 };
 
-const del = (
-  url: string,
-  _callback: any,
-  body?: any,
-  addToast?: any
-): any => {
+const del = (url: string, _callback: any, body?: any, addToast?: any): any => {
   store.dispatch(setLoadingStatus(2));
   fetch(url, {
     method: "DELETE",
@@ -127,8 +122,7 @@ const del = (
         _callback();
       })
     )
-    .catch((err) => console.log(err));
+    .catch(() => store.dispatch(setLoadingStatus(1)));
 };
-
 
 export default { get, put, post, del, postFile };

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 
 import UserCard from "layout/common/UserCard";
 import req from "utils/request";
+import { checkLogin } from "utils/connection";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -21,11 +22,7 @@ function Users({ auth, errors, history }: Props) {
   const { user } = auth;
 
   useEffect(() => {
-    if (!auth.isAuthenticated) {
-      history.push("/login");
-    } else {
-      fetchStalkRequests();
-    }
+    if (checkLogin(auth, history)) fetchStalkRequests();
   }, []);
 
   const fetchStalkRequests = () => {

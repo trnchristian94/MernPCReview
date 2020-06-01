@@ -8,6 +8,7 @@ import UserCard from "layout/common/UserCard";
 import PicCropUpload from "utils/picCropUpload";
 import req from "utils/request";
 import { formatDate } from "utils/date";
+import { checkLogin } from "utils/connection";
 
 import { changeProfileImg } from "userLogic/actions/authActions";
 
@@ -94,9 +95,7 @@ function MyProfile({ auth, history, changeProfileImg }: Props) {
   };
 
   useEffect(() => {
-    if (!auth.isAuthenticated) {
-      history.push("/login");
-    } else {
+    if (checkLogin(auth, history)) {
       fetchUser();
       fetchStalks();
     }

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import req from "utils/request";
+import { checkLogin } from "utils/connection";
 
 import UserCard from "layout/common/UserCard";
 
@@ -26,11 +27,7 @@ function Stalks({ auth, errors, history, match }: Props) {
   const [stalkType, setStalkType] = useState("");
 
   useEffect(() => {
-    if (!auth.isAuthenticated) {
-      history.push("/login");
-    } else {
-      getLocationAndStalk();
-    }
+    if (checkLogin(auth, history)) getLocationAndStalk();
   }, []);
 
   const getLocationAndStalk = () => {
@@ -49,10 +46,7 @@ function Stalks({ auth, errors, history, match }: Props) {
   const fetchStalking = (stalkType: string) => {
     if (match.params.username) {
       new Promise((resolve, reject) => {
-        req.get(
-          `/api/userProfile/getUserId/${match.params.username}`,
-          resolve
-        );
+        req.get(`/api/userProfile/getUserId/${match.params.username}`, resolve);
       }).then((u: any) => {
         req.get(`/api/stalks/${stalkType}/${u[0]._id}`, setStalks);
       });
@@ -80,18 +74,27 @@ function Stalks({ auth, errors, history, match }: Props) {
   return (
     <Container id="stalks" fluid style={{ paddingTop: "4rem" }}>
       <Col lg={true}>
-        <div className="stalkType">{stalkType} {match.params.username?` - @${match.params.username}`:""}:</div>
+        <div className="stalkType">
+          {stalkType}{" "}
+          {match.params.username ? ` - @${match.params.username}` : ""}:
+        </div>
         {renderArrowBack()}
         <div className="userCards">
           {stalks.map((publicUser: any, key: any) => {
             return (
-                <UserCard
-                  key={key}
-                  user={publicUser}
-                  showAddButton={publicUser._id === user.id || stalkType==="stalkers" || match.params.username? false : true}
-                  status={2}
-                  fetchUsers={fetchStalking}
-                />
+              <UserCard
+                key={key}
+                user={publicUser}
+                showAddButton={
+                  publicUser._id === user.id ||
+                  stalkType === "stalkers" ||
+                  match.params.username
+                    ? false
+                    : true
+                }
+                status={2}
+                fetchUsers={fetchStalking}
+              />
             );
           })}
         </div>

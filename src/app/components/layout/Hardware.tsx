@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import req from "utils/request";
+import { checkLogin } from "utils/connection";
 import { useToasts } from "react-toast-notifications";
 
 import Container from "react-bootstrap/Container";
@@ -67,9 +68,7 @@ function Hardware({ auth, errors, history, match }: Props) {
   };
 
   useEffect(() => {
-    if (!auth.isAuthenticated) {
-      history.push("/login");
-    } else {
+    if (checkLogin(auth, history)) {
       setPieceType(Object.keys(hardwarePieces)[0]);
       fetchHardwares();
     }

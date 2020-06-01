@@ -48,7 +48,11 @@ class Login extends Component<MyProps, MyState> {
 
   UNSAFE_componentWillReceiveProps(nextProps: any) {
     if (nextProps.auth.isAuthenticated) {
-      this.props.history.push("/dashboard"); // push user to dashboard when they login
+      if (nextProps.url.url) {
+        this.props.history.push(nextProps.url.url); // push user to dashboard when they login
+      } else {
+        this.props.history.push("/dashboard"); // push user to dashboard when they login
+      }
     }
     if (nextProps.errors) {
       this.setState({
@@ -147,6 +151,7 @@ class Login extends Component<MyProps, MyState> {
 }
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
-  errors: state.errors
+  errors: state.errors,
+  url: state.url
 });
 export default connect(mapStateToProps, { loginUser })(Login);

@@ -5,6 +5,7 @@ import Col from "react-bootstrap/Col";
 
 import { connect } from "react-redux";
 import req from "utils/request";
+import { checkLogin } from "utils/connection";
 
 import Favorite from "@material-ui/icons/Favorite";
 import GroupRounded from "@material-ui/icons/GroupRounded";
@@ -26,11 +27,7 @@ function Notifications({ auth, history }: Props) {
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
-    if (!auth.isAuthenticated) {
-      history.push("/login");
-    } else {
-      fetchNotifications();
-    }
+    if (checkLogin(auth, history)) fetchNotifications();
   }, []);
 
   const fetchNotifications = () => {
@@ -43,7 +40,7 @@ function Notifications({ auth, history }: Props) {
       case "Post":
         formatedContent.push(<span>{content.text}</span>);
         break;
-        case "Repost":
+      case "Repost":
         formatedContent.push(<span>{content.post.text}</span>);
         break;
       default:
@@ -84,7 +81,10 @@ function Notifications({ auth, history }: Props) {
       {notifications.length > 0 &&
         notifications.map((notification: any) => {
           return (
-            <div className={`notification ${!notification.read?"unread":""}`} key={notification.id}>
+            <div
+              className={`notification ${!notification.read ? "unread" : ""}`}
+              key={notification.id}
+            >
               <div className="avatarHeader">
                 <div className="notification__icon">
                   {formatIcon(notification.iconType)}

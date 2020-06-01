@@ -6,6 +6,7 @@ import postReducer from "./postReducer";
 import userPostReducer from "./userPostReducer";
 import loadingReducer from "./loadingReducer";
 import notificationReducer from "./notificationReducer";
+import urlReducer from "./urlReducer";
 export default combineReducers({
   auth: authReducer,
   errors: errorReducer,
@@ -13,5 +14,6 @@ export default combineReducers({
   posts: postReducer,
   userPosts: userPostReducer,
   loadingStatus: loadingReducer,
-  newNotifications: notificationReducer
+  newNotifications: notificationReducer,
+  url: urlReducer
 });
