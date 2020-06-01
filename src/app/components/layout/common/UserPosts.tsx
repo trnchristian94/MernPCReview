@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 
 import { formatDate, formatHour, getTimeUntilNow } from "utils/date";
-import { requestDelete, requestPost } from "utils/request";
+import req from "utils/request";
 import { getUrlDir } from "utils/string";
 
 import Delete from "@material-ui/icons/Delete";
@@ -67,7 +67,7 @@ function UserPosts({
         showToast("Post deleted");
         fetchPosts();
       };
-      requestDelete(`/api/posts/${user.id}`, callback, { postId });
+      req.del(`/api/posts/${user.id}`, callback, { postId });
     }
   };
 
@@ -107,7 +107,7 @@ function UserPosts({
     const callback = () => {
       fetchPosts();
     };
-    requestPost(`/api/repost/${user.id}`, { postId }, callback);
+    req.post(`/api/repost/${user.id}`, { postId }, callback);
   };
   const removeRepost = (postId: string) => {
     if (confirm("Remove repost ?")) {
@@ -115,7 +115,7 @@ function UserPosts({
         showToast("Repost deleted");
         fetchPosts();
       };
-      requestDelete(`/api/repost/${user.id}`, callback, { postId });
+      req.del(`/api/repost/${user.id}`, callback, { postId });
     }
   };
 

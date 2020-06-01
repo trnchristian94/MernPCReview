@@ -13,6 +13,8 @@ import Stalks from "layout/common/Stalks";
 import LoadingBar from "layout/common/LoadingBar";
 import Notifications from "src/app/components/layout/Notifications";
 import Hardware from "src/app/components/layout/Hardware";
+import Profile from "layout/common/Profile";
+import ProfileHardware from "layout/common/ProfileHardware";
 
 import Register from "components/auth/Register";
 import Login from "components/auth/Login";
@@ -30,7 +32,6 @@ import Col from "react-bootstrap/Col";
 import "./App.scss";
 
 import { ToastProvider } from "react-toast-notifications";
-import Profile from "layout/common/Profile";
 // Check for token to keep user logged in
 
 if (localStorage.jwtToken) {
@@ -72,6 +73,7 @@ export default class App extends Component {
                   <Route exact path="/stalking" component={Stalks} />
                   <Route exact path="/stalkers" component={Stalks} />
                   <Route exact path="/hardware" component={Hardware} />
+                  <Route exact path={`/hardware/:hardwareId`} component={Hardware} />
                   <Route
                     exact
                     path="/notifications"
@@ -106,7 +108,9 @@ export default class App extends Component {
                     />
                   </Switch>
                 </Col>
-                <Col xs={3} id="rightCol"></Col>
+                <Col xs={3} id="rightCol">
+                <Route exact path={`/user/:username`} component={ProfileHardware} />
+                </Col>
               </Router>
             </Row>
           </Container>

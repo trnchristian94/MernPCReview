@@ -3,7 +3,21 @@ import { AppearanceTypes } from "react-toast-notifications";
 import { setLoadingStatus } from "userLogic/actions/loadingActions";
 import store from "src/store";
 
-const requestGet = (url: string, _setValue: any): any => {
+const showAlert = (
+  responseStatus: any,
+  message: string,
+  addToast: any
+): any => {
+  let status: AppearanceTypes = "success";
+  if (responseStatus != 200) {
+    status = "warning";
+  }
+  addToast(message, {
+    appearance: status,
+    autoDismiss: true
+  });
+};
+const get = (url: string, _setValue: any): any => {
   const oldLoc = location.pathname;
   store.dispatch(setLoadingStatus(2));
   fetch(url, {
@@ -20,7 +34,7 @@ const requestGet = (url: string, _setValue: any): any => {
     });
 };
 
-const requestPut = (
+const put = (
   url: string,
   body?: any,
   _callback?: any,
@@ -38,13 +52,13 @@ const requestPut = (
   }).then((res) =>
     res.json().then((data) => {
       store.dispatch(setLoadingStatus(1));
-      if (res.status) showAlert(res.status, data.status, addToast);
+      if (res.status && addToast) showAlert(res.status, data.status, addToast);
       if (_callback) _callback();
     })
   );
 };
 
-const requestPost = (url: string, body: any, _callback: any): any => {
+const post = (url: string, body: any, _callback: any): any => {
   store.dispatch(setLoadingStatus(2));
   fetch(url, {
     method: "POST",
@@ -63,7 +77,7 @@ const requestPost = (url: string, body: any, _callback: any): any => {
     .catch((err) => console.log(err));
 };
 
-const requestPostFile = (
+const postFile = (
   url: string,
   body: any,
   _callback: any,
@@ -89,7 +103,7 @@ const requestPostFile = (
   );
 };
 
-const requestDelete = (
+const del = (
   url: string,
   _callback: any,
   body?: any,
@@ -116,19 +130,5 @@ const requestDelete = (
     .catch((err) => console.log(err));
 };
 
-const showAlert = (
-  responseStatus: any,
-  message: string,
-  addToast: any
-): any => {
-  let status: AppearanceTypes = "success";
-  if (responseStatus != 200) {
-    status = "warning";
-  }
-  addToast(message, {
-    appearance: status,
-    autoDismiss: true
-  });
-};
 
-export { requestGet, requestPut, requestPost, requestDelete, requestPostFile };
+export default { get, put, post, del, postFile };

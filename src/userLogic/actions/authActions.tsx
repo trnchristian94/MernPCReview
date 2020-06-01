@@ -1,7 +1,7 @@
 import axios from "axios";
 import setAuthToken from "utils/setAuthToken";
 import jwt_decode from "jwt-decode";
-import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING } from "./types";
+import { GET_ERRORS, SET_CURRENT_USER, USER_LOADING, SET_CURRENT_PROFILE_IMG } from "./types";
 // Register User
 export const registerUser = (userData: any, history: any) => (
   dispatch: any
@@ -44,6 +44,13 @@ export const setCurrentUser = (decoded: any) => {
   return {
     type: SET_CURRENT_USER,
     payload: decoded
+  };
+};
+// Set logged in user
+export const changeProfileImg = (img: string) => {
+  return {
+    type: SET_CURRENT_PROFILE_IMG,
+    payload: img
   };
 };
 // User loading

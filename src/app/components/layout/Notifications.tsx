@@ -4,7 +4,7 @@ import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
 
 import { connect } from "react-redux";
-import { requestGet } from "utils/request";
+import req from "utils/request";
 
 import Favorite from "@material-ui/icons/Favorite";
 import GroupRounded from "@material-ui/icons/GroupRounded";
@@ -34,7 +34,7 @@ function Notifications({ auth, history }: Props) {
   }, []);
 
   const fetchNotifications = () => {
-    requestGet(`/api/notifications/${user.id}`, setNotifications);
+    req.get(`/api/notifications/${user.id}`, setNotifications);
   };
 
   const formatContent = (content: any, contentModel: String) => {

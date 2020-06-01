@@ -1,11 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-import {
-  requestGet,
-  requestPostFile,
-  requestDelete,
-  requestPut
-} from "utils/request";
+import req from "utils/request";
 import { useToasts } from "react-toast-notifications";
 
 import Container from "react-bootstrap/Container";
@@ -18,6 +13,12 @@ import DoneIcon from "@material-ui/icons/Done";
 import AddAPhoto from "@material-ui/icons/AddAPhoto";
 import DeleteIcon from "@material-ui/icons/Delete";
 import WallpaperIcon from "@material-ui/icons/Wallpaper";
+import ArrowBackIcon from "@material-ui/icons/ArrowBack";
+import { Link } from "react-router-dom";
+
+import BackLink from "layout/common/BackLink";
+import ComponentInfo from "layout/ComponentInfo";
+import LikeBar from "layout/common/LikeBar";
 
 import { connect } from "react-redux";
 
@@ -27,9 +28,10 @@ interface Props {
   auth: any;
   errors: any;
   history: any;
+  match: any;
 }
 
-function Hardware({ auth, errors, history }: Props) {
+function Hardware({ auth, errors, history, match }: Props) {
   const { user } = auth;
   const [pieceId, setPieceId] = useState("");
   const [pieceName, setPieceName] = useState("");
@@ -41,8 +43,10 @@ function Hardware({ auth, errors, history }: Props) {
   const [pieceMinVal, setMinVal]: any = useState(0);
   const [pieceMaxVal, setMaxVal]: any = useState(10000);
   const [pieceVal, setPieceVal]: any = useState(0);
+  const [setupPiece, setSetupPiece]: any = useState(false);
   const [images, setImages]: any = useState();
   const [imagesPreview, setImagesPreview] = useState([]);
+  const [hardwareEditing, setHardwareEditing]: any = useState();
   const [error, setError] = useState({ images: "" });
   const { addToast } = useToasts();
   let inputImage: any;
@@ -75,22 +79,33 @@ function Hardware({ auth, errors, history }: Props) {
     refreshImages();
   }, [images]);
 
-  const fetchHardwares = () => {
-    requestGet(`/api/hardware/${location.search}`, setHardware);
-  };
+  const fetchHardwares = () =>
+    req.get(`/api/hardware/${location.search}`, setHardware);
 
   const removePiece = (hardwareId: string) => {
     if (confirm("Remove hardware ?")) {
       const callback = () => {
         fetchHardwares();
       };
-      requestDelete(
-        `/api/hardware/${user.id}`,
-        callback,
-        { hardwareId },
-        addToast
-      );
+      req.del(`/api/hardware/${user.id}`, callback, { hardwareId }, addToast);
     }
+  };
+
+  const addToSetup = (hardwareId: string, remove?: boolean) => {
+    const callback = () => {
+      fetchHardwares();
+    };
+    req.put(
+      `/api/hardware/${remove ? "removeFrom" : "addTo"}Setup/${user.id}`,
+      {
+        hardwareId
+      },
+      callback,
+      addToast
+    );
+  };
+  const removeFromSetup = (hardwareId: string) => {
+    addToSetup(hardwareId, true);
   };
 
   const setPrincipalImage = (pieceId: string, index: number) => {
@@ -101,7 +116,7 @@ function Hardware({ auth, errors, history }: Props) {
       images[index] = temp;
       refreshImages();
     };
-    requestPut(
+    req.put(
       `/api/hardware/setPrincipalImage/${user.id}`,
       {
         pieceId,
@@ -114,12 +129,14 @@ function Hardware({ auth, errors, history }: Props) {
   };
 
   const removeImage = (pieceId: string, index: number) => {
+    if (confirm("Remove this image ?")) {
+    }
     const callback = () => {
       fetchHardwares();
       images.splice(index, 1);
       refreshImages();
     };
-    requestPut(
+    req.put(
       `/api/hardware/removeImage/${user.id}`,
       {
         pieceId,
@@ -137,8 +154,9 @@ function Hardware({ auth, errors, history }: Props) {
     query += pieceName ? `name=${pieceName}&` : "";
     query += pieceType ? `type=${pieceType}&` : "";
     query += pieceMinVal ? `minVal=${pieceMinVal}&` : "";
-    query += pieceMaxVal ? `maxVal=${pieceMaxVal}` : "";
-    requestGet(`/api/hardware/?${query}`, setHardware);
+    query += pieceMaxVal ? `maxVal=${pieceMaxVal}&` : "";
+    query += setupPiece ? `ownSetup=${setupPiece}` : "";
+    req.get(`/api/hardware/?${query}`, setHardware);
     window.history.pushState("", "", `/hardware/?${query}`);
   };
 
@@ -149,7 +167,7 @@ function Hardware({ auth, errors, history }: Props) {
     };
 
     if (editingPiece) {
-      requestPut(
+      req.put(
         `/api/hardware/${user.id}`,
         {
           pieceId: pieceId,
@@ -161,6 +179,7 @@ function Hardware({ auth, errors, history }: Props) {
         callback,
         addToast
       );
+      closeSubmit();
     } else {
       let formData = new FormData();
       formData.append("name", pieceName);
@@ -179,25 +198,27 @@ function Hardware({ auth, errors, history }: Props) {
           formData.append("images", images[i]);
         }
       }
-      requestPostFile(
+      req.postFile(
         `/api/hardware/add/${user.id}`,
         formData,
         callback,
         addToast
       );
+      closeSubmit(true);
     }
-
-    closeSubmit();
   };
 
-  const closeSubmit = () => {
+  const closeSubmit = (resetSubmitForm?: boolean) => {
     setPieceId("");
     setPieceName("");
     setPieceDesc("");
+    setPieceVal(0);
     setImages();
     setImagesPreview([]);
     setError({ images: "" });
-    setAddingPiece(false);
+    if (!resetSubmitForm) {
+      setAddingPiece(false);
+    }
     setEditingPiece(false);
   };
 
@@ -223,6 +244,7 @@ function Hardware({ auth, errors, history }: Props) {
         </option>
       );
     }
+
     return options;
   };
 
@@ -235,6 +257,7 @@ function Hardware({ auth, errors, history }: Props) {
     setPieceVal(hardware.price);
     setPieceDesc(hardware.description);
     setImages(hardware.images);
+    setHardwareEditing(hardware);
   };
 
   const refreshImages = () => {
@@ -286,19 +309,53 @@ function Hardware({ auth, errors, history }: Props) {
         <Col md={10}>
           <div className="pieceName">{hardware.name}</div>
           <div className="pieceVal">
-            {hardware.price || hardware.price === 0 ? hardware.price : "¿?"} €
+            {hardware.price || hardware.price === 0
+              ? hardware.price.toFixed(2)
+              : "¿?"}{" "}
+            €
           </div>
           <div className="pieceType mb-2">
             {hardwarePieces[`${hardware.type}`]}
           </div>
           <div className="pieceDesc">{hardware.description}</div>
         </Col>
-        {hardware.creator._id === user.id && (
-          <Col md={3} className="align-self-center">
-              <Create className="editHardware mr-2" onClick={() => editPiece(hardware)} />
-              <DeleteIcon className="removeHardware" onClick={() => removePiece(hardware._id)} />
-          </Col>
-        )}
+        <Col
+          md={{ offset: 2 }}
+          className="align-self-center inlineAndAlign mt-2"
+        >
+          {hardware.creator._id === user.id && (
+            <>
+              <Create
+                className="editHardware mr-3"
+                onClick={() => editPiece(hardware)}
+              />
+              <DeleteIcon
+                className="removeHardware mr-3"
+                onClick={() => removePiece(hardware._id)}
+              />
+            </>
+          )}
+          <Link to={`/hardware/${hardware._id}`}>
+            <Button className="mr-3">View</Button>
+          </Link>
+
+          {!hardware.users.includes(user.id) || hardware.users.length === 0 ? (
+            <Button
+              variant="outline-light"
+              onClick={() => addToSetup(hardware._id)}
+            >
+              Add to my setup
+            </Button>
+          ) : (
+            <Button
+              variant="outline-danger"
+              onClick={() => removeFromSetup(hardware._id)}
+            >
+              Remove from my setup
+            </Button>
+          )}
+          <div className="ml-2"><LikeBar  fetchHardware={fetchHardwares} hardware={hardware}/></div>
+        </Col>
       </Row>
     );
   };
@@ -306,7 +363,9 @@ function Hardware({ auth, errors, history }: Props) {
   return (
     <Container fluid style={{ paddingTop: "4rem" }} id="hardware">
       <Col lg={true}>
-        {!addingPiece ? (
+        {match.params.hardwareId ? (
+          <ComponentInfo hardwareId={match.params.hardwareId} />
+        ) : !addingPiece ? (
           <>
             <h1>Search hardware piece</h1>
             <Button
@@ -348,6 +407,7 @@ function Hardware({ auth, errors, history }: Props) {
                       step="0.01"
                       value={pieceMinVal}
                       onChange={(e: any) => setMinVal(e.target.value)}
+                      onFocus={(e: any) => e.target.select()}
                     />
                     <span>€</span>
                   </div>
@@ -362,11 +422,20 @@ function Hardware({ auth, errors, history }: Props) {
                       step="0.01"
                       value={pieceMaxVal}
                       onChange={(e: any) => setMaxVal(e.target.value)}
+                      onFocus={(e: any) => e.target.select()}
                     />
                     <span>€</span>
                   </div>
                 </Form.Group>
               </Form.Row>
+              <Form.Group controlId="formBasicCheckbox">
+                <Form.Check
+                  type="checkbox"
+                  label="My setup"
+                  defaultChecked={setupPiece}
+                  onClick={(e: any) => setSetupPiece(e.target.checked)}
+                />
+              </Form.Group>
               <Button type="submit" className="mr-3">
                 Search
               </Button>
@@ -396,6 +465,7 @@ function Hardware({ auth, errors, history }: Props) {
         ) : (
           <>
             <h1>{`${editingPiece ? "Editing" : "Add new"} hardware piece`}</h1>
+            <BackLink callback={closeSubmit} />
             <Form
               encType="multipart/form-data"
               className="mb-3"
@@ -418,6 +488,7 @@ function Hardware({ auth, errors, history }: Props) {
                     value={pieceType}
                     onChange={(e: any) => setPieceType(e.target.value)}
                     as="select"
+                    disabled={editingPiece && hardwareEditing.users.length > 0}
                     required
                   >
                     {componentOptions(true)}
@@ -433,6 +504,7 @@ function Hardware({ auth, errors, history }: Props) {
                       step="0.01"
                       value={pieceVal}
                       onChange={(e: any) => setPieceVal(e.target.value)}
+                      onFocus={(e: any) => e.target.select()}
                       required
                     />
                     <span>€</span>

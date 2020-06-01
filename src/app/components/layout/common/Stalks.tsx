@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { requestGet } from "utils/request";
+import req from "utils/request";
 
 import UserCard from "layout/common/UserCard";
 
@@ -49,15 +49,15 @@ function Stalks({ auth, errors, history, match }: Props) {
   const fetchStalking = (stalkType: string) => {
     if (match.params.username) {
       new Promise((resolve, reject) => {
-        requestGet(
+        req.get(
           `/api/userProfile/getUserId/${match.params.username}`,
           resolve
         );
       }).then((u: any) => {
-        requestGet(`/api/stalks/${stalkType}/${u[0]._id}`, setStalks);
+        req.get(`/api/stalks/${stalkType}/${u[0]._id}`, setStalks);
       });
     } else {
-      requestGet(`/api/stalks/${stalkType}/${user.id}`, setStalks);
+      req.get(`/api/stalks/${stalkType}/${user.id}`, setStalks);
     }
   };
 

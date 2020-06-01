@@ -1,0 +1,46 @@
+@import "core/colors.scss";
+
+/***************** ProfileHardware *******************/
+
+#profileHardware {
+  .pcComponents {
+    text-align: center;
+    font-size: x-large;
+    margin-bottom: 10px;
+    color: $color4;
+  }
+  .hardwareList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, 270px);
+    justify-content: center;
+    align-content: flex-start;
+
+    .hardware {
+      border: 1px solid $color2;
+      border-radius: 10px;
+      width: 250px;
+      margin: 10px;
+      .pieceType {
+        font-size: 1.3em;
+        font-weight: 500;
+        color: $color5;
+      }
+      .pieceType,.pieceName
+       {
+        text-align: center;
+      }
+      .pieceImage {
+        height: 7vw;
+        padding: 10px;
+
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+          display: block;
+          margin: auto;
+        }
+      }
+    }
+  }
+}

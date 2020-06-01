@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { useToasts } from "react-toast-notifications";
 
-import { requestPost, requestDelete, requestPut } from "utils/request";
+import req from "utils/request";
 import { getStalkRequests } from "userLogic/actions/stalkRequestActions";
 
 import Button from "react-bootstrap/Button";
@@ -48,7 +48,7 @@ function UserCard({
       });
       fetchUsers();
     };
-    requestPost(`/api/stalks/${auth.user.id}`, { recipient: userId }, callback);
+    req.post(`/api/stalks/${auth.user.id}`, { recipient: userId }, callback);
   };
 
   const cancelRequest = (userId: string) => {
@@ -59,7 +59,7 @@ function UserCard({
       });
       fetchUsers();
     };
-    requestDelete(`/api/stalks/cancel/${auth.user.id}`, callback, {
+    req.del(`/api/stalks/cancel/${auth.user.id}`, callback, {
       recipient: userId
     });
   };
@@ -79,7 +79,7 @@ function UserCard({
       fetchUsers();
       getStalkRequests(auth.user);
     };
-    requestPut(
+    req.put(
       `/api/stalks/${action}/${auth.user.id}`,
       { requester: userId },
       callback

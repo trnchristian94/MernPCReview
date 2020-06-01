@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
-import { requestGet } from "utils/request";
+import req from "utils/request";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -49,26 +49,26 @@ function Profile({
   }, [username]);
 
   const fetchAmounts = (u: any) => {
-    requestGet(`/api/stalks/stalkers/${u[0]._id}/amount`, setStalkers);
-    requestGet(`/api/stalks/stalking/${u[0]._id}/amount`, setStalking);
-    requestGet(`/api/posts/likes/${u[0]._id}/amount`, setLikes);
-    requestGet(`/api/posts/from/${u[0]._id}/amount`, setPostsAmount);
+    req.get(`/api/stalks/stalkers/${u[0]._id}/amount`, setStalkers);
+    req.get(`/api/stalks/stalking/${u[0]._id}/amount`, setStalking);
+    req.get(`/api/posts/likes/${u[0]._id}/amount`, setLikes);
+    req.get(`/api/posts/from/${u[0]._id}/amount`, setPostsAmount);
   };
 
   const fetchUser = () => {
     new Promise((resolve, reject) => {
-      requestGet("/api/userProfile/user/" + username, resolve);
+      req.get("/api/userProfile/user/" + username, resolve);
     }).then((u: any) => {
       setUser(u);
       fetchAmounts(u);
       if (direction === "likes") {
-        requestGet("/api/posts/likes/" + u[0]._id, setPosts);
+        req.get("/api/posts/likes/" + u[0]._id, setPosts);
       } else {
         if (user.name === username) {
           // If it's own user
           getUserPosts(user);
         } else {
-          requestGet("/api/posts/from/" + u[0]._id, setPosts);
+          req.get("/api/posts/from/" + u[0]._id, setPosts);
         }
       }
     });

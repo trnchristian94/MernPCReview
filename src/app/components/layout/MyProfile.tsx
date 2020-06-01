@@ -6,9 +6,10 @@ import { useToasts } from "react-toast-notifications";
 import UserCard from "layout/common/UserCard";
 
 import PicCropUpload from "utils/picCropUpload";
-import { requestGet, requestPut } from "utils/request";
+import req from "utils/request";
 import { formatDate } from "utils/date";
 
+import { changeProfileImg } from "userLogic/actions/authActions";
 
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
@@ -20,9 +21,10 @@ import { connect } from "react-redux";
 interface Props {
   auth: any;
   history: any;
+  changeProfileImg: any;
 }
 
-function MyProfile({ auth, history }: Props) {
+function MyProfile({ auth, history, changeProfileImg }: Props) {
   const { addToast } = useToasts();
   const [userName, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -30,12 +32,12 @@ function MyProfile({ auth, history }: Props) {
   const [date, setDate] = useState("");
   const [userImage, setUserImage] = useState({
     image: "",
-    imageId: "",
+    imageId: ""
   });
 
   const [userLandscape, setUserLandscape] = useState({
     landscape: "",
-    landscapeId: "",
+    landscapeId: ""
   });
   const [croppedImage, setCroppedImage] = useState(null);
   const [landscapeForm, setlandscapeForm] = useState(false);
@@ -48,8 +50,8 @@ function MyProfile({ auth, history }: Props) {
   const fetchUser = () => {
     fetch("/api/userProfile/" + user.id, {
       headers: {
-        Authorization: localStorage.jwtToken,
-      },
+        Authorization: localStorage.jwtToken
+      }
     })
       .then((res) => res.json())
       .then((data) => {
@@ -60,33 +62,35 @@ function MyProfile({ auth, history }: Props) {
         setBio(data.userInfo ? data.userInfo.bio : "");
         setUserImage({
           image: data.userImage ? data.userImage.image : "",
-          imageId: data.userImage ? data.userImage.imageId : "",
+          imageId: data.userImage ? data.userImage.imageId : ""
         });
+        changeProfileImg(data.userImage.image);
         setUserLandscape({
           landscape: data.userImage.landscape ? data.userImage.landscape : "",
           landscapeId: data.userImage.landscapeId
             ? data.userImage.landscapeId
-            : "",
+            : ""
         });
       });
   };
 
   const editUser = (e: any) => {
     e.preventDefault();
-    requestPut(
+    req.put(
       `/api/userProfile/updateUser/${user.id}`,
       {
         name: userName,
         email,
-        userInfo: { bio: bio },
+        userInfo: { bio: bio }
       },
+      null,
       addToast
     );
   };
 
   const fetchStalks = () => {
-    requestGet(`/api/stalks/stalkers/${user.id}/amount`, setStalkers);
-    requestGet(`/api/stalks/stalking/${user.id}/amount`, setStalking);
+    req.get(`/api/stalks/stalkers/${user.id}/amount`, setStalkers);
+    req.get(`/api/stalks/stalking/${user.id}/amount`, setStalking);
   };
 
   useEffect(() => {
@@ -107,9 +111,9 @@ function MyProfile({ auth, history }: Props) {
               name: userName,
               userImage: {
                 image: userImage.image,
-                landscape: userLandscape.landscape,
+                landscape: userLandscape.landscape
               },
-              userInfo: { bio: bio },
+              userInfo: { bio: bio }
             }}
             showAddButton={false}
           />
@@ -118,7 +122,7 @@ function MyProfile({ auth, history }: Props) {
           style={{
             display: "flex",
             justifyContent: "center",
-            marginTop: "10px",
+            marginTop: "10px"
           }}
         >
           <Link to={"/stalkers"} className="nav-link">
@@ -201,6 +205,6 @@ function MyProfile({ auth, history }: Props) {
 }
 const mapStateToProps = (state: any) => ({
   auth: state.auth,
-  errors: state.errors,
+  errors: state.errors
 });
-export default connect(mapStateToProps)(MyProfile);
+export default connect(mapStateToProps, { changeProfileImg })(MyProfile);

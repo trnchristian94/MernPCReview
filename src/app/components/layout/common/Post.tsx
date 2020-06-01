@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { requestPostFile } from "utils/request";
+import req from "utils/request";
 import { useToasts } from "react-toast-notifications";
 import CloseRounded from "@material-ui/icons/CloseRounded";
 import AddAPhoto from "@material-ui/icons/AddAPhoto";
@@ -77,9 +77,9 @@ function Post({
       formData.append("image", image);
     }
     if(answer){
-      requestPostFile(`/api/posts/${user.id}/answer/${answer}`, formData, callback);
+      req.postFile(`/api/posts/${user.id}/answer/${answer}`, formData, callback);
     } else {
-      requestPostFile(`/api/posts/${user.id}`, formData, callback);
+      req.postFile(`/api/posts/${user.id}`, formData, callback);
     }
     setShowSubmitPost(false);
   };

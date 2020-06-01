@@ -1,0 +1,31 @@
+@import "core/colors.scss";
+
+/***************** LikeBar *******************/
+
+.likeComponent{
+  position: relative;
+  width: 126px;
+  .thumbs{
+    display:flex;
+    margin-bottom: 5px;
+    .likes > svg, .dislikes > svg {
+      padding-right: 3px;
+      cursor: pointer;
+    }
+    .dislikes {
+      position: absolute;
+      right: 0;
+    }
+  }
+  .likingBar {
+    background-color: $color5;
+    height: 2px;width: inherit;
+  }
+  #likeBar {
+    background-color: $color9;
+    height: 2px;
+    position: absolute;
+    left: 0;
+  }
+}
+

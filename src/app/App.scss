@@ -61,6 +61,10 @@ a {
     vertical-align: middle;
     display: flex;
   }
+  .inlineAndAlign {
+    display: inline-flex;
+    align-items: center;
+  }
 
   // Aligns items inside div in center
   .mAlign {

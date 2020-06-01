@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import ReactCrop, { Crop } from "react-image-crop";
 import "react-image-crop/lib/ReactCrop.scss";
-import { requestPostFile } from "./request";
+import req from "./request";
 
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -181,9 +181,9 @@ export default function picCropUpload({
     formData.append("image", cropImage);
     formData.append("userId", id);
     if (landscape) {
-      requestPostFile("/api/userProfile/uploadLandscape/", formData, callback);
+      req.postFile("/api/userProfile/uploadLandscape/", formData, callback);
     } else {
-      requestPostFile("/api/userProfile/uploadImage/", formData, callback);
+      req.postFile("/api/userProfile/uploadImage/", formData, callback);
     }
   };
 

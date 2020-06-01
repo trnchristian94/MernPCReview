@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 
 import UserCard from "layout/common/UserCard";
-import { requestGet } from "utils/request";
+import req from "utils/request";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -29,12 +29,12 @@ function Users({ auth, errors, history }: Props) {
   }, []);
 
   const fetchStalkRequests = () => {
-    requestGet(`/api/stalks/sent/${user.id}`, setStalkRequests);
+    req.get(`/api/stalks/sent/${user.id}`, setStalkRequests);
     fetchUsers();
   };
 
   const fetchUsers = () => {
-    requestGet("/api/userList", setUsers);
+    req.get("/api/userList", setUsers);
   };
 
   const createUserList = () => {
