@@ -11,6 +11,7 @@ import { formatDate } from "utils/date";
 import { checkLogin } from "utils/connection";
 
 import { changeProfileImg } from "userLogic/actions/authActions";
+import { logoutUser } from "userLogic/actions/authActions";
 
 import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
@@ -23,9 +24,10 @@ interface Props {
   auth: any;
   history: any;
   changeProfileImg: any;
+  logoutUser: any;
 }
 
-function MyProfile({ auth, history, changeProfileImg }: Props) {
+function MyProfile({ auth, history, changeProfileImg, logoutUser }: Props) {
   const { addToast } = useToasts();
   const [userName, setUsername] = useState("");
   const [email, setEmail] = useState("");
@@ -45,6 +47,7 @@ function MyProfile({ auth, history, changeProfileImg }: Props) {
   const [imageForm, setImageForm] = useState(false);
   const [stalkers, setStalkers] = useState(0);
   const [stalking, setStalking] = useState(0);
+  const conf = "You will deactivate your account, after 30 days it will be deleted. As long as your account remains deactivated other users will not have access to your posts or your basic information. If you log in again your account will be reactivated and all your data will be visible again.";
 
   const { user } = auth;
 
@@ -92,6 +95,17 @@ function MyProfile({ auth, history, changeProfileImg }: Props) {
   const fetchStalks = () => {
     req.get(`/api/stalks/stalkers/${user.id}/amount`, setStalkers);
     req.get(`/api/stalks/stalking/${user.id}/amount`, setStalking);
+  };
+
+  const deactivateAccout = () => {
+
+    if(confirm(conf)){
+      const callback = () => {
+        logoutUser();
+        history.push("/");
+      };
+      req.put(`/api/userProfile/deactivate/${user.id}`, null, callback, addToast);
+    }
   };
 
   useEffect(() => {
@@ -198,6 +212,9 @@ function MyProfile({ auth, history, changeProfileImg }: Props) {
           User joined {formatDate(date)} <br />
           <Button type="submit">Save profile</Button>
         </Form>
+        <Button variant="danger" onClick={() => deactivateAccout()}>
+          Deactivate my account
+        </Button>
       </Col>
     </Container>
   );
@@ -206,4 +223,6 @@ const mapStateToProps = (state: any) => ({
   auth: state.auth,
   errors: state.errors
 });
-export default connect(mapStateToProps, { changeProfileImg })(MyProfile);
+export default connect(mapStateToProps, { changeProfileImg, logoutUser })(
+  MyProfile
+);

@@ -56,16 +56,18 @@ function Profile({
     new Promise((resolve, reject) => {
       req.get("/api/userProfile/user/" + username, resolve);
     }).then((u: any) => {
-      setUser(u);
-      fetchAmounts(u);
-      if (direction === "likes") {
-        req.get("/api/posts/likes/" + u[0]._id, setPosts);
-      } else {
-        if (user.name === username) {
-          // If it's own user
-          getUserPosts(user);
+      if (u.length > 0) {
+        setUser(u);
+        fetchAmounts(u);
+        if (direction === "likes") {
+          req.get("/api/posts/likes/" + u[0]._id, setPosts);
         } else {
-          req.get("/api/posts/from/" + u[0]._id, setPosts);
+          if (user.name === username) {
+            // If it's own user
+            getUserPosts(user);
+          } else {
+            req.get("/api/posts/from/" + u[0]._id, setPosts);
+          }
         }
       }
     });
@@ -134,7 +136,12 @@ function Profile({
             </Link>
           </Col>
         </Row>
-
+        {!publicUser && (
+          <h4 className="m-4">
+            No posts found, maybe the profile does not exist or belongs to an
+            inactive user.
+          </h4>
+        )}
         <UserPosts
           posts={
             user.name === username && direction !== "likes"

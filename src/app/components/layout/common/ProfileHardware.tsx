@@ -4,13 +4,6 @@ import req from "utils/request";
 import { checkLogin } from "utils/connection";
 
 import Container from "react-bootstrap/Container";
-import Col from "react-bootstrap/Col";
-import Row from "react-bootstrap/Row";
-import UserPosts from "./UserPosts";
-import { getUserPosts } from "userLogic/actions/userPostActions";
-
-import { getUrlDir } from "utils/string";
-import { Link } from "react-router-dom";
 
 import "./ProfileHardware.scss";
 
@@ -39,7 +32,6 @@ function ProfileHardware({ auth, match, history }: Props) {
   const [userHardware, setUserHardware] = useState([]);
   const { user } = auth;
   const username = match.params.username;
-  const direction = getUrlDir(1);
 
   useEffect(() => {
     if (checkLogin(auth, history)) fetchUserHardware();
@@ -49,11 +41,13 @@ function ProfileHardware({ auth, match, history }: Props) {
     new Promise((resolve, reject) => {
       req.get("/api/userProfile/user/" + username, resolve);
     }).then((u: any) => {
-      setUser(u[0]);
-      req.get(
-        `/api/hardware/lookForSetup/${user.id}?user=${u[0]._id}`,
-        setUserHardware
-      );
+      if(u.length > 0){
+        setUser(u[0]);
+        req.get(
+          `/api/hardware/lookForSetup/${user.id}?user=${u[0]._id}`,
+          setUserHardware
+        );
+      }
     });
   };
 
@@ -79,7 +73,7 @@ function ProfileHardware({ auth, match, history }: Props) {
           <div className="pcComponents">{`${publicUser.name}'s PC Components`}</div>
         )}
         <div className="hardwareList">
-          {userHardware &&
+          {userHardware && userHardware.length > 0 &&
             userHardware.map((hardware: any) => {
               return (
                 <div className="hardware" key={hardware._id}>
@@ -95,7 +89,7 @@ function ProfileHardware({ auth, match, history }: Props) {
                 </div>
               );
             })}
-          {getHardwarePrice()}
+          {userHardware && userHardware.length > 0  && getHardwarePrice()}
         </div>
       </div>
     </Container>

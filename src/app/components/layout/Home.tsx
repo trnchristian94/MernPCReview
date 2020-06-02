@@ -24,11 +24,7 @@ function Home({ auth, posts, getPosts }: Props) {
 
   useEffect(() => {
     loadPosts();
-  }, []);
-
-  useEffect(() => {
-    loadPosts();
-  }, [tabValue]);
+  }, [,user, tabValue]);
 
   const loadPosts = () => {
     if (user.id) {
