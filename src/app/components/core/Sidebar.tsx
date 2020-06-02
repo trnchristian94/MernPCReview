@@ -172,7 +172,7 @@ function Sidebar({
           </Link>
           {stalkReq > 0 && (
             <Link to={"/stalkerRequests"} className="nav-link stalkerRequests">
-              <div className="sidebar-link">Stalker Requests : {stalkReq}</div>
+              <div className="sidebar-link stalkRequests">Stalker Requests {stalkReq}</div>
             </Link>
           )}
         </>

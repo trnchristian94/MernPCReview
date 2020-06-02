@@ -61,11 +61,12 @@ export default class App extends Component {
             <Row>
               <Router>
                 <LoadingBar />
-                <Col xs={3} id="sidebarCol">
+                <Col xs={3} className="p-0" id="sidebarCol">
                   <Sidebar />
                 </Col>
                 <Col xs={6} className="p-0" id="midCol">
                   <Route exact path="/" component={Landing} />
+                  <Route exact path="/home" component={Landing} />
                   <Route exact path="/register" component={Register} />
                   <Route exact path="/login" component={Login} />
                   <Route exact path="/userList" component={Users} />

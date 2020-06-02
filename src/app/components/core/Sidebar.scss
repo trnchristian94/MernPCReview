@@ -20,7 +20,7 @@
       background-color: rgba(29, 161, 242, 0.1);
     }
     .sidebar-link {
-      border-radius: 9999px;
+      border-radius: 30px;
       transition-duration: 0.2s;
       padding-top: 8px;
       padding-bottom: 8px;
@@ -117,6 +117,12 @@
         height: 1.3em !important;
         margin-right: 0px !important;
       }
+    }
+
+    .stalkRequests {
+      text-align: center;
+      padding-left: 0px !important;
+      padding-right: 0px !important;
     }
 
     .avatarImg {
