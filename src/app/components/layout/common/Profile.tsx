@@ -9,6 +9,8 @@ import Row from "react-bootstrap/Row";
 import UserPosts from "./UserPosts";
 import { getUserPosts } from "userLogic/actions/userPostActions";
 
+import StalkButton from "layout/common/StalkButton";
+
 import { getUrlDir } from "utils/string";
 
 import "./Profile.scss";
@@ -39,6 +41,7 @@ function Profile({
   const [stalking, setStalking] = useState(0);
   const [likes, setLikes] = useState(0);
   const [postsAmount, setPostsAmount] = useState(0);
+  const [status, setStatus] = useState();
   const direction = getUrlDir(1);
 
   useEffect(() => {
@@ -59,6 +62,7 @@ function Profile({
       if (u.length > 0) {
         setUser(u);
         fetchAmounts(u);
+        fetchStatus(u[0]._id);
         if (direction === "likes") {
           req.get("/api/posts/likes/" + u[0]._id, setPosts);
         } else {
@@ -71,6 +75,10 @@ function Profile({
         }
       }
     });
+  };
+
+  const fetchStatus = (userId: string) => {
+    req.get(`/api/stalks/sent/${userId}`, setStatus);
   };
 
   return (
@@ -104,7 +112,20 @@ function Profile({
             </div>
           )}
         </div>
-        <div className="userName">{`@${username}`}</div>
+        <Row>
+          <Col xs={6}>
+            <div className="userName">{`@${username}`}</div>
+          </Col>
+          <Col xs={6}>
+            {status !== undefined && publicUser && (
+              <StalkButton
+                status={status}
+                fetchUsers={fetchUser}
+                userId={publicUser[0]._id}
+              />
+            )}
+          </Col>
+        </Row>
         <Row>
           <Col xs={6}>
             <div className="stalking">

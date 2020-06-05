@@ -67,32 +67,5 @@
       }
     }
 
-    &__footer {
-      .stalkReqButton,
-      .stalkingButton,
-      .stalkCanceledButton {
-        width: 120px;
-        font-size: 0.95em;
-        font-weight: 700;
-        border-radius: 20px;
-      }
-
-      .stalkingButton:hover {
-        background-color: #d61f31;
-        border-color: #d61f31;
-      }
-
-      .stalkCanceledButton:hover {
-        color: #007bff;
-        background-color: rgba(29, 161, 242, 0.1);
-        border-color: #007bff;
-      }
-
-      .stalkReqButton:hover {
-        color: #007bff;
-        background-color: rgba(29, 161, 242, 0.1);
-        border-color: #007bff;
-      }
-    }
   }
 }

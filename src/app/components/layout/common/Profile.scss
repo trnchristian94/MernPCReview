@@ -59,6 +59,10 @@
     color: $color3;
     margin-left: 25px;
   }
+  .stalkButton {
+    text-align: end;
+    margin-right: 25px;
+  }
   .stalkers a,
   .stalking a,
   .linkLikes,
@@ -86,12 +90,13 @@
     padding-left: 7vw;
   }
 
-  .postsAmount, .likes{
+  .postsAmount,
+  .likes {
     border: 1px solid $color4;
     padding-top: 20px;
     padding-bottom: 20px;
   }
-  
+
   .userBio {
     text-align: center;
     padding-top: 1vh;

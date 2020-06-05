@@ -4,6 +4,9 @@ import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 interface Props {
   callback: any;
 }
+
+import "./BackLink.scss";
+
 function BackLink({ callback }: Props) {
   return (
     <div className="goBackLink mb-3" onClick={() => callback()}>

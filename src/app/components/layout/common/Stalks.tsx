@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import req from "utils/request";
 import { checkLogin } from "utils/connection";
+import { getUrlDir } from "utils/string";
 
 import UserCard from "layout/common/UserCard";
+import BackLink from "layout/common/BackLink";
 
 import Container from "react-bootstrap/Container";
 import Col from "react-bootstrap/Col";
@@ -14,6 +16,7 @@ import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 
 import "./Stalks.scss";
+
 interface Props {
   auth: any;
   errors: any;
@@ -31,14 +34,7 @@ function Stalks({ auth, errors, history, match }: Props) {
   }, []);
 
   const getLocationAndStalk = () => {
-    let direction =
-      location.pathname.substr(location.pathname.length - 1) === "/"
-        ? location.pathname.substr(0, location.pathname.length - 1)
-        : location.pathname;
-    direction = direction.substr(
-      direction.lastIndexOf("/") + 1,
-      direction.length
-    );
+    const direction = getUrlDir(1);
     setStalkType(direction);
     fetchStalking(direction);
   };
@@ -55,22 +51,6 @@ function Stalks({ auth, errors, history, match }: Props) {
     }
   };
 
-  const renderArrowBack = () => {
-    let ret = [];
-    ret.push(
-      <Link
-        className="goBackLink"
-        to={`/user/${
-          match.params.username ? match.params.username : user.name
-        }`}
-      >
-        <ArrowBackIcon className="arrowBack" />
-        <span>Return</span>
-      </Link>
-    );
-    return ret;
-  };
-
   return (
     <Container id="stalks" fluid style={{ paddingTop: "4rem" }}>
       <Col lg={true}>
@@ -78,7 +58,15 @@ function Stalks({ auth, errors, history, match }: Props) {
           {stalkType}{" "}
           {match.params.username ? ` - @${match.params.username}` : ""}:
         </div>
-        {renderArrowBack()}
+        <BackLink
+          callback={() => {
+            history.push(
+              `/user/${
+                match.params.username ? match.params.username : user.name
+              }`
+            );
+          }}
+        />
         <div className="userCards">
           {stalks.map((publicUser: any, key: any) => {
             return (
@@ -88,12 +76,12 @@ function Stalks({ auth, errors, history, match }: Props) {
                 showAddButton={
                   publicUser._id === user.id ||
                   stalkType === "stalkers" ||
-                  match.params.username
+                  (match.params.username && match.params.username !== user.name)
                     ? false
                     : true
                 }
                 status={2}
-                fetchUsers={fetchStalking}
+                fetchUsers={getLocationAndStalk}
               />
             );
           })}

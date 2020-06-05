@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { connect } from "react-redux";
 import req from "utils/request";
-import { useToasts } from "react-toast-notifications";
 
 import BackLink from "layout/common/BackLink";
 import LikeBar from "layout/common/LikeBar";
@@ -21,10 +20,6 @@ function ComponentInfo({ auth, hardwareId }: Props) {
   const history = useHistory();
   const [hardware, setHardware]: any = useState();
   const [prevImage, setPrevImage] = useState();
-  const prevHardware = () => {
-    history.push("/hardware");
-  };
-
   useEffect(() => {
     fetchHardware();
   }, []);
@@ -53,7 +48,11 @@ function ComponentInfo({ auth, hardwareId }: Props) {
     setPrevImage(hardware.images[0].image);
   return (
     <div id="componentInfo">
-      <BackLink callback={prevHardware} />
+      <BackLink
+        callback={() => {
+          history.push("/hardware");
+        }}
+      />
       {hardware && (
         <>
           <Row>
