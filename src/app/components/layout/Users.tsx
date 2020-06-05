@@ -26,7 +26,7 @@ function Users({ auth, errors, history }: Props) {
   }, []);
 
   const fetchStalkRequests = () => {
-    req.get(`/api/stalks/sent/${user.id}`, setStalkRequests);
+    req.get(`/api/stalks/sent`, setStalkRequests);
     fetchUsers();
   };
 
@@ -66,6 +66,7 @@ function Users({ auth, errors, history }: Props) {
   return (
     <Container fluid style={{ paddingTop: "4rem" }}>
       <Col lg={true}>
+        <h3>Users</h3>
         <div className="userCards">
           {/*createUserList()*/}
           {users.map((publicUser: any) => {

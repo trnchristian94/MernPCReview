@@ -2,7 +2,7 @@ import { GET_NEW_NOTIFICATIONS } from "./types";
 // Register User
 export const getNewNotifications = (user: { id: String }) => (dispatch: any) => {
   if(localStorage.jwtToken){
-    fetch(`/api/notifications/${user.id}/amount`, {
+    fetch(`/api/notifications/amount`, {
       headers: {
         Authorization: localStorage.jwtToken
       }

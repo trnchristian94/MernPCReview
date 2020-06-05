@@ -86,7 +86,7 @@ function Hardware({ auth, errors, history, match }: Props) {
       const callback = () => {
         fetchHardwares();
       };
-      req.del(`/api/hardware/${user.id}`, callback, { hardwareId }, addToast);
+      req.del(`/api/hardware`, callback, { hardwareId }, addToast);
     }
   };
 
@@ -95,7 +95,7 @@ function Hardware({ auth, errors, history, match }: Props) {
       fetchHardwares();
     };
     req.put(
-      `/api/hardware/${remove ? "removeFrom" : "addTo"}Setup/${user.id}`,
+      `/api/hardware/${remove ? "removeFrom" : "addTo"}Setup`,
       {
         hardwareId
       },
@@ -116,7 +116,7 @@ function Hardware({ auth, errors, history, match }: Props) {
       refreshImages();
     };
     req.put(
-      `/api/hardware/setPrincipalImage/${user.id}`,
+      `/api/hardware/setPrincipalImage`,
       {
         pieceId,
         index,
@@ -136,7 +136,7 @@ function Hardware({ auth, errors, history, match }: Props) {
       refreshImages();
     };
     req.put(
-      `/api/hardware/removeImage/${user.id}`,
+      `/api/hardware/removeImage`,
       {
         pieceId,
         index,
@@ -167,7 +167,7 @@ function Hardware({ auth, errors, history, match }: Props) {
 
     if (editingPiece) {
       req.put(
-        `/api/hardware/${user.id}`,
+        `/api/hardware`,
         {
           pieceId: pieceId,
           name: pieceName,
@@ -198,7 +198,7 @@ function Hardware({ auth, errors, history, match }: Props) {
         }
       }
       req.postFile(
-        `/api/hardware/add/${user.id}`,
+        `/api/hardware/add`,
         formData,
         callback,
         addToast
@@ -298,63 +298,76 @@ function Hardware({ auth, errors, history, match }: Props) {
   const getHardwareHtml = (hardware: any) => {
     return (
       <Row className="hardware" key={hardware._id}>
-        <Col md={2} className="align-self-center">
-          <div className="pieceImage">
+        <Row style={{ width: "100%" }}>
+          <Col md={2} className="align-self-center">
             {hardware.images.length > 0 && (
-              <img src={hardware.images[0].image} />
+              <div className="pieceImage">
+                <img src={hardware.images[0].image} />
+              </div>
             )}
-          </div>
-        </Col>
-        <Col md={10}>
-          <div className="pieceName">{hardware.name}</div>
-          <div className="pieceVal">
-            {hardware.price || hardware.price === 0
-              ? hardware.price.toFixed(2)
-              : "¿?"}{" "}
-            €
-          </div>
-          <div className="pieceType mb-2">
-            {hardwarePieces[`${hardware.type}`]}
-          </div>
-          <div className="pieceDesc">{hardware.description}</div>
-        </Col>
-        <Col
-          md={{ offset: 2 }}
-          className="align-self-center inlineAndAlign mt-2"
-        >
-          {hardware.creator._id === user.id && (
-            <>
-              <Create
-                className="editHardware mr-3"
-                onClick={() => editPiece(hardware)}
-              />
-              <DeleteIcon
-                className="removeHardware mr-3"
-                onClick={() => removePiece(hardware._id)}
-              />
-            </>
-          )}
-          <Link to={`/hardware/${hardware._id}`}>
-            <Button className="mr-3">View</Button>
-          </Link>
+          </Col>
+          <Col md={10}>
+            <div className="pieceName">{hardware.name}</div>
+            <div className="pieceVal">
+              {hardware.price || hardware.price === 0
+                ? hardware.price.toFixed(2)
+                : "¿?"}{" "}
+              €
+            </div>
+            <div className="pieceType mb-2">
+              {hardwarePieces[`${hardware.type}`]}
+            </div>
+            <div className="pieceDesc">{hardware.description}</div>
+          </Col>
+        </Row>
+        <Row style={{ width: "100%" }}>
+          <Col
+            md={{ offset: 2 }}
+            className="align-self-center inlineAndAlign mt-2"
+          >
+            {(hardware.creator._id === user.id ||
+              user.permission === "admin") && (
+              <>
+                <Create
+                  className="editHardware mr-3"
+                  onClick={() => editPiece(hardware)}
+                />
+                <DeleteIcon
+                  className="removeHardware mr-3"
+                  onClick={() => removePiece(hardware._id)}
+                />
+              </>
+            )}
+            <Link to={`/hardware/${hardware._id}`}>
+              <Button className="mr-3">View</Button>
+            </Link>
 
-          {!hardware.users.includes(user.id) || hardware.users.length === 0 ? (
-            <Button
-              variant="outline-light"
-              onClick={() => addToSetup(hardware._id)}
-            >
-              Add to my setup
-            </Button>
-          ) : (
-            <Button
-              variant="outline-danger"
-              onClick={() => removeFromSetup(hardware._id)}
-            >
-              Remove from my setup
-            </Button>
-          )}
-          <div className="ml-2"><LikeBar  fetchHardware={fetchHardwares} hardware={hardware}/></div>
-        </Col>
+            {!hardware.users.includes(user.id) ||
+            hardware.users.length === 0 ? (
+              <Button
+                variant="outline-light"
+                onClick={() => addToSetup(hardware._id)}
+              >
+                Add to my setup
+              </Button>
+            ) : (
+              <Button
+                variant="outline-danger"
+                onClick={() => removeFromSetup(hardware._id)}
+              >
+                Remove from my setup
+              </Button>
+            )}
+          </Col>
+        </Row>
+        <Row style={{ width: "100%" }}>
+          <Col
+            md={{ offset: 2 }}
+            className="align-self-center inlineAndAlign mt-2"
+          >
+            <LikeBar fetchHardware={fetchHardwares} hardware={hardware} />
+          </Col>
+        </Row>
       </Row>
     );
   };

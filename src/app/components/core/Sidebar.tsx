@@ -17,11 +17,9 @@ import Button from "react-bootstrap/Button";
 
 import Create from "@material-ui/icons/Create";
 import HomeRounded from "@material-ui/icons/HomeRounded";
-import PlaylistAddCheckRounded from "@material-ui/icons/PlaylistAddCheckRounded";
 import GroupRounded from "@material-ui/icons/GroupRounded";
 import AccountCircleRounded from "@material-ui/icons/AccountCircleRounded";
 import PowerOffRounded from "@material-ui/icons/PowerOffRounded";
-import PermMedia from "@material-ui/icons/PermMedia";
 import NotificationsNone from "@material-ui/icons/NotificationsNone";
 import Notifications from "@material-ui/icons/Notifications";
 import DesktopWindows from "@material-ui/icons/DesktopWindows";
@@ -50,7 +48,6 @@ function Sidebar({
   logoutUser,
   getStalkRequests,
   getNewNotifications,
-  errors,
   stalks,
   newNotifications
 }: Props) {
@@ -156,7 +153,7 @@ function Sidebar({
             className="nav-link"
             style={{ position: "relative" }}
           >
-            <div className="sidebar-link">
+            <div className="sidebar-link notif-link">
               {newNotifs > 0 ? (
                 <>
                   <Notifications />
@@ -172,7 +169,9 @@ function Sidebar({
           </Link>
           {stalkReq > 0 && (
             <Link to={"/stalkerRequests"} className="nav-link stalkerRequests">
-              <div className="sidebar-link stalkRequests">Stalker Requests {stalkReq}</div>
+              <div className="sidebar-link stalkRequests">
+                Stalker Requests {stalkReq}
+              </div>
             </Link>
           )}
         </>
@@ -194,6 +193,9 @@ function Sidebar({
             <div className="navText mAlign">
               Welcome {user.name.split(" ")[0]}!
             </div>
+            {user.permission !== "user" && (
+              <div className="mAlign permission"> {user.permission}</div>
+            )}
             {user.userImage && (
               <Avatar
                 alt={`${user.name} profile image`}

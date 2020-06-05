@@ -23,7 +23,6 @@ interface Props {
 }
 
 function Notifications({ auth, history }: Props) {
-  const { user } = auth;
   const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
@@ -31,7 +30,7 @@ function Notifications({ auth, history }: Props) {
   }, []);
 
   const fetchNotifications = () => {
-    req.get(`/api/notifications/${user.id}`, setNotifications);
+    req.get(`/api/notifications`, setNotifications);
   };
 
   const formatContent = (content: any, contentModel: String) => {
@@ -71,10 +70,6 @@ function Notifications({ auth, history }: Props) {
     return icon;
   };
 
-  const goToProfile = (name: String) => {
-    history.push(`/user/${name}`);
-  };
-
   return (
     <Container style={{ paddingTop: "4rem" }}>
       <Col lg={true}>Notifications</Col>
@@ -93,7 +88,7 @@ function Notifications({ auth, history }: Props) {
                   alt={`${notification.fromUser.name} profile image`}
                   className="avatarImg"
                   src={notification.fromUser.userImage.image}
-                  onClick={() => goToProfile(notification.fromUser.name)}
+                  onClick={() => history.push(`/user/${notification.fromUser.name}`)}
                 />
                 <div className="notification__date">
                   {`${formatDate(notification.date)} ${formatHour(
@@ -101,11 +96,9 @@ function Notifications({ auth, history }: Props) {
                   )}`}
                 </div>
               </div>
-
               <div className="notification__message">
                 {notification.message}
               </div>
-
               <div className="notification__content">
                 {formatContent(notification.type, notification.typeModel)}
               </div>

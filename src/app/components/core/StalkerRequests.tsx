@@ -25,14 +25,14 @@ function StalkerRequests({ auth, errors, history }: Props) {
   }, []);
 
   const fetchStalkerRequests = () => {
-    req.get("/api/stalks/received/" + user.id, setStalkerRequests);
+    req.get(`/api/stalks/received/${user.id}`, setStalkerRequests);
   };
 
   return (
     <Container fluid style={{ paddingTop: "4rem" }}>
       <Col lg={true}>
-        <div>Stalker requests :</div>
-        <Row>
+        <h3>Stalker requests</h3>
+        <div className="userCards">
           {stalkerRequests.map((publicUser: any) => {
             return (
               <UserCard
@@ -45,7 +45,7 @@ function StalkerRequests({ auth, errors, history }: Props) {
               />
             );
           })}
-        </Row>
+        </div>
       </Col>
     </Container>
   );

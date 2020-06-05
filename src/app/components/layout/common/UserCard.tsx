@@ -48,7 +48,7 @@ function UserCard({
       });
       fetchUsers();
     };
-    req.post(`/api/stalks/${auth.user.id}`, { recipient: userId }, callback);
+    req.post(`/api/stalks`, { recipient: userId }, callback);
   };
 
   const cancelRequest = (userId: string) => {
@@ -59,7 +59,7 @@ function UserCard({
       });
       fetchUsers();
     };
-    req.del(`/api/stalks/cancel/${auth.user.id}`, callback, {
+    req.del(`/api/stalks/cancel`, callback, {
       recipient: userId
     });
   };
@@ -80,7 +80,7 @@ function UserCard({
       getStalkRequests(auth.user);
     };
     req.put(
-      `/api/stalks/${action}/${auth.user.id}`,
+      `/api/stalks/${action}`,
       { requester: userId },
       callback
     );

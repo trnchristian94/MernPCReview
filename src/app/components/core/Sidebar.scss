@@ -35,6 +35,10 @@
       height: 1.2em;
       margin-right: 5px;
     }
+
+    .notif-link{
+      position: relative;
+    }
     .notificationBubble {
       background-color: $color6;
       width: 20px;
@@ -79,6 +83,9 @@
     img {
       cursor: pointer;
     }
+  }
+  .permission {
+    text-transform: capitalize;
   }
 }
 
@@ -128,6 +135,8 @@
     .avatarImg {
       width: auto !important;
       height: auto !important;
+      max-width: 11vh;
+      max-height: 11vh;
     }
     .postBtn {
       width: 10px !important;

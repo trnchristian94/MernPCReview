@@ -51,53 +51,33 @@ function UserPosts({
   const [clickedImg, setClickedImg] = useState("");
   const [answeredPost, setAnsweredPost] = useState("");
   const [showSubmitPost, setShowSubmitPost] = useState(false);
-  const [postss, setPosts] = useState(posts);
-  //const direction = getUrlDir(1);
-
-  const showToast = (message: string) => {
-    addToast(message, {
-      appearance: "success",
-      autoDismiss: true
-    });
-  };
+  //const [postss, setPosts] = useState(posts);
+  const direction = getUrlDir(1);
 
   const removePost = (postId: string) => {
     if (confirm("Are you sure you want to delete this?")) {
       const callback = () => {
-        showToast("Post deleted");
         fetchPosts();
       };
-      req.del(`/api/posts/${user.id}`, callback, { postId });
+      req.del(`/api/posts`, callback, { postId }, addToast);
     }
   };
 
-  
-
-  const likePost_ = (postId: string, hasRepost: boolean) => {
-    let direction =
-      location.pathname.substr(location.pathname.length - 1) === "/"
-        ? `/user/${user.name}/`
-        : `/user/${user.name}`;
-    if (location.pathname === direction) {
-      userLikePost(postId);
-    } else {
-      likePost(postId);
-      if (location.pathname.substr(1, 4) == "user" || hasRepost) {
-        fetchPosts();
+  const _likePost = (post: any, remove: boolean, hasRepost: boolean) => {
+    const userDirection = getUrlDir(2);
+    if (`user/${user.name}` === userDirection) {
+      if(remove){
+        userRemoveLikePost(post._id);
+      } else {
+        userLikePost(post._id);
       }
-    }
-  };
-
-  const removeLikePost_ = (postId: string, hasRepost: boolean) => {
-    let direction =
-      location.pathname.substr(location.pathname.length - 1) === "/"
-        ? `/user/${user.name}/`
-        : `/user/${user.name}`;
-    if (location.pathname === direction) {
-      userRemoveLikePost(postId);
     } else {
-      removeLikePost(postId);
-      if (location.pathname.substr(1, 4) == "user" || hasRepost) {
+      if(remove){
+        removeLikePost(post._id);
+      } else {
+        likePost(post._id);
+      }
+      if (userDirection === `user/${post.creator.name}` || direction === "home" || hasRepost) {
         fetchPosts();
       }
     }
@@ -109,13 +89,13 @@ function UserPosts({
     };
     req.post(`/api/repost/${user.id}`, { postId }, callback);
   };
+
   const removeRepost = (postId: string) => {
     if (confirm("Remove repost ?")) {
       const callback = () => {
-        showToast("Repost deleted");
         fetchPosts();
       };
-      req.del(`/api/repost/${user.id}`, callback, { postId });
+      req.del(`/api/repost/${user.id}`, callback, { postId }, addToast);
     }
   };
 
@@ -138,7 +118,7 @@ function UserPosts({
     );
     return ret;
   };
-
+  console.log(auth);
   return (
     <div id="userPosts">
       {posts &&
@@ -252,7 +232,7 @@ function UserPosts({
                     <div className="liked">
                       <Favorite
                         className="likedButton rounded"
-                        onClick={() => removeLikePost_(post._id, post.reposter||post.reposts.length>0?true:false)}
+                        onClick={() => _likePost(post, true, post.reposter||post.reposts.length>0?true:false)}
                       />
                       {` ${post.likes.length}`}
                     </div>
@@ -260,7 +240,7 @@ function UserPosts({
                     <div className="like">
                       <FavoriteBorderOutlined
                         className="likeButton rounded"
-                        onClick={() => likePost_(post._id, post.reposter||post.reposts.length>0?true:false)}
+                        onClick={() => _likePost(post, false, post.reposter||post.reposts.length>0?true:false)}
                       />
                       {` ${post.likes.length}`}
                     </div>
@@ -289,7 +269,7 @@ function UserPosts({
                     {post.answers? post.answers.length: 0}
                   </div>
                   {/* Delete */}
-                  {post.creator._id === user.id && (
+                  {(post.creator._id === user.id || user.permission === "admin") && (
                     <Delete
                       className="delete"
                       onClick={() => removePost(post._id)}

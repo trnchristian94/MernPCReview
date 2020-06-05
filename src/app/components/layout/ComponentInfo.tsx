@@ -18,8 +18,6 @@ interface Props {
 }
 
 function ComponentInfo({ auth, hardwareId }: Props) {
-  const { addToast } = useToasts();
-  const { user } = auth;
   const history = useHistory();
   const [hardware, setHardware]: any = useState();
   const [prevImage, setPrevImage] = useState();

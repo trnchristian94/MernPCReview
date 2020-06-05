@@ -77,9 +77,9 @@ function Post({
       formData.append("image", image);
     }
     if(answer){
-      req.postFile(`/api/posts/${user.id}/answer/${answer}`, formData, callback);
+      req.postFile(`/api/posts/answer/${answer}`, formData, callback);
     } else {
-      req.postFile(`/api/posts/${user.id}`, formData, callback);
+      req.postFile(`/api/posts`, formData, callback);
     }
     setShowSubmitPost(false);
   };
@@ -104,7 +104,6 @@ function Post({
               type="text"
               name="post"
               placeholder="Post text"
-              style={{ width: "25vw" }}
               value={postText}
               onChange={(e: any) => setPostText(e.target.value)}
               ref={(text: any) => {

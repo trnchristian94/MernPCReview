@@ -15,7 +15,7 @@ function LikeBar({ auth, fetchHardware, hardware }: Props) {
   const { user } = auth;
   const { addToast } = useToasts();
   const likePost = (like: boolean, hardwareId: string) => {
-    req.put(`/api/hardware/${like?"like":"dislike"}/${user.id}`, {hardwareId}, null, addToast)
+    req.put(`/api/hardware/${like?"like":"dislike"}`, {hardwareId}, null, addToast)
     fetchHardware();
   }
 
