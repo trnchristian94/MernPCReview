@@ -51,7 +51,6 @@ function UserPosts({
   const [clickedImg, setClickedImg] = useState("");
   const [answeredPost, setAnsweredPost] = useState("");
   const [showSubmitPost, setShowSubmitPost] = useState(false);
-  //const [postss, setPosts] = useState(posts);
   const direction = getUrlDir(1);
 
   const removePost = (postId: string) => {

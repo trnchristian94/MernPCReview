@@ -14,7 +14,6 @@ import DoneIcon from "@material-ui/icons/Done";
 import AddAPhoto from "@material-ui/icons/AddAPhoto";
 import DeleteIcon from "@material-ui/icons/Delete";
 import WallpaperIcon from "@material-ui/icons/Wallpaper";
-import ArrowBackIcon from "@material-ui/icons/ArrowBack";
 import { Link } from "react-router-dom";
 
 import BackLink from "layout/common/BackLink";
@@ -234,6 +233,14 @@ function Hardware({ auth, errors, history, match }: Props) {
     return options;
   };
 
+  const getAvgRate = (reviews: any) => {
+    let totalRate = 0;
+    for (let i = 0; i < reviews.length; i++) {
+      totalRate += reviews[i].reviewRate;
+    }
+    return (totalRate / reviews.length).toFixed(2);
+  };
+
   const editPiece = (hardware: any) => {
     setAddingPiece(true);
     setEditingPiece(true);
@@ -349,11 +356,16 @@ function Hardware({ auth, errors, history, match }: Props) {
         </Row>
         <Row style={{ width: "100%" }}>
           <Col
-            md={{ offset: 2 }}
+            md={{ offset: 2, span: 3 }}
             className="align-self-center inlineAndAlign mt-2"
           >
             <LikeBar fetchHardware={fetchHardwares} hardware={hardware} />
           </Col>
+          {hardware.reviews && hardware.reviews.length > 0 &&
+          <Col className="reviews inlineAndAlign">
+            Avg rate {getAvgRate(hardware.reviews)} ({hardware.reviews.length} reviews)
+          </Col>
+  }
         </Row>
       </Row>
     );

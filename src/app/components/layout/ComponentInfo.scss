@@ -38,11 +38,12 @@
     font-size: 1.3em;
     color: $color8;
   }
-  .reviewLength {
-    margin-top: 15px;
-    margin-bottom: 5px;
+  .reviewRate {
+    color: $color10;
+    font-size: 1.1em;
   }
-  #keepaCont{
+
+  #keepaCont {
     height: 654px;
     overflow: hidden;
     #keepaContainer {
@@ -61,5 +62,64 @@
       }
     }
   }
-  
+
+  .reviewForm {
+    border: 1px solid $color2;
+    padding: 10px;
+    background-color: $color4;
+    border-radius: 5px;
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+    .form-label {
+      color: $color2;
+    }
+  }
+
+  .review {
+    border: 1px solid $color4;
+    border-radius: 5px;
+    padding: 15px;
+    position: relative;
+    width: 85%;
+    margin-left: auto;
+    margin-right: auto;
+
+    &__header {
+      display: flex;
+      align-items: center;
+      div {
+        margin-right: 10px;
+      }
+    }
+    .avatarImg,
+    .user {
+      cursor: pointer;
+    }
+    .user {
+      color: $color5;
+    }
+    .rate span {
+      color: $color10;
+    }
+    &__body {
+      padding: 15px;
+      text-align: left;
+    }
+    &__actions {
+      text-align: left;
+      .delete{
+        cursor: pointer;
+      }
+    }
+  }
+  .reviews {
+    margin-bottom: 10px;
+    margin-right: auto;
+    margin-left: auto;
+    text-align: center;
+  }
+  .reviews .review:not(:last-child) {
+    margin-bottom: 10px;
+  }
 }
