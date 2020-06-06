@@ -15,6 +15,7 @@ import Notifications from "src/app/components/layout/Notifications";
 import Hardware from "src/app/components/layout/Hardware";
 import Profile from "layout/common/Profile";
 import ProfileHardware from "layout/common/ProfileHardware";
+import HardwareUsers from "layout/common/HardwareUsers";
 
 import Register from "components/auth/Register";
 import Login from "components/auth/Login";
@@ -74,7 +75,11 @@ export default class App extends Component {
                   <Route exact path="/stalking" component={Stalks} />
                   <Route exact path="/stalkers" component={Stalks} />
                   <Route exact path="/hardware" component={Hardware} />
-                  <Route exact path={`/hardware/:hardwareId`} component={Hardware} />
+                  <Route
+                    exact
+                    path={`/hardware/:hardwareId`}
+                    component={Hardware}
+                  />
                   <Route
                     exact
                     path="/notifications"
@@ -110,7 +115,16 @@ export default class App extends Component {
                   </Switch>
                 </Col>
                 <Col xs={3} id="rightCol">
-                <Route exact path={`/user/:username`} component={ProfileHardware} />
+                  <Route
+                    exact
+                    path={`/user/:username`}
+                    component={ProfileHardware}
+                  />
+                  <Route
+                    exact
+                    path={`/hardware/:hardwareId`}
+                    component={HardwareUsers}
+                  />
                 </Col>
               </Router>
             </Row>

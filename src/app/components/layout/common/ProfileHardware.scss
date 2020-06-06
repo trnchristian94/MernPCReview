@@ -29,6 +29,10 @@
        {
         text-align: center;
       }
+      .pieceName > span:hover {
+        color: $color5;
+        cursor: pointer;
+      }
       .pieceImage {
         height: 7vw;
         padding: 10px;

@@ -21,6 +21,8 @@ import BackLink from "layout/common/BackLink";
 import ComponentInfo from "layout/ComponentInfo";
 import LikeBar from "layout/common/LikeBar";
 
+import hardwarePieces from "layout/common/hardwarePieces";
+
 import { connect } from "react-redux";
 
 import "./Hardware.scss";
@@ -51,21 +53,6 @@ function Hardware({ auth, errors, history, match }: Props) {
   const [error, setError] = useState({ images: "" });
   const { addToast } = useToasts();
   let inputImage: any;
-
-  const hardwarePieces: any = {
-    "": "All",
-    mobo: "Motherboard",
-    cpu: "CPU",
-    hdd: "Hard Drive Disk",
-    ssd: "Solid State Drive",
-    gpu: "Graphic Card",
-    ram: "Memory RAM",
-    optic: "Optical Drive",
-    soundcard: "Soundcard",
-    case: "Case",
-    psu: "Power Supply",
-    etc: "Others"
-  };
 
   useEffect(() => {
     if (checkLogin(auth, history)) {

@@ -118,7 +118,6 @@ function UserPosts({
     );
     return ret;
   };
-  console.log(auth);
   return (
     <div id="userPosts">
       {posts &&

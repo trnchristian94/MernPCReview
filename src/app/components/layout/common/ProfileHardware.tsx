@@ -6,6 +6,7 @@ import { checkLogin } from "utils/connection";
 import Container from "react-bootstrap/Container";
 
 import "./ProfileHardware.scss";
+import hardwarePieces from "./hardwarePieces";
 
 interface Props {
   auth: any;
@@ -13,26 +14,13 @@ interface Props {
   history: any;
 }
 
-const hardwarePieces: any = {
-  mobo: "Motherboard",
-  cpu: "CPU",
-  hdd: "Hard Drive Disk",
-  ssd: "Solid State Drive",
-  gpu: "Graphic Card",
-  ram: "Memory RAM",
-  optic: "Optical Drive",
-  soundcard: "Soundcard",
-  case: "Case",
-  psu: "Power Supply",
-  etc: "Others"
-};
+
 
 function ProfileHardware({ auth, match, history }: Props) {
   const [publicUser, setUser]: any = useState();
   const [userHardware, setUserHardware] = useState([]);
   const { user } = auth;
   const username = match.params.username;
-
   useEffect(() => {
     if (checkLogin(auth, history)) fetchUserHardware();
   }, [username]);
@@ -80,7 +68,7 @@ function ProfileHardware({ auth, match, history }: Props) {
                   <div className="pieceType">
                     {hardware.type && hardwarePieces[hardware.type]}
                   </div>
-                  <div className="pieceName">{hardware.name}</div>
+                  <div className="pieceName"><span onClick={() => history.push(`/hardware/${hardware._id}`)}>{hardware.name}</span></div>
                   <div className="pieceImage">
                     {hardware.images && hardware.images.length > 0 && (
                       <img src={hardware.images[0].image} />

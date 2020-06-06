@@ -9,6 +9,8 @@ import Col from "react-bootstrap/Col";
 import Row from "react-bootstrap/Row";
 import { Link, useHistory } from "react-router-dom";
 
+import hardwarePieces from "layout/common/hardwarePieces";
+
 import "./ComponentInfo.scss";
 
 interface Props {
@@ -71,6 +73,9 @@ function ComponentInfo({ auth, hardwareId }: Props) {
             <Col className="centerCol" md={7}>
               <div className="pieceName">
                 <h5>{hardware.name}</h5>
+              </div>
+              <div className="pieceType">
+                <span className="ml-2">{hardwarePieces[hardware.type]}</span>
               </div>
               <div className="pieceCreator">
                 <small>
