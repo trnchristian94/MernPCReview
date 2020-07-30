@@ -4,7 +4,14 @@ const renderStatus = (loadingStatus: number) => {
   if (loadingStatus === 1) {
     return <span></span>;
   } else if (loadingStatus === 2) {
-    return <div className="loadingBar"><img src='https://res.cloudinary.com/dz6ogknjd/image/upload/v1588558431/imgs/ZKZg_m1pd9n.gif' title='loading'/></div>;
+    return (
+      <div className="loadingBar">
+        <img
+          src="https://res.cloudinary.com/dz6ogknjd/image/upload/v1596121507/Pulse-1.2s-284px_psx9ib.gif"
+          title="loading"
+        />
+      </div>
+    );
   }
 };
 interface Props {

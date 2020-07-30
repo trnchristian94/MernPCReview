@@ -21,20 +21,19 @@ const getTimeUntilNow = (d: any) => {
   const dif = new Date().getTime() - new Date(d).getTime();
   const secondsBetweenDates = Math.round(dif / 1000);
   const s = secondsBetweenDates;
-  
-  if(s < 60){
-    return `${secondsBetweenDates} seconds ago.`; 
-  } else if(Math.round(s/60) < 60) {
-    return `${Math.round(s/60)} minutes ago.`;
-  } else if(Math.round(s/3600) < 24){
-    return `${Math.round(s/3600)} hours ago.`;
-  } else if(Math.round(s/3600/24) < 31) {
-    return `${Math.round(s/3600/24)} days ago.`;
-  } else if(Math.round(s/3600/24*31) < 12) {
-    return `${Math.round(s/3600/24*31)} months ago.`;
+  if (s < 60) {
+    return `${secondsBetweenDates} seconds ago.`;
+  } else if (Math.round(s / 60) < 60) {
+    return `${Math.round(s / 60)} minutes ago.`;
+  } else if (Math.round(s / 3600) < 24) {
+    return `${Math.round(s / 3600)} hours ago.`;
+  } else if (Math.round(s / 3600 / 24) < 31) {
+    return `${Math.round(s / 3600 / 24)} days ago.`;
+  } else if (Math.round(s / 3600 / 24 / 31) < 12) {
+    return `${Math.round(s / 3600 / 24 / 31)} months ago.`;
   } else {
-    return `${Math.round(s/3600/24*31/12)} years ago.`;
+    return `${Math.round(s / 3600 / 24 / 31 / 12)} years ago.`;
   }
-}
+};
 
 export { formatDate, formatHour, getTimeUntilNow };

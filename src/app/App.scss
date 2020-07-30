@@ -36,7 +36,7 @@ a {
   /****************** LoadingBar ****************************************/
   .loadingBar {
     position: fixed;
-    height: 70px;
+    height: 100px;
     right: 50%;
     z-index: 3;
     top: 50%;
@@ -77,13 +77,13 @@ a {
     width: auto;
     border-radius: 999px;
     padding: 7px 20px;
-    svg{
+    svg {
       margin-left: 5px;
     }
   }
 
   // Clases colors
-  .error{
-    color:$color6;
+  .error {
+    color: $color6;
   }
 }
